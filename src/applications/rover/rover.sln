@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31808.319
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover", "rover\rover.csproj", "{CC04E5DE-1E78-40C7-8658-2D6467A5F231}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{C418FE98-62C0-49FE-84DE-E559DA727F18}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover.domain", "..\..\modules\rover\rover.domain\rover.domain.csproj", "{7D775F34-72BC-4796-A358-6A12B192039A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC04E5DE-1E78-40C7-8658-2D6467A5F231}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC04E5DE-1E78-40C7-8658-2D6467A5F231}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC04E5DE-1E78-40C7-8658-2D6467A5F231}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC04E5DE-1E78-40C7-8658-2D6467A5F231}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D775F34-72BC-4796-A358-6A12B192039A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D775F34-72BC-4796-A358-6A12B192039A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D775F34-72BC-4796-A358-6A12B192039A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D775F34-72BC-4796-A358-6A12B192039A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7D775F34-72BC-4796-A358-6A12B192039A} = {C418FE98-62C0-49FE-84DE-E559DA727F18}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {80AD15C0-2026-41E7-BDBA-6516B1FDAFBB}
+	EndGlobalSection
+EndGlobal
