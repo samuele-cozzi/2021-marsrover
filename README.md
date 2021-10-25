@@ -20,3 +20,7 @@ docker-compose -f ./src/docker-compose.infrastucture.yml up
 docker-compose build
 docker-compose up
 ```
+
+### Pakages References
+- Serilog
+- Autofac

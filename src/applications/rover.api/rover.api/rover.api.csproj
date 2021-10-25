@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>edbcfb01-5497-438c-9ce4-bcb5e916989c</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Application.Rover\**" />
+    <Content Remove="Application.Rover\**" />
+    <EmbeddedResource Remove="Application.Rover\**" />
+    <None Remove="Application.Rover\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+    <PackageReference Include="EventFlow" Version="0.83.4713" />
+    <PackageReference Include="EventFlow.AspNetCore" Version="0.83.4713" />
+    <PackageReference Include="EventFlow.Autofac" Version="0.83.4713" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Rover\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\modules\rover\rover.application\rover.application.csproj" />
+  </ItemGroup>
+
+
+</Project>

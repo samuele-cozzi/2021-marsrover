@@ -1,7 +1,9 @@
-﻿using Autofac.Extensions.DependencyInjection;
+﻿using EventFlow;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using rover.application.Commands;
+using rover.application.DomainEvents;
 using rover.Services;
 using rover.Services.Interfaces;
 using rover.Settings;
@@ -35,7 +37,7 @@ namespace rover
                 {
                     loggerConfiguration.ReadFrom.Configuration(host.Configuration);
                 })
-                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                //.UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureAppConfiguration((host, config) =>
                 {
                     config.Sources.Clear();
@@ -52,10 +54,27 @@ namespace rover
                     services.AddOptions();
 
                     var configurationRoot = host.Configuration;
-                    services.Configure<RoverSettings>(configurationRoot.GetSection(nameof(RoverSettings)));
+                    services.Configure<RoverSettings>(
+                        configurationRoot.GetSection(nameof(RoverSettings)) //.Get<RoverSettings>()
+                    );
+
+                    //var containerBuilder = new ContainerBuilder();
+
+                    //var container = EventFlowOptions.New
+                    //    .UseAutofacContainerBuilder(containerBuilder)
+                    //    .AddAspNetCoreMetadataProviders()
+                    //    .AddEvents(typeof(ExampleEvent))
+                    //    .AddCommands(typeof(ExampleCommand))
+                    //    .AddCommandHandlers(typeof(ExampleCommandHandler))
+                    //    .UseConsoleLog()
+                    //    .UseFilesEventStore(FilesEventStoreConfiguration.Create("./evt-store"))
+                    //    .UseInMemoryReadStoreFor<ExampleReadModel>();
+
+                    //containerBuilder.Populate(services);
 
                     services.AddTransient<IWaitService, WaitService>();
                     //services.AddHostedService<GracePeriodManagerService>()
+
                 });
         }
     }
