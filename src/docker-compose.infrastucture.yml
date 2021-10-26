@@ -35,16 +35,9 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    environment:
-      - RABBITMQ_DEFAULT_USER=admin 
-      - RABBITMQ_DEFAULT_PASS=admin
-    command: "/bin/bash -c \"rabbitmq-plugins enable rabbitmq_mqtt; rabbitmq-server\""
     ports:
       - "15672:15672"
       - "5672:5672"
-      - "1883:1883"
-    volumes:
-      - "./rabbitmq:/etc/rabbitmq"
 
 volumes:
   marsrover-sqldata:

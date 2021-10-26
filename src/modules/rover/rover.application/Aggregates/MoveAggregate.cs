@@ -11,59 +11,22 @@ using System.Threading.Tasks;
 
 namespace rover.application.Aggregates
 {
-    public class MoveAggregate : AggregateRoot<MoveAggregate, RoverId>, IEmit<MovedEvent>
+    public class MoveAggregate : AggregateRoot<MoveAggregate, RoverId>, IEmit<MoveEvent>
     {
-        private Position position;
+        private string[] move;
 
         public MoveAggregate(RoverId id) : base(id) { }
 
         public IExecutionResult Move(string[] move)
         {
-            //MoveResponse response = new MoveResponse();
-            position = new Position()
-            {
-                FacingDirection = "N",
-                Latitude = 3,
-                Longitude = 4
-            };
-
-            //Change position of rover
-            try
-            {
-                //response.Move = new Move[move.Length];
-                //foreach (var m in move)
-                //{
-                //    response.Move.Append(m);
-                //    response.StopPosition = new Position()
-                //    {
-                //        FacingDirection = "N",
-                //        Latitude = 3,
-                //        Longitude = 4
-                //    };
-                //}
-
-                Emit(new MovedEvent(
-                    position.FacingDirection, position.Longitude, position.Latitude
-                ));
-            }
-            catch (Exception ex)
-            {
-                Emit(new MovedEvent(
-                    position.FacingDirection, position.Longitude, position.Latitude
-                ));
-            }
+            Emit(new MoveEvent(move));
 
             return ExecutionResult.Success();
         }
 
-        public void Apply(MovedEvent aggregateEvent)
+        public void Apply(MoveEvent aggregateEvent)
         {
-            position = new Position()
-            {
-                Latitude = aggregateEvent.Latitude,
-                Longitude = aggregateEvent.Longitude,
-                FacingDirection = aggregateEvent.FacingDirection
-            };
+            move = aggregateEvent.Move;
         }
     }
 }

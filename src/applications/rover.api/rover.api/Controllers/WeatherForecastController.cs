@@ -3,7 +3,6 @@ using EventFlow.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using rover.api.Domain.Rover;
-using rover.api.Example;
 using rover.application.Commands;
 using rover.application.Entities;
 using System;
@@ -40,15 +39,9 @@ namespace rover.api.Controllers
             //await _commandBus.PublishAsync(exampleCommand, CancellationToken.None);
 
             //var landingCommand = new LandingCommand(RoverId.New, new Position() { FacingDirection = "N", Latitude = 1, Longitude = 2});
-            var landingCommand = new LandingCommand(RoverId.New, new rover.domain.AggregateModels.Rover.Position()
-            {
-                    FacingDirection = "N",
-                    Latitude = 1,
-                    Longitude = 2
-                }
-            );
+            var landingCommand = new MoveCommand(RoverId.New, new string[3] {"f","f","l"});
 
-            await _commandBus.PublishAsync(landingCommand, CancellationToken.None);
+            _commandBus.PublishAsync(landingCommand, CancellationToken.None);
         }
     }
 }

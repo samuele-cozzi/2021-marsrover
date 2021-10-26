@@ -7,18 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Application.Example\**" />
     <Compile Remove="Application.Rover\**" />
+    <Content Remove="Application.Example\**" />
     <Content Remove="Application.Rover\**" />
+    <EmbeddedResource Remove="Application.Example\**" />
     <EmbeddedResource Remove="Application.Rover\**" />
+    <None Remove="Application.Example\**" />
     <None Remove="Application.Rover\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
-    <PackageReference Include="EventFlow" Version="0.83.4713" />
     <PackageReference Include="EventFlow.AspNetCore" Version="0.83.4713" />
-    <PackageReference Include="EventFlow.Autofac" Version="0.83.4713" />
+    <PackageReference Include="EventFlow.DependencyInjection" Version="0.83.4713" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
   </ItemGroup>
 

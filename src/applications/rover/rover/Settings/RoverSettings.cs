@@ -13,5 +13,6 @@ namespace rover.Settings
 
         public int Distance { get; set; }
         public string ConnectionStringReadModel { get; set; }
+        public string ConnectionStringRabbitMQ { get; set; }
     }
 }

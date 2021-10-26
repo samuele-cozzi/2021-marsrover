@@ -1,8 +1,12 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using EventFlow;
-using EventFlow.Autofac.Extensions;
+using EventFlow.DependencyInjection.Extensions;
 using EventFlow.Extensions;
+using EventFlow.MsSql;
+using EventFlow.MsSql.Extensions;
+using EventFlow.RabbitMQ;
+using EventFlow.RabbitMQ.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,9 +15,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using rover.api.Example;
 using rover.application.Commands;
 using rover.application.DomainEvents;
+using rover.application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,24 +39,32 @@ namespace rover.api
         {
             services.AddControllers();
 
-            var containerBuilder = new ContainerBuilder();
-
-            var container = EventFlowOptions.New
-                .UseAutofacContainerBuilder(containerBuilder)
-                //.AddAspNetCoreMetadataProviders()
-                .AddEvents(typeof(ExampleEvent))
-                .AddCommands(typeof(ExampleCommand))
-                .AddCommandHandlers(typeof(ExampleCommandHandler))
+            return EventFlowOptions.New
+                .UseServiceCollection(services)
+                //.UseAutofacContainerBuilder(containerBuilder)
                 .AddEvents(typeof(LandedEvent))
+                .AddEvents(typeof(MoveEvent))
                 .AddCommands(typeof(LandingCommand))
+                .AddCommands(typeof(MoveCommand))
                 .AddCommandHandlers(typeof(LandingCommandHandler))
-                .UseConsoleLog();
-            //.UseFilesEventStore(FilesEventStoreConfiguration.Create("./evt-store"))
-            //.UseInMemoryReadStoreFor<ExampleReadModel>();
+                .AddCommandHandlers(typeof(MoveCommandHandler))
+                //.AddSnapshots(typeof(CompetitionSnapshot))
+                //.RegisterServices(sr => sr.Register(i => SnapshotEveryFewVersionsStrategy.Default))
+                //.RegisterServices(sr => sr.Register(c => ConfigurationManager.ConnectionStrings["EventStore"].ConnectionString))
+                //.AddSynchronousSubscriber<MoveAggregate, RoverId, MoveEvent, MoveEventSubscriber>()
 
-            containerBuilder.Populate(services);
+                .UseMssqlReadModel<LandingReadModel>()
+                .UseMssqlReadModel<MoveReadModel>()
+                //.UseInMemoryReadStoreFor<LandingReadModel>()
+                //.UseInMemoryReadStoreFor<MoveReadModel>()
+                .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString("Server=localhost,5433;Database=RoverRM;User Id=sa;Password=Pass@word"))
+                .PublishToRabbitMq(RabbitMqConfiguration.With(new Uri($"amqp://localhost:5672"), true, 5, "eventflow"))
+                //.RegisterServices(s => {
+                //    s.Register<IHostedService, MoveEventSubscriber>(Lifetime.Singleton);
+                //})
+                .UseConsoleLog().CreateServiceProvider();
 
-            return new AutofacServiceProvider(containerBuilder.Build());
+            
 
         }
 

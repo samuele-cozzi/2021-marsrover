@@ -7,10 +7,16 @@
   <ItemGroup>
     <PackageReference Include="EventFlow" Version="0.83.4713" />
     <PackageReference Include="EventFlow.MsSql" Version="0.83.4713" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\rover.domain\rover.domain.csproj" />
+    <ProjectReference Include="..\rover.infrastructure.rabbitmq\rover.infrastructure.rabbitmq.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Queries\" />
   </ItemGroup>
 
 </Project>
