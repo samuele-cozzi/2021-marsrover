@@ -1,25 +1,23 @@
 ﻿using EventFlow.Aggregates.ExecutionResults;
 using EventFlow.Commands;
 using rover.application.Aggregates;
-using rover.application.Entities;
 using rover.application.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace rover.application.Commands
 {
-    public class MoveCommandHandler : CommandHandler<MoveAggregate, MoveId, IExecutionResult, MoveCommand>
+    public class StopCommandHandler : CommandHandler<StopAggregate, StopId, IExecutionResult, StopCommand>
     {
         public override Task<IExecutionResult> ExecuteCommandAsync(
-            MoveAggregate aggregate,
-            MoveCommand command,
+            StopAggregate aggregate,
+            StopCommand command,
             CancellationToken cancellationToken)
         {
-            var executionResult = aggregate.Move(command.Move);
+            var executionResult = aggregate.Stop(command.StartId, command.RoverPosition, command.IsBlocked, command.Stop);
             return Task.FromResult(executionResult);
         }
     }

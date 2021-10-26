@@ -14,10 +14,9 @@ using rover.application.Aggregates;
 using rover.application.Commands;
 using rover.application.DomainEvents;
 using rover.application.Entities;
+using rover.application.Models;
+using rover.domain.Settings;
 using rover.infrastructure.rabbitmq;
-using rover.Services;
-using rover.Services.Interfaces;
-using rover.Settings;
 using Serilog;
 using System;
 using System.IO;
@@ -105,26 +104,38 @@ namespace rover
                         //var envconfig = EnvironmentConfiguration.Bind(hostcontext.Configuration);
                         //services.AddSingleton(envconfig);
 
+                        services.AddOptions();
+
+                        var configurationRoot = hostcontext.Configuration;
+                        services.Configure<RoverSettings>(configurationRoot.GetSection(nameof(RoverSettings)));
+                        services.Configure<IntegrationSettings>(configurationRoot.GetSection(nameof(IntegrationSettings)));
+
                         EventFlowOptions.New
                             .Configure(cfg => cfg.IsAsynchronousSubscribersEnabled = true)
                             .UseServiceCollection(services)
                             .AddAspNetCoreMetadataProviders()
-                            .PublishToRabbitMq(RabbitMqConfiguration.With(new Uri("amqp://localhost"), true, 5, "eventflow"))
+                            .PublishToRabbitMq(RabbitMqConfiguration.With(
+                                new Uri(configurationRoot.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQConnectionString")), 
+                                true, 5,
+                                configurationRoot.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQPublishExchange")))
                             //.RegisterModule<DomainModule>()
-                            .AddEvents(typeof(LandedEvent))
-                            .AddEvents(typeof(MoveEvent))
-                            .AddCommands(typeof(LandingCommand))
-                            .AddCommands(typeof(MoveCommand))
-                            .AddCommandHandlers(typeof(LandingCommandHandler))
-                            .AddCommandHandlers(typeof(MoveCommandHandler))
+
+                            .AddEvents(typeof(StoppedEvent))
+                            .AddCommands(typeof(StopCommand))
+                            .AddCommandHandlers(typeof(StopCommandHandler))
+                            .UseInMemoryReadStoreFor<StopReadModel>()
+
+                            .AddEvents(typeof(StartEvent))
+                            .AddEvents(typeof(PositionChangedEvent))
+                            //.AddEvents(typeof(MoveEvent))
 
                             //
                             // subscribe services changed
                             //
-                            .AddAsynchronousSubscriber<MoveAggregate, RoverId, MoveEvent, MoveEventSubscriber>()
+                            .AddAsynchronousSubscriber<StartAggregate, StartId, StartEvent, StartEventSubscriber>()
                             .RegisterServices(s => {
                                 s.Register<IHostedService, RabbitConsumePersistenceService>(Lifetime.Singleton);
-                                s.Register<IHostedService, MoveEventSubscriber>(Lifetime.Singleton);
+                                s.Register<IHostedService, StartEventSubscriber>(Lifetime.Singleton);
                             });
                     })
                 .ConfigureLogging((hostingContext, logging) => { });

@@ -2,13 +2,14 @@
 using EventFlow.ReadStores;
 using rover.application.Aggregates;
 using rover.application.DomainEvents;
+using rover.application.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace rover.application.Models
 {
-    public class PositionReadModel : IReadModel, IAmReadModelFor<PositionAggregate, PositionId, PositionChangedEvent>
+    public class StopReadModel : IReadModel, IAmReadModelFor<StopAggregate, StopId, StoppedEvent>
     {
         public string AggregateId { get; private set; }
         public DateTimeOffset Timestamp { get; private set; }
@@ -18,10 +19,9 @@ namespace rover.application.Models
         public double Latitude { get; private set; }
         public double Longitude { get; private set; }
         public bool IsBlocked { get; set; }
-        public string StartId { get; set; }
 
 
-        public void Apply(IReadModelContext context, IDomainEvent<PositionAggregate, PositionId, PositionChangedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<StopAggregate, StopId, StoppedEvent> domainEvent)
         {
             AggregateId = domainEvent.AggregateIdentity.Value;
             Timestamp = domainEvent.Timestamp;
@@ -31,7 +31,6 @@ namespace rover.application.Models
             Longitude = domainEvent.AggregateEvent.Longitude;
             FacingDirection = domainEvent.AggregateEvent.FacingDirection;
             IsBlocked = domainEvent.AggregateEvent.IsBlocked;
-            StartId = domainEvent.AggregateEvent.StartId;
         }
 
     }

@@ -1,31 +1,27 @@
 ﻿using EventFlow.Aggregates;
 using EventFlow.Aggregates.ExecutionResults;
 using rover.application.DomainEvents;
-using rover.application.Entities;
 using rover.application.Models;
-using rover.domain.AggregateModels.Rover;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace rover.application.Aggregates
 {
-    public class MoveAggregate : AggregateRoot<MoveAggregate, MoveId>, IEmit<MoveEvent>
+    public class StartAggregate : AggregateRoot<StartAggregate, StartId>, IEmit<StartEvent>
     {
         private string[] move;
 
-        public MoveAggregate(MoveId id) : base(id) { }
+        public StartAggregate(StartId id) : base(id) { }
 
-        public IExecutionResult Move(string[] move)
+        public IExecutionResult Move(string[] move, bool stop)
         {
-            Emit(new MoveEvent(move));
+            Emit(new StartEvent(move, stop));
 
             return ExecutionResult.Success();
         }
 
-        public void Apply(MoveEvent aggregateEvent)
+        public void Apply(StartEvent aggregateEvent)
         {
             move = aggregateEvent.Move;
         }

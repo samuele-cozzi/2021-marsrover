@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Domain.Rover\Position.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
     <PackageReference Include="EventFlow.AspNetCore" Version="0.83.4713" />
@@ -26,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Domain.Rover\" />
     <Folder Include="Rover\" />
   </ItemGroup>
 

@@ -1,29 +1,30 @@
 ﻿using EventFlow.Aggregates;
 using rover.application.Aggregates;
-using rover.application.Entities;
 using rover.application.Models;
-using rover.domain.AggregateModels.Rover;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace rover.application.DomainEvents
 {
-    public class MovedEvent : AggregateEvent<MoveAggregate, MoveId>
+    public class StoppedEvent : AggregateEvent<StopAggregate, StopId>
     {
+        public string StartId { get; set; }
         public string FacingDirection { get; }
         public double Latitude { get; }
         public double Longitude { get; }
-    
+        public bool IsBlocked { get; }
+        public bool Stop { get; set; }
 
-        public MovedEvent(string facingDirection, double latitude, double longitude)
+        public StoppedEvent(string startId, string facingDirection, double latitude, double longitude, bool isBlocked, bool stop)
         {
+            this.StartId = startId;
             this.FacingDirection = facingDirection;
             this.Latitude = latitude;
             this.Longitude = longitude;
+            this.IsBlocked = isBlocked;
+            this.Stop = stop;
         }
-    }
 
+    }
 }

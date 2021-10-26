@@ -7,6 +7,7 @@
   <ItemGroup>
     <Compile Remove="AggregateModels\Abstracts\Enumeration.cs" />
     <Compile Remove="AggregateModels\Rover\Move.cs" />
+    <Compile Remove="AggregateModels\Rover\MoveResponse.cs" />
     <Compile Remove="AggregateModels\Rover\Orientation.cs" />
   </ItemGroup>
 

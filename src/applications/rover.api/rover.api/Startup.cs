@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using EventFlow;
+using EventFlow.Configuration;
 using EventFlow.DependencyInjection.Extensions;
 using EventFlow.Extensions;
 using EventFlow.MsSql;
@@ -15,9 +16,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using rover.application.Aggregates;
 using rover.application.Commands;
 using rover.application.DomainEvents;
 using rover.application.Models;
+using rover.domain.Settings;
+using rover.infrastructure.rabbitmq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,29 +43,53 @@ namespace rover.api
         {
             services.AddControllers();
 
+            services.Configure<RoverSettings>(Configuration.GetSection(nameof(RoverSettings)));
+            services.Configure<IntegrationSettings>(Configuration.GetSection(nameof(IntegrationSettings)));
+
             return EventFlowOptions.New
                 .UseServiceCollection(services)
                 //.UseAutofacContainerBuilder(containerBuilder)
-                .AddEvents(typeof(LandedEvent))
                 .AddEvents(typeof(MoveEvent))
-                .AddCommands(typeof(LandingCommand))
                 .AddCommands(typeof(MoveCommand))
-                .AddCommandHandlers(typeof(LandingCommandHandler))
                 .AddCommandHandlers(typeof(MoveCommandHandler))
+                .UseMssqlReadModel<MoveReadModel>()
+
+                .AddEvents(typeof(StartEvent))
+                .AddCommands(typeof(StartCommand))
+                .AddCommandHandlers(typeof(StartCommandHandler))
+                .UseMssqlReadModel<StartReadModel>()
+
+                .AddEvents(typeof(PositionChangedEvent))
+                .AddCommands(typeof(PositionCommand))
+                .AddCommandHandlers(typeof(PositionCommandHandler))
+                .UseMssqlReadModel<PositionReadModel>()
+
                 //.AddSnapshots(typeof(CompetitionSnapshot))
                 //.RegisterServices(sr => sr.Register(i => SnapshotEveryFewVersionsStrategy.Default))
                 //.RegisterServices(sr => sr.Register(c => ConfigurationManager.ConnectionStrings["EventStore"].ConnectionString))
                 //.AddSynchronousSubscriber<MoveAggregate, RoverId, MoveEvent, MoveEventSubscriber>()
 
-                .UseMssqlReadModel<LandingReadModel>()
-                .UseMssqlReadModel<MoveReadModel>()
+                .AddEvents(typeof(StoppedEvent))
+
+                
+                
                 //.UseInMemoryReadStoreFor<LandingReadModel>()
                 //.UseInMemoryReadStoreFor<MoveReadModel>()
-                .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString("Server=localhost,5433;Database=RoverRM;User Id=sa;Password=Pass@word"))
-                .PublishToRabbitMq(RabbitMqConfiguration.With(new Uri($"amqp://localhost:5672"), true, 5, "eventflow"))
+                .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString(
+                    Configuration.GetSection(nameof(IntegrationSettings)).GetValue<string>("ReadModelConnectionString")))
+                .PublishToRabbitMq(RabbitMqConfiguration.With(
+                                new Uri(Configuration.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQConnectionString")),
+                                true, 5,
+                                Configuration.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQPublishExchange")))
                 //.RegisterServices(s => {
                 //    s.Register<IHostedService, MoveEventSubscriber>(Lifetime.Singleton);
                 //})
+                .AddAsynchronousSubscriber<StopAggregate, StopId, StoppedEvent, StoppedEventSubscriber>()
+                .RegisterServices(s => {
+                    s.Register<IHostedService, RabbitConsumePersistenceService>(Lifetime.Singleton);
+                    s.Register<IHostedService, StoppedEventSubscriber>(Lifetime.Singleton);
+                    
+                })
                 .UseConsoleLog().CreateServiceProvider();
 
             

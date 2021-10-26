@@ -2,17 +2,13 @@
 using EventFlow.ReadStores;
 using rover.application.Aggregates;
 using rover.application.DomainEvents;
-using rover.application.Entities;
-using rover.domain.AggregateModels.Rover;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace rover.application.Models
 {
-    public class MoveReadModel : IReadModel, IAmReadModelFor<MoveAggregate, MoveId, MoveEvent>
+    public class StartReadModel : IReadModel, IAmReadModelFor<StartAggregate, StartId, StartEvent>
     {
         public string AggregateId { get; private set; }
         public DateTimeOffset Timestamp { get; private set; }
@@ -22,7 +18,7 @@ namespace rover.application.Models
 
         public void Apply(
             IReadModelContext context,
-            IDomainEvent<MoveAggregate, MoveId, MoveEvent> domainEvent)
+            IDomainEvent<StartAggregate, StartId, StartEvent> domainEvent)
         {
             AggregateId = domainEvent.AggregateIdentity.Value;
             Timestamp = domainEvent.Timestamp;

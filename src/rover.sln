@@ -15,6 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover", "applications\rover
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover.infrastructure.rabbitmq", "modules\rover\rover.infrastructure.rabbitmq\rover.infrastructure.rabbitmq.csproj", "{B36FD00E-81C2-433B-A310-D964BC8B74F5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{C147586B-98EF-45D1-982C-37DAD2D5E804}"
+	ProjectSection(SolutionItems) = preProject
+		ReadModel.sql = ReadModel.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

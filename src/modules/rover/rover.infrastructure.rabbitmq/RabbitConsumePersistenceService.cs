@@ -12,9 +12,10 @@ using EventFlow.RabbitMQ.Integrations;
 using EventFlow.Subscribers;
 
 using Microsoft.Extensions.Hosting;
-
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using rover.domain.Settings;
 
 namespace rover.infrastructure.rabbitmq
 {
@@ -23,16 +24,19 @@ namespace rover.infrastructure.rabbitmq
         private readonly IDispatchToEventSubscribers _dispatchToEventSubscribers;
         private readonly IEventJsonSerializer _eventJsonSerializer;
         private readonly IRabbitMqConnectionFactory _rabbitMqConnectionFactory;
+        private readonly IntegrationSettings _options;
 
 
         public RabbitConsumePersistenceService(
             IRabbitMqConnectionFactory rabbitMqConnectionFactory,
             IEventJsonSerializer eventJsonSerializer,
-            IDispatchToEventSubscribers dispatchToEventSubscribers)
+            IDispatchToEventSubscribers dispatchToEventSubscribers,
+            IOptions<IntegrationSettings> options)
         {
             _rabbitMqConnectionFactory = rabbitMqConnectionFactory;
             _eventJsonSerializer = eventJsonSerializer;
             _dispatchToEventSubscribers = dispatchToEventSubscribers;
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
         public void Dispose()
@@ -42,22 +46,24 @@ namespace rover.infrastructure.rabbitmq
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             var connection =
-                await _rabbitMqConnectionFactory.CreateConnectionAsync(new Uri("amqp://localhost"), cancellationToken);
+                await _rabbitMqConnectionFactory.CreateConnectionAsync(new Uri(_options.RabbitMQConnectionString), cancellationToken);
             await connection.WithModelAsync(model => {
-                model.ExchangeDeclare("eventflow", ExchangeType.Fanout);
-                model.QueueDeclare("eventconsumer", false, false, true, null);
-                model.QueueBind("eventconsumer", "eventflow", "");
+                model.ExchangeDeclare(_options.RabbitMQReadExchange, ExchangeType.Fanout);
+                model.QueueDeclare(_options.RabbitMQQueue, false, false, true, null);
+                model.QueueBind(_options.RabbitMQQueue, _options.RabbitMQReadExchange, "");
 
                 var consume = new EventingBasicConsumer(model);
                 consume.Received += (obj, @event) => {
                     var msg = CreateRabbitMqMessage(@event);
-                    var domainEvent = _eventJsonSerializer.Deserialize(msg.Message, new Metadata(msg.Headers));
+                    
+                        var domainEvent = _eventJsonSerializer.Deserialize(msg.Message, new Metadata(msg.Headers));
 
-                    _dispatchToEventSubscribers.DispatchToAsynchronousSubscribersAsync(domainEvent, cancellationToken);
+                        _dispatchToEventSubscribers.DispatchToAsynchronousSubscribersAsync(domainEvent, cancellationToken);
+                    
                 };
 
 
-                model.BasicConsume("eventconsumer", false, consume);
+                model.BasicConsume(_options.RabbitMQQueue, false, consume);
                 return Task.CompletedTask;
             }, cancellationToken);
         }
