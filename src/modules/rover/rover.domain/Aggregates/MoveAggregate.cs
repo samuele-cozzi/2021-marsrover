@@ -12,6 +12,7 @@ namespace rover.domain.Aggregates
     public class MoveAggregate : AggregateRoot<MoveAggregate, MoveId>, IEmit<MovedEvent>
     {
         private readonly MarsSettings _options;
+        private const int circle = 360;
 
         public MoveAggregate(
             MoveId id,
@@ -23,32 +24,39 @@ namespace rover.domain.Aggregates
 
         public IExecutionResult Move(Position position, Moves move)
         {
+            double x = position.Longitude, y = position.Latitude;
+
             if (move == Moves.f)
             {
                 if (position.FacingDirection == FacingDirections.N)
-                    position.Latitude += 360 / _options.AngularPartition;
+                    y += 360 / _options.AngularPartition;
                 if (position.FacingDirection == FacingDirections.S)
-                    position.Latitude -= 360 / _options.AngularPartition;
+                    y -= 360 / _options.AngularPartition;
                 if (position.FacingDirection == FacingDirections.E)
-                    position.Longitude += 360 / _options.AngularPartition;
+                    x += 360 / _options.AngularPartition;
                 if (position.FacingDirection == FacingDirections.W)
-                    position.Longitude -= 360 / _options.AngularPartition;
+                    x -= 360 / _options.AngularPartition;
             }
 
             if (move == Moves.b)
             {
                 if (position.FacingDirection == FacingDirections.N)
-                    position.Latitude -= 360 / _options.AngularPartition;
+                    y -= 360 / _options.AngularPartition;
                 if (position.FacingDirection == FacingDirections.S)
-                    position.Latitude += 360 / _options.AngularPartition;
+                    y += 360 / _options.AngularPartition;
                 if (position.FacingDirection == FacingDirections.E)
-                    position.Longitude -= 360 / _options.AngularPartition;
+                    x -= 360 / _options.AngularPartition;
                 if (position.FacingDirection == FacingDirections.W)
-                    position.Longitude += 360 / _options.AngularPartition;
+                    x += 360 / _options.AngularPartition;
             }
 
-            var obstacle = _options.Obstacles.FirstOrDefault(z => z.X == position.Longitude && z.Y == position.Latitude);
-            if(obstacle == null) { 
+            var obstacle = _options.Obstacles.FirstOrDefault(z => z.X == x && z.Y == y);
+
+
+            if (obstacle == null)
+            {
+                position.Longitude = x;
+                position.Latitude = y;
                 Emit(new MovedEvent(position.Latitude, position.Longitude));
 
                 return ExecutionResult.Success();
