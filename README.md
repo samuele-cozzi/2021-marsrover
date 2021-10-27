@@ -22,11 +22,12 @@ the rover moves up to the last possible point, aborts the sequence and reports t
 - Real world scenario (Rover + Control room)
 
 ## Architecture
-![ConceptualArchitecture](https://github.com/samuele-cozzi/2021-MarsRover/blob/main/src/Utilities/MarsRoverArchitectureV2.svg)
+![ConceptualArchitecture](https://github.com/samuele-cozzi/2021-MarsRover/blob/main/src/Utilities/MarsRoverArchitecture.svg)
 
 ## Prerequisites
 - dotnet core 3.1
 - docker
+- postman
 
 Note: for linux environment follow this [link](https://docs.docker.com/engine/install/linux-postinstall/) after docker installation
 
