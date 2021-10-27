@@ -27,6 +27,9 @@ the rover moves up to the last possible point, aborts the sequence and reports t
 
 Note: for linux environment follow this [link](https://docs.docker.com/engine/install/linux-postinstall/) after docker installation
 
+## Architecture
+![OverallArchitecture](https://github.com/samuele-cozzi/2021-MarsRover/blob/main/src/Utilities/MarsRoverArchitecture.svg)
+
 ## Develop
 
 ### Infrastructure
