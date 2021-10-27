@@ -1,7 +1,4 @@
-﻿using rover.domain.AggregateModels.Rover;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using rover.domain.Models;
 
 namespace rover.domain.Settings
 {

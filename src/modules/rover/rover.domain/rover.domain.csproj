@@ -5,21 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="AggregateModels\Plantes\**" />
-    <EmbeddedResource Remove="AggregateModels\Plantes\**" />
-    <None Remove="AggregateModels\Plantes\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="AggregateModels\Abstracts\Enumeration.cs" />
-    <Compile Remove="AggregateModels\Rover\Move.cs" />
-    <Compile Remove="AggregateModels\Rover\MoveResponse.cs" />
-    <Compile Remove="AggregateModels\Rover\Orientation.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="AggregateModels\Abstracts\" />
-    <Folder Include="Interfaces\" />
+    <PackageReference Include="EventFlow" Version="0.83.4713" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

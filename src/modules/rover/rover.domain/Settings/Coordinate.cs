@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace rover.domain.Settings
+﻿namespace rover.domain.Settings
 {
     public class Coordinate
     {

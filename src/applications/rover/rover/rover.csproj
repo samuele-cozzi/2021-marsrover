@@ -14,22 +14,18 @@
 
   <ItemGroup>
     <Compile Remove="RabbitConsumePersistenceService.cs" />
-    <Compile Remove="Settings\RoverSettings.cs" />
     <Compile Remove="Worker.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="EventFlow.AspNetCore" Version="0.83.4713" />
     <PackageReference Include="EventFlow.DependencyInjection" Version="0.83.4713" />
+    <PackageReference Include="EventFlow.MsSql" Version="0.83.4713" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="4.1.2" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\modules\rover\rover.application\rover.application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,7 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Settings\" />
+    <ProjectReference Include="..\..\..\modules\rover\rover.domain\rover.domain.csproj" />
+    <ProjectReference Include="..\..\..\modules\rover\rover.infrastructure.rabbitmq\rover.infrastructure.rabbitmq.csproj" />
   </ItemGroup>
 
 </Project>

@@ -16,16 +16,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using rover.application.Aggregates;
-using rover.application.Commands;
-using rover.application.DomainEvents;
-using rover.application.Models;
-using rover.domain.Settings;
 using rover.infrastructure.rabbitmq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using rover.api.DomainEventsHandler;
+using rover.domain.Aggregates;
+using rover.domain.Commands;
+using rover.domain.DomainEvents;
+using rover.domain.Models;
+using rover.domain.Settings;
 
 namespace rover.api
 {
@@ -48,7 +49,6 @@ namespace rover.api
 
             return EventFlowOptions.New
                 .UseServiceCollection(services)
-                //.UseAutofacContainerBuilder(containerBuilder)
 
                 .AddEvents(typeof(StartEvent))
                 .AddCommands(typeof(StartCommand))
@@ -59,29 +59,18 @@ namespace rover.api
                 .AddCommands(typeof(PositionCommand))
                 .AddCommandHandlers(typeof(PositionCommandHandler))
                 .UseMssqlReadModel<PositionReadModel>()
-
-                //.AddSnapshots(typeof(CompetitionSnapshot))
-                //.RegisterServices(sr => sr.Register(i => SnapshotEveryFewVersionsStrategy.Default))
-                //.RegisterServices(sr => sr.Register(c => ConfigurationManager.ConnectionStrings["EventStore"].ConnectionString))
-                //.AddSynchronousSubscriber<MoveAggregate, RoverId, MoveEvent, MoveEventSubscriber>()
-
+                
                 .AddEvents(typeof(StoppedEvent))
                 .AddEvents(typeof(TurnedEvent))
                 .AddEvents(typeof(MovedEvent))
-
-
-
-                //.UseInMemoryReadStoreFor<LandingReadModel>()
-                //.UseInMemoryReadStoreFor<MoveReadModel>()
+                
                 .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString(
                     Configuration.GetSection(nameof(IntegrationSettings)).GetValue<string>("ReadModelConnectionString")))
                 .PublishToRabbitMq(RabbitMqConfiguration.With(
                                 new Uri(Configuration.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQConnectionString")),
                                 true, 5,
                                 Configuration.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQPublishExchange")))
-                //.RegisterServices(s => {
-                //    s.Register<IHostedService, MoveEventSubscriber>(Lifetime.Singleton);
-                //})
+                
                 .AddAsynchronousSubscriber<StopAggregate, StopId, StoppedEvent, StoppedEventSubscriber>()
                 .RegisterServices(s => {
                     s.Register<IHostedService, RabbitConsumePersistenceService>(Lifetime.Singleton);

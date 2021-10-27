@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31808.319
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover.api", "applications\rover.api\rover.api\rover.api.csproj", "{F1A49696-FA75-4EDA-9E8C-517FC1989082}"
 EndProject
@@ -9,15 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{D7212B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover.domain", "modules\rover\rover.domain\rover.domain.csproj", "{4C80CEE5-958E-489A-A16B-4D738284C4D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover.application", "modules\rover\rover.application\rover.application.csproj", "{EF9B2F46-7EC1-4350-AE8C-8AECA88698CB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover", "applications\rover\rover\rover.csproj", "{47A54B35-48EA-4E20-BDC2-12AE245757A2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover.infrastructure.rabbitmq", "modules\rover\rover.infrastructure.rabbitmq\rover.infrastructure.rabbitmq.csproj", "{B36FD00E-81C2-433B-A310-D964BC8B74F5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{C147586B-98EF-45D1-982C-37DAD2D5E804}"
 	ProjectSection(SolutionItems) = preProject
-		ReadModel.sql = ReadModel.sql
+		Utilities\ReadModel.sql = Utilities\ReadModel.sql
 	EndProjectSection
 EndProject
 Global
@@ -34,10 +32,6 @@ Global
 		{4C80CEE5-958E-489A-A16B-4D738284C4D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C80CEE5-958E-489A-A16B-4D738284C4D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C80CEE5-958E-489A-A16B-4D738284C4D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF9B2F46-7EC1-4350-AE8C-8AECA88698CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF9B2F46-7EC1-4350-AE8C-8AECA88698CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF9B2F46-7EC1-4350-AE8C-8AECA88698CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF9B2F46-7EC1-4350-AE8C-8AECA88698CB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{47A54B35-48EA-4E20-BDC2-12AE245757A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{47A54B35-48EA-4E20-BDC2-12AE245757A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47A54B35-48EA-4E20-BDC2-12AE245757A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -52,7 +46,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4C80CEE5-958E-489A-A16B-4D738284C4D5} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
-		{EF9B2F46-7EC1-4350-AE8C-8AECA88698CB} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
 		{B36FD00E-81C2-433B-A310-D964BC8B74F5} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
