@@ -109,6 +109,7 @@ namespace rover
                         var configurationRoot = hostcontext.Configuration;
                         services.Configure<RoverSettings>(configurationRoot.GetSection(nameof(RoverSettings)));
                         services.Configure<IntegrationSettings>(configurationRoot.GetSection(nameof(IntegrationSettings)));
+                        services.Configure<MarsSettings>(configurationRoot.GetSection(nameof(MarsSettings)));
 
                         EventFlowOptions.New
                             .Configure(cfg => cfg.IsAsynchronousSubscribersEnabled = true)
@@ -124,6 +125,16 @@ namespace rover
                             .AddCommands(typeof(StopCommand))
                             .AddCommandHandlers(typeof(StopCommandHandler))
                             .UseInMemoryReadStoreFor<StopReadModel>()
+
+                            .AddEvents(typeof(MovedEvent))
+                            .AddCommands(typeof(MoveCommand))
+                            .AddCommandHandlers(typeof(MoveCommandHandler))
+                            .UseInMemoryReadStoreFor<MoveReadModel>()
+
+                            .AddEvents(typeof(TurnedEvent))
+                            .AddCommands(typeof(TurnCommand))
+                            .AddCommandHandlers(typeof(TurnCommandHandler))
+                            .UseInMemoryReadStoreFor<TurnReadModel>()
 
                             .AddEvents(typeof(StartEvent))
                             .AddEvents(typeof(PositionChangedEvent))

@@ -8,16 +8,14 @@ using System.Text;
 
 namespace rover.application.DomainEvents
 {
-    public class StartEvent : AggregateEvent<StartAggregate, StartId>
+    public class TurnedEvent : AggregateEvent<TurnAggregate, TurnId>
     {
-        public Moves[] Move { get; }
-        public bool Stop { get; set; }
+        public FacingDirections FacingDirection { get; }
 
-        public StartEvent(Moves[] move, bool stop)
+
+        public TurnedEvent(FacingDirections facingDirection)
         {
-            this.Move = move;
-            this.Stop = stop;
+            this.FacingDirection = facingDirection;
         }
-
     }
 }

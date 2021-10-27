@@ -49,10 +49,6 @@ namespace rover.api
             return EventFlowOptions.New
                 .UseServiceCollection(services)
                 //.UseAutofacContainerBuilder(containerBuilder)
-                .AddEvents(typeof(MoveEvent))
-                .AddCommands(typeof(MoveCommand))
-                .AddCommandHandlers(typeof(MoveCommandHandler))
-                .UseMssqlReadModel<MoveReadModel>()
 
                 .AddEvents(typeof(StartEvent))
                 .AddCommands(typeof(StartCommand))
@@ -70,9 +66,11 @@ namespace rover.api
                 //.AddSynchronousSubscriber<MoveAggregate, RoverId, MoveEvent, MoveEventSubscriber>()
 
                 .AddEvents(typeof(StoppedEvent))
+                .AddEvents(typeof(TurnedEvent))
+                .AddEvents(typeof(MovedEvent))
 
-                
-                
+
+
                 //.UseInMemoryReadStoreFor<LandingReadModel>()
                 //.UseInMemoryReadStoreFor<MoveReadModel>()
                 .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString(

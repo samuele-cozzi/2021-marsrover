@@ -1,25 +1,23 @@
 ﻿using EventFlow.Aggregates.ExecutionResults;
 using EventFlow.Commands;
 using rover.application.Aggregates;
-using rover.application.Entities;
 using rover.application.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace rover.application.Commands
 {
-    public class MoveCommandHandler : CommandHandler<MoveAggregate, MoveId, IExecutionResult, MoveCommand>
+    public class TurnCommandHandler : CommandHandler<TurnAggregate, TurnId, IExecutionResult, TurnCommand>
     {
         public override Task<IExecutionResult> ExecuteCommandAsync(
-            MoveAggregate aggregate,
-            MoveCommand command,
+            TurnAggregate aggregate,
+            TurnCommand command,
             CancellationToken cancellationToken)
         {
-            var executionResult = aggregate.Move(command.Position, command.Move);
+            var executionResult = aggregate.Turn(command.FacingDirection, command.Move);
             return Task.FromResult(executionResult);
         }
     }

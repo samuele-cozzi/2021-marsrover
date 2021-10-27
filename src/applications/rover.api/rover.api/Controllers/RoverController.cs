@@ -5,7 +5,9 @@ using Microsoft.Extensions.Logging;
 using rover.application.Commands;
 using rover.application.Models;
 using rover.domain.AggregateModels.Rover;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -48,13 +50,16 @@ namespace rover.api.Controllers
         [HttpPost("move")]
         public void Move(string[] value)
         {
-            _commandBus.PublishAsync(new StartCommand(StartId.New, value, true), CancellationToken.None);
+            var enumList = value
+              .Select(x => (Moves)Enum.Parse(typeof(Moves), x)).ToArray();
+
+            _commandBus.PublishAsync(new StartCommand(StartId.New, enumList, true), CancellationToken.None);
         }
 
         [HttpPost("explore")]
         public void Explore()
         {
-            _commandBus.PublishAsync(new StartCommand(StartId.New, new string[4] {"f","f","f","f"}, false), CancellationToken.None);
+            _commandBus.PublishAsync(new StartCommand(StartId.New, new Moves[4] { Moves.f, Moves.f , Moves.f , Moves.f }, false), CancellationToken.None);
         }
     }
 }

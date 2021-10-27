@@ -11,6 +11,6 @@ namespace rover.domain.AggregateModels.Rover
     {
         public double Latitude {  get; set; }
         public double Longitude { get; set; }
-        public string FacingDirection { get; set; }
+        public FacingDirections FacingDirection { get; set; }
     }
 }

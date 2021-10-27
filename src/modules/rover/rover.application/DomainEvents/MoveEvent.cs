@@ -10,9 +10,9 @@ namespace rover.application.DomainEvents
 {
     public class MoveEvent : AggregateEvent<MoveAggregate, MoveId>
     {
-        public string[] Move { get; }
+        public string Move { get; }
 
-        public MoveEvent(string[] move)
+        public MoveEvent(string move)
         {
             this.Move = move;
         }

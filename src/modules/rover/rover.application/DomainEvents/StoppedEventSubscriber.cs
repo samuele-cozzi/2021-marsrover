@@ -46,22 +46,22 @@ namespace rover.application.DomainEvents
                         FacingDirection = domainEvent.AggregateEvent.FacingDirection, 
                         Latitude = domainEvent.AggregateEvent.Latitude, 
                         Longitude = domainEvent.AggregateEvent.Longitude }, 
-                    false, 
+                    domainEvent.AggregateEvent.IsBlocked, 
                     domainEvent.AggregateEvent.StartId,
                     domainEvent.AggregateEvent.Stop)
                 , CancellationToken.None);
 
-            if (!domainEvent.AggregateEvent.Stop)
+            if (!domainEvent.AggregateEvent.Stop && domainEvent.AggregateEvent.Longitude < 360)
             {
                 if (domainEvent.AggregateEvent.IsBlocked)
                 {
                     _commandBus.PublishAsync(
-                    new StartCommand(StartId.New, new string[2] { "r", "f" }, domainEvent.AggregateEvent.Stop), CancellationToken.None);
+                    new StartCommand(StartId.New, new Moves[3] { Moves.r, Moves.f, Moves.l }, domainEvent.AggregateEvent.Stop), CancellationToken.None);
                 }
                 else
                 {
                     _commandBus.PublishAsync(
-                    new StartCommand(StartId.New, new string[4] { "f", "f", "f", "f" }, domainEvent.AggregateEvent.Stop), CancellationToken.None);
+                    new StartCommand(StartId.New, new Moves[4] { Moves.f, Moves.f, Moves.f, Moves.f }, domainEvent.AggregateEvent.Stop), CancellationToken.None);
                 }
             }
 

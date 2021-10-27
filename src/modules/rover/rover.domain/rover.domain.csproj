@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AggregateModels\Plantes\**" />
+    <EmbeddedResource Remove="AggregateModels\Plantes\**" />
+    <None Remove="AggregateModels\Plantes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="AggregateModels\Abstracts\Enumeration.cs" />
     <Compile Remove="AggregateModels\Rover\Move.cs" />
     <Compile Remove="AggregateModels\Rover\MoveResponse.cs" />

@@ -13,14 +13,12 @@ namespace rover.application.DomainEvents
 {
     public class MovedEvent : AggregateEvent<MoveAggregate, MoveId>
     {
-        public string FacingDirection { get; }
         public double Latitude { get; }
         public double Longitude { get; }
     
 
-        public MovedEvent(string facingDirection, double latitude, double longitude)
+        public MovedEvent(double latitude, double longitude)
         {
-            this.FacingDirection = facingDirection;
             this.Latitude = latitude;
             this.Longitude = longitude;
         }
