@@ -22,7 +22,7 @@ the rover moves up to the last possible point, aborts the sequence and reports t
 - Real world scenario (Rover + Control room)
 
 ## Architecture
-![ConceptualArchitecture](https://github.com/samuele-cozzi/2021-MarsRover/blob/main/src/Utilities/MarsRoverArchitecture.svg)
+![ConceptualArchitecture](https://github.com/samuele-cozzi/2021-MarsRover/blob/main/src/Utilities/MarsRoverArchitectureV2.svg)
 
 ## Prerequisites
 - dotnet core 3.1
