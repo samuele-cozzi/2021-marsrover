@@ -21,14 +21,14 @@ the rover moves up to the last possible point, aborts the sequence and reports t
 - DDD
 - Real world scenario (Rover + Control room)
 
+## Architecture
+![ConceptualArchitecture](https://github.com/samuele-cozzi/2021-MarsRover/blob/main/src/Utilities/MarsRoverArchitecture.svg)
+
 ## Prerequisites
 - dotnet core 3.1
 - docker
 
 Note: for linux environment follow this [link](https://docs.docker.com/engine/install/linux-postinstall/) after docker installation
-
-## Architecture
-![OverallArchitecture](https://github.com/samuele-cozzi/2021-MarsRover/blob/main/src/Utilities/MarsRoverArchitecture.svg)
 
 ## Develop
 
@@ -57,6 +57,7 @@ rover.sln
 - Validation
 - Swagger
 - Exception Handling
+- Queries
 - Tests
 - DevOps
 - Authentication
