@@ -11,13 +11,13 @@ using rover.domain.DomainEvents;
 using rover.domain.Models;
 using rover.infrastructure.rabbitmq;
 
-namespace rover.api.DomainEventsHandler
+namespace controlroom.api.DomainEventsHandlers
 {
-    public class StoppedEventSubscriber : IHostedService, IRabbitMqConsumerPersistanceService, 
+    public class StoppedEventSubscriber : IHostedService, IRabbitMqConsumerPersistanceService,
         ISubscribeAsynchronousTo<StopAggregate, StopId, StoppedEvent>
     {
         private readonly ICommandBus _commandBus;
-        
+
         public StoppedEventSubscriber(
             ICommandBus commandBus)
         {
@@ -39,12 +39,14 @@ namespace rover.api.DomainEventsHandler
             Console.WriteLine($"Location Updated for ");
             _commandBus.PublishAsync(
                 new PositionCommand(
-                    PositionId.New, 
-                    new Position() { 
-                        FacingDirection = domainEvent.AggregateEvent.FacingDirection, 
-                        Latitude = domainEvent.AggregateEvent.Latitude, 
-                        Longitude = domainEvent.AggregateEvent.Longitude }, 
-                    domainEvent.AggregateEvent.IsBlocked, 
+                    PositionId.New,
+                    new Position()
+                    {
+                        FacingDirection = domainEvent.AggregateEvent.FacingDirection,
+                        Latitude = domainEvent.AggregateEvent.Latitude,
+                        Longitude = domainEvent.AggregateEvent.Longitude
+                    },
+                    domainEvent.AggregateEvent.IsBlocked,
                     domainEvent.AggregateEvent.StartId,
                     domainEvent.AggregateEvent.Stop)
                 , CancellationToken.None);

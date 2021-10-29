@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using EventFlow.Aggregates;
 using EventFlow.ReadStores;
 using rover.domain.Aggregates;
@@ -8,6 +9,7 @@ namespace rover.domain.Models
 {
     public class PositionReadModel : IReadModel, IAmReadModelFor<PositionAggregate, PositionId, PositionChangedEvent>
     {
+        [Key]
         public string AggregateId { get; private set; }
         public DateTimeOffset Timestamp { get; private set; }
         public int SequenceNumber { get; private set; }

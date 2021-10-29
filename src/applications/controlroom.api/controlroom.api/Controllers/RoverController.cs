@@ -2,19 +2,19 @@
 using EventFlow.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using rover.domain.Commands;
+using rover.domain.Models;
+using rover.domain.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using rover.domain.Commands;
-using rover.domain.Models;
+using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace rover.api.Controllers
+namespace controlroom.api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class RoverController : ControllerBase
     {
         private readonly ILogger<RoverController> _logger;
@@ -31,21 +31,8 @@ namespace rover.api.Controllers
             _queryProcessor = queryProcessor;
         }
 
-        // GET: api/<Rover>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<Rover>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<Rover>
+        
+        // POST api/<Rover>/move
         [HttpPost("move")]
         public void Move(string[] value)
         {
@@ -55,10 +42,11 @@ namespace rover.api.Controllers
             _commandBus.PublishAsync(new StartCommand(StartId.New, enumList, true), CancellationToken.None);
         }
 
+        // POST api/<Rover>/explore
         [HttpPost("explore")]
         public void Explore()
         {
-            _commandBus.PublishAsync(new StartCommand(StartId.New, new Moves[4] { Moves.f, Moves.f , Moves.f , Moves.f }, false), CancellationToken.None);
+            _commandBus.PublishAsync(new StartCommand(StartId.New, new Moves[4] { Moves.f, Moves.f, Moves.f, Moves.f }, false), CancellationToken.None);
         }
     }
 }

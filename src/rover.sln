@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30804.86
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31808.319
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover.api", "applications\rover.api\rover.api\rover.api.csproj", "{F1A49696-FA75-4EDA-9E8C-517FC1989082}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{D7212BC1-927D-4F54-8C2C-172A87E773EB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover.domain", "modules\rover\rover.domain\rover.domain.csproj", "{4C80CEE5-958E-489A-A16B-4D738284C4D5}"
@@ -18,16 +16,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{
 		Utilities\ReadModel.sql = Utilities\ReadModel.sql
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "controlroom.api", "applications\controlroom.api\controlroom.api\controlroom.api.csproj", "{3E26AF6E-4BAA-4D28-A871-B23B3AF059AC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover.infrastructure.ef", "modules\rover\rover.infrastructure.ef\rover.infrastructure.ef.csproj", "{45EB13E5-BC42-4F6F-B9B1-F88ABA140AE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F1A49696-FA75-4EDA-9E8C-517FC1989082}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1A49696-FA75-4EDA-9E8C-517FC1989082}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1A49696-FA75-4EDA-9E8C-517FC1989082}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1A49696-FA75-4EDA-9E8C-517FC1989082}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4C80CEE5-958E-489A-A16B-4D738284C4D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C80CEE5-958E-489A-A16B-4D738284C4D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C80CEE5-958E-489A-A16B-4D738284C4D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -40,6 +38,14 @@ Global
 		{B36FD00E-81C2-433B-A310-D964BC8B74F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B36FD00E-81C2-433B-A310-D964BC8B74F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B36FD00E-81C2-433B-A310-D964BC8B74F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E26AF6E-4BAA-4D28-A871-B23B3AF059AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E26AF6E-4BAA-4D28-A871-B23B3AF059AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E26AF6E-4BAA-4D28-A871-B23B3AF059AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E26AF6E-4BAA-4D28-A871-B23B3AF059AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45EB13E5-BC42-4F6F-B9B1-F88ABA140AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45EB13E5-BC42-4F6F-B9B1-F88ABA140AE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45EB13E5-BC42-4F6F-B9B1-F88ABA140AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45EB13E5-BC42-4F6F-B9B1-F88ABA140AE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +53,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4C80CEE5-958E-489A-A16B-4D738284C4D5} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
 		{B36FD00E-81C2-433B-A310-D964BC8B74F5} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
+		{45EB13E5-BC42-4F6F-B9B1-F88ABA140AE8} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AE9438D2-F70E-421E-90B1-E44FB7075E61}
