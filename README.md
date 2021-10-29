@@ -53,8 +53,12 @@ rover.sln
 ### Pakages References
 - Serilog
 - EventFlow
+- Angular
 
-### TODO
+## Thanks
+- [Angular Tutorial](https://angular.io/tutorial)
+
+## TODO
 - Validation
 - Swagger
 - Exception Handling
