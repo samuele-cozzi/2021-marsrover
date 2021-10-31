@@ -37,12 +37,22 @@ Note: for linux environment follow this [link](https://docs.docker.com/engine/in
 
 ```docker
 docker-compose -f ./src/docker-compose.infrastucture.yml up
+
+docker-compose -f ./src/docker-compose.infrastucture.yml -f ./src/docker-compose.yml -f ./src/docker-compose.override.yml up
 ```
 Using:
 - RabbitMQ
 - MSSQL
 
 Before Start Run SQL file to create rad models tale
+
+## vscode
+
+```docker
+code ./src/applications/rover/rover
+code ./src/applications/controlroom.api/controlroom.api
+code ./src/applications/controlroom.ui
+```
 
 ### Run & Test
 

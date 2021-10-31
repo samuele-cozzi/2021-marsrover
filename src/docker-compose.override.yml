@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  controlroom-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IntegrationSettings__ReadModelConnectionString=Server=sqldata;Database=RoverRM;User Id=sa;Password=Pass@word
+      - IntegrationSettings__RabbitMQConnectionString=amqp://rabbitmq
+    ports:
+      - "5000:80"
+      - "5001:443"
+  rover:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IntegrationSettings__ReadModelConnectionString=Server=sqldata;Database=RoverRM;User Id=sa;Password=Pass@word
+      - IntegrationSettings__RabbitMQConnectionString=amqp://rabbitmq

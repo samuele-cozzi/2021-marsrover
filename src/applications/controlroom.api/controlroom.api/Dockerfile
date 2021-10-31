@@ -7,10 +7,15 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["controlroom.api/controlroom.api.csproj", "controlroom.api/"]
-RUN dotnet restore "controlroom.api/controlroom.api.csproj"
+COPY ["applications/controlroom.api/controlroom.api/controlroom.api.csproj", "applications/controlroom.api/controlroom.api/"]
+COPY ["applications/rover/rover/rover.csproj", "applications/rover/rover/"]
+COPY ["modules/rover/rover.domain/rover.domain.csproj", "modules/rover/rover.domain/"]
+COPY ["modules/rover/rover.infrastructure.ef/rover.infrastructure.ef.csproj", "modules/rover/rover.infrastructure.ef/"]
+COPY ["modules/rover/rover.infrastructure.rabbitmq/rover.infrastructure.rabbitmq.csproj", "modules/rover/rover.infrastructure.rabbitmq/"]
+COPY ["rover.sln", "rover.sln"]
+RUN dotnet restore "rover.sln"
 COPY . .
-WORKDIR "/src/controlroom.api"
+WORKDIR "/src/applications/controlroom.api/controlroom.api"
 RUN dotnet build "controlroom.api.csproj" -c Release -o /app/build
 
 FROM build AS publish
