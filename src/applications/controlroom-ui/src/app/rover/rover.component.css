@@ -1,0 +1,11 @@
+.grid-container {
+    margin: 20px;
+    height: 100%;
+  }
+
+.dashboard-container {
+    margin: 20px;
+}
+.command-row {
+    margin: 10px;
+}

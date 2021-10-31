@@ -39,7 +39,7 @@ namespace controlroom.api.Controllers
 
         // GET api/<Rover>/5
         [HttpGet("last")]
-        public PositionReadModel Get(int id)
+        public PositionReadModel Last()
         {
             var result = _queryProcessor.ProcessAsync(new GetLastPositionQuery(), CancellationToken.None).Result;
             return result;
