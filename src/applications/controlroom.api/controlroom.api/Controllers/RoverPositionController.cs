@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using rover.domain.Models;
 using rover.domain.Queries;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,19 +31,54 @@ namespace controlroom.api.Controllers
             _queryProcessor = queryProcessor;
         }
 
+
+        /// <summary>
+        /// Get list of rover position
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/rover/position
+        ///
+        /// </remarks>
+        /// <returns>list of rover positions</returns>
+        /// <response code="200">Ok</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
         // GET: api/<Rover>
         [HttpGet]
-        public IEnumerable<PositionReadModel> Get()
+        public async Task<ActionResult<IEnumerable<PositionReadModel>>> Get()
         {
-            var result = _queryProcessor.ProcessAsync(new GetPositionsQuery(), CancellationToken.None).Result;
+            var eventId = new EventId();
+            _logger.LogInformation(eventId, "start - Get: rover position");
+
+            var result = await _queryProcessor.ProcessAsync(new GetPositionsQuery(), CancellationToken.None);
+
+            _logger.LogInformation(eventId, "end - Get: rover position");
             return result;
         }
-
+        
+        /// <summary>
+        /// Get last recorder rover posotion
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/rover/position/last
+        ///
+        /// </remarks>
+        /// <returns>last registered rover positions</returns>
+        /// <response code="200">Ok</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
         // GET api/<Rover>/5
         [HttpGet("last")]
-        public PositionReadModel Last()
+        public async Task<ActionResult<PositionReadModel>> Last()
         {
-            var result = _queryProcessor.ProcessAsync(new GetLastPositionQuery(), CancellationToken.None).Result;
+            var eventId = new EventId();
+            _logger.LogInformation(eventId, "start - Get last: rover position");
+
+            var result = await _queryProcessor.ProcessAsync(new GetLastPositionQuery(), CancellationToken.None);
+
+            _logger.LogInformation(eventId, "end - Get last: rover position");
             return result;
         }
 
