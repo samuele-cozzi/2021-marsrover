@@ -34,20 +34,25 @@ Note: for linux environment follow this [link](https://docs.docker.com/engine/in
 
 ## Develop
 
-### Infrastructure
+### Run Infrastructure
 
 ```docker
 docker-compose -f ./src/docker-compose.infrastucture.yml up
-
-docker-compose -f ./src/docker-compose.infrastucture.yml -f ./src/docker-compose.yml -f ./src/docker-compose.override.yml up
 ```
 Using:
 - RabbitMQ
 - MSSQL
+- seq
 
-Before Start Run SQL file to create rad models tale
+### Build & Run
 
-## vscode
+```docker
+docker-compose -f ./src/docker-compose.infrastucture.yml -f ./src/docker-compose.yml -f ./src/docker-compose.override.yml build
+docker-compose -f ./src/docker-compose.infrastucture.yml -f ./src/docker-compose.yml -f ./src/docker-compose.override.yml up
+```
+
+
+### Debug in Linux
 
 ```docker
 code ./src/applications/rover/rover
@@ -58,19 +63,27 @@ code ./src/applications/controlroom.ui
 ng serve --open
 ```
 
-### Run & Test
+### Debug in Windows
 
 ```docker
-rover.sln
+./src/rover.sln
 ```
 
 ### Pakages References
 - Serilog
 - EventFlow
 - Angular
+- Angular Material
+- Angular Flex
 
 ## Thanks
 - [Angular Tutorial](https://angular.io/tutorial)
+
+## Wiki
+- Architecture
+- CQRS & EF
+- DDD & Clean Architecture
+- Devops & github actions
 
 ## TODO
 - Exception Handling

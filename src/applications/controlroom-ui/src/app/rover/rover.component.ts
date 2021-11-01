@@ -25,6 +25,16 @@ export class RoverComponent implements OnInit {
     this.commands.push(command);
   }
 
+  turnLeft(): void {
+    this.commands.push('l');
+    this.commands.push('f');
+  }
+
+  turnRight(): void {
+    this.commands.push('r');
+    this.commands.push('f');
+  }
+
   send(): void {
     this.reoverService.start(this.commands)
       .subscribe(() => {});

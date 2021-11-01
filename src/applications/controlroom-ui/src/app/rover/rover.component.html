@@ -11,8 +11,8 @@
             </div>
             <div class="command-row" flex fxLayout="row">
                 <div fxFlex="33">
-                    <button mat-fab color="accent" (click)="refresh()">
-                        <mat-icon>refresh</mat-icon>
+                    <button mat-fab color="primary" (click)="add('l')">
+                        <mat-icon>rotate_left</mat-icon>
                     </button>
                 </div>
                 <div fxFlex="33">
@@ -21,14 +21,14 @@
                     </button>
                 </div>
                 <div fxFlex="33">
-                    <button mat-fab color="accent" (click)="clear()">
-                        <mat-icon>clear</mat-icon>
+                    <button mat-fab color="primary" (click)="add('r')">
+                        <mat-icon>rotate_right</mat-icon>
                     </button>
                 </div>
             </div>
             <div class="command-row" flex fxLayout="row">
                 <div fxFlex="33">
-                    <button mat-fab color="primary" (click)="add('l')">
+                    <button mat-fab color="primary" (click)="turnLeft()">
                         <mat-icon>keyboard_arrow_left</mat-icon>
                     </button>
                 </div>
@@ -38,19 +38,27 @@
                     </button>
                 </div>
                 <div fxFlex="33">
-                    <button mat-fab color="primary" (click)="add('r')">
+                    <button mat-fab color="primary" (click)="turnRight()">
                         <mat-icon>keyboard_arrow_right</mat-icon>
                     </button>
                 </div>
             </div>
             <div class="command-row" flex fxLayout="row">
-                <div fxFlex="33"></div>
+                <div fxFlex="33">
+                    <button mat-fab color="accent" (click)="refresh()">
+                        <mat-icon>refresh</mat-icon>
+                    </button>
+                </div>
                 <div fxFlex="33">
                     <button mat-fab color="primary" (click)="add('b')">
                         <mat-icon>keyboard_arrow_down</mat-icon>
                     </button>
                 </div>
-                <div fxFlex="33"></div>
+                <div fxFlex="33">
+                    <button mat-fab color="accent" (click)="clear()">
+                        <mat-icon>clear</mat-icon>
+                    </button>
+                </div>
             </div>
             
         </div>

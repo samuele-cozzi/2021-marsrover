@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { environment } from '../environments/environment';
 
 import { RoverPosition } from './rover';
 
@@ -9,7 +10,7 @@ import { RoverPosition } from './rover';
 })
 export class RoverService {
 
-  private urlPrefix = 'https://localhost:44373/api/rover';  // URL to web api
+  private urlPrefix = environment.apiBaseUrl;  // URL to web api
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
