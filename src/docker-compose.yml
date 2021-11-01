@@ -21,3 +21,11 @@ services:
       - seq
       - sqldata
       - rabbitmq
+  
+  controlroom-ui:
+    image: ${REGISTRY:-rover}/controlroom.ui:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: applications/controlroom-ui/Dockerfile
+    depends_on:
+      - controlroom-api
