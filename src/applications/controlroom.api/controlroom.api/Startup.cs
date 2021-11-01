@@ -31,6 +31,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
+using Serilog;
+using Serilog.Configuration;
 
 namespace controlroom.api
 {
@@ -39,6 +41,10 @@ namespace controlroom.api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
         }
 
         public IConfiguration Configuration { get; }

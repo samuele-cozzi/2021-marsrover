@@ -70,7 +70,7 @@ namespace controlroom.api.Controllers
             }
             
             var result = _commandBus.PublishAsync(new StartCommand(StartId.New, enumList, true), CancellationToken.None).Result;
-            if(result.IsSuccess){
+            if(!result.IsSuccess){
                 _logger.LogError(eventId, "Error");
                 return StatusCode(500);
             }
@@ -105,7 +105,7 @@ namespace controlroom.api.Controllers
             _logger.LogInformation(eventId, "Start Explore Command");
 
             var result = _commandBus.PublishAsync(new StartCommand(StartId.New, new Moves[4] { Moves.f, Moves.f, Moves.f, Moves.f }, false), CancellationToken.None).Result;
-            if(result.IsSuccess){
+            if(!result.IsSuccess){
                 _logger.LogError(eventId, "Error");
                 return StatusCode(500);
             }

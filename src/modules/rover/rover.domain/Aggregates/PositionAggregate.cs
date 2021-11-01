@@ -25,12 +25,12 @@ namespace rover.domain.Aggregates
 
         public void Apply(PositionChangedEvent aggregateEvent)
         {
-            position = new Position()
-            {
-                Latitude = aggregateEvent.Latitude,
-                Longitude = aggregateEvent.Longitude,
-                FacingDirection = aggregateEvent.FacingDirection
-            };
+            // position = new Position()
+            // {
+            //     Latitude = aggregateEvent.Latitude,
+            //     Longitude = aggregateEvent.Longitude,
+            //     FacingDirection = aggregateEvent.FacingDirection
+            // };
         }
     }
 }
