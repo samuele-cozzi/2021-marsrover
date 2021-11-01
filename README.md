@@ -15,7 +15,7 @@ Given the initial starting point (x,y) of a rover and the direction (N,S,E,W) it
 the rover moves up to the last possible point, aborts the sequence and reports the obstacle.
 - Implement wrapping from one edge of the grid to another. (planets are spheres after all)
 
-## Focused
+## Objectives
 - CQRS & EF
 - Clean Architecture
 - DDD
@@ -25,9 +25,10 @@ the rover moves up to the last possible point, aborts the sequence and reports t
 ![ConceptualArchitecture](https://github.com/samuele-cozzi/2021-MarsRover/blob/main/src/Utilities/MarsRoverArchitecture.svg)
 
 ## Prerequisites
-- dotnet core 3.1
+- dotnet core 5
 - docker
-- postman
+- node 
+- angular (npm install -g @angular/cli)
 
 Note: for linux environment follow this [link](https://docs.docker.com/engine/install/linux-postinstall/) after docker installation
 
@@ -50,8 +51,11 @@ Before Start Run SQL file to create rad models tale
 
 ```docker
 code ./src/applications/rover/rover
+debug
 code ./src/applications/controlroom.api/controlroom.api
+debug
 code ./src/applications/controlroom.ui
+ng serve --open
 ```
 
 ### Run & Test
@@ -69,10 +73,7 @@ rover.sln
 - [Angular Tutorial](https://angular.io/tutorial)
 
 ## TODO
-- Validation
-- Swagger
 - Exception Handling
-- Queries
 - Tests
 - DevOps
 - Authentication
