@@ -43,8 +43,10 @@ namespace controlroom.api.DomainEventsHandlers
                     new Position()
                     {
                         FacingDirection = domainEvent.AggregateEvent.FacingDirection,
-                        Latitude = domainEvent.AggregateEvent.Latitude,
-                        Longitude = domainEvent.AggregateEvent.Longitude
+                        Coordinate = new Coordinate(){
+                            Latitude = domainEvent.AggregateEvent.Latitude,
+                            Longitude = domainEvent.AggregateEvent.Longitude
+                        }
                     },
                     domainEvent.AggregateEvent.IsBlocked,
                     domainEvent.AggregateEvent.StartId,
@@ -55,8 +57,16 @@ namespace controlroom.api.DomainEventsHandlers
             {
                 if (domainEvent.AggregateEvent.IsBlocked)
                 {
-                    _commandBus.PublishAsync(
-                    new StartCommand(StartId.New, new Moves[3] { Moves.r, Moves.f, Moves.l }, domainEvent.AggregateEvent.Stop), CancellationToken.None);
+                    var rnd = new Random();
+                    if(rnd.NextDouble() > 0.5){
+                        _commandBus.PublishAsync(
+                        new StartCommand(StartId.New, new Moves[4] { Moves.r, Moves.f, Moves.l, Moves.f }, domainEvent.AggregateEvent.Stop), CancellationToken.None);
+                    }
+                    else
+                    {
+                        _commandBus.PublishAsync(
+                        new StartCommand(StartId.New, new Moves[4] { Moves.l, Moves.f, Moves.r, Moves.f }, domainEvent.AggregateEvent.Stop), CancellationToken.None);
+                    }
                 }
                 else
                 {

@@ -51,12 +51,17 @@ namespace rover
                         EventFlowOptions.New
                             .Configure(cfg => cfg.IsAsynchronousSubscribersEnabled = true)
                             .UseServiceCollection(services)
-                            .AddAspNetCoreMetadataProviders()
+                            .AddAspNetCore()
                             .PublishToRabbitMq(RabbitMqConfiguration.With(
                                 new Uri(configurationRoot.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQConnectionString")), 
                                 true, 5,
                                 configurationRoot.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQPublishExchange")))
                             //.RegisterModule<DomainModule>()
+
+                            .AddEvents(typeof(ObstacleEvent))
+                            .AddCommands(typeof(ObstacleCommand))
+                            .AddCommandHandlers(typeof(ObstacleCommandHandler))
+                            .UseInMemoryReadStoreFor<ObstacleReadModel>()
 
                             .AddEvents(typeof(StoppedEvent))
                             .AddCommands(typeof(StopCommand))

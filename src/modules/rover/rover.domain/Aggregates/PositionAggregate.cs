@@ -17,7 +17,7 @@ namespace rover.domain.Aggregates
 
 
             Emit(new PositionChangedEvent(
-                landingPosition.FacingDirection, landingPosition.Latitude, landingPosition.Longitude, isBlocked, startId, stop
+                landingPosition.FacingDirection, landingPosition.Coordinate.Latitude, landingPosition.Coordinate.Longitude, isBlocked, startId, stop
             ));
 
             return ExecutionResult.Success();
