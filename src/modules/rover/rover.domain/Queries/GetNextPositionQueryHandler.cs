@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EventFlow.ReadStores.InMemory;
 using Microsoft.Extensions.Options;
 using rover.domain.Settings;
+using System;
 
 namespace rover.domain.Queries
 {
@@ -19,45 +20,50 @@ namespace rover.domain.Queries
           IOptions<MarsSettings> options)
         {
             _readStore = readStore;
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options)); ;
         }
 
         public async Task<PositionReadModel> ExecuteQueryAsync(GetNextPositionQuery query, CancellationToken cancellationToken)
         {
-            var obstacle = await _readStore
-                .FindAsync(x => x.Latitude == query.Position.Coordinate.Latitude && x.Longitude == query.Position.Coordinate.Longitude, cancellationToken).ConfigureAwait(false);
-
-            double x = query.Position.Coordinate.Longitude, y = query.Position.Coordinate.Latitude;
+            double longitude = query.Position.Coordinate.Longitude, latitude = query.Position.Coordinate.Latitude;
             var angularStep = circle / _options.AngularPartition;
 
             if (query.Move == Moves.f)
             {
                 if (query.Position.FacingDirection == FacingDirections.N)
-                    y += angularStep;
+                    latitude += angularStep;
                 if (query.Position.FacingDirection == FacingDirections.S)
-                    y -= angularStep;
+                    latitude -= angularStep;
                 if (query.Position.FacingDirection == FacingDirections.E)
-                    x += angularStep;
+                    longitude += angularStep;
                 if (query.Position.FacingDirection == FacingDirections.W)
-                    x -= angularStep;
+                    longitude -= angularStep;
             }
 
             if (query.Move == Moves.b)
             {
                 if (query.Position.FacingDirection == FacingDirections.N)
-                    y -= angularStep;
+                    latitude -= angularStep;
                 if (query.Position.FacingDirection == FacingDirections.S)
-                    y += angularStep;
+                    latitude += angularStep;
                 if (query.Position.FacingDirection == FacingDirections.E)
-                    x -= angularStep;
+                    longitude -= angularStep;
                 if (query.Position.FacingDirection == FacingDirections.W)
-                    x += angularStep;
+                    longitude += angularStep;
             }
 
-            if (obstacle == null){
+            //boudaries
+            longitude = (longitude >= -circle/2 && longitude <= circle/2) ?  longitude : Math.Sign(longitude) * (2 * angularStep) - longitude;
+            latitude = (latitude >= -circle/4 && latitude <= circle/4) ? latitude : throw new Exception();
+
+            var obstacle = await _readStore
+                .FindAsync(x => x.Latitude == latitude && x.Longitude == longitude, cancellationToken).ConfigureAwait(false);
+
+            if (obstacle?.Count == 0){
                 return new PositionReadModel(){
                     FacingDirection = query.Position.FacingDirection,
-                    Latitude = y,
-                    Longitude = x,
+                    Latitude = latitude,
+                    Longitude = longitude,
                     IsBlocked = false
                 };
             }

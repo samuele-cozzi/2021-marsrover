@@ -7,4 +7,5 @@ export interface RoverPosition {
     longitude: number;
     isBlocked: boolean;
     startId: string;
+    facingDirectionName: string;
 }

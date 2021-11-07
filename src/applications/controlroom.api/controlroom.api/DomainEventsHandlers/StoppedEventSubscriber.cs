@@ -17,6 +17,7 @@ namespace controlroom.api.DomainEventsHandlers
         ISubscribeAsynchronousTo<StopAggregate, StopId, StoppedEvent>
     {
         private readonly ICommandBus _commandBus;
+        private static double landingLongitude;
 
         public StoppedEventSubscriber(
             ICommandBus commandBus)
@@ -26,6 +27,7 @@ namespace controlroom.api.DomainEventsHandlers
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            landingLongitude = 0;
             return Task.CompletedTask;
         }
 
@@ -53,7 +55,11 @@ namespace controlroom.api.DomainEventsHandlers
                     domainEvent.AggregateEvent.Stop)
                 , CancellationToken.None);
 
-            if (!domainEvent.AggregateEvent.Stop && domainEvent.AggregateEvent.Longitude < 360)
+            bool continueMoving = !domainEvent.AggregateEvent.Stop;
+            bool isOnLandingLongitude = domainEvent.AggregateEvent.Longitude >= (landingLongitude - domainEvent.AggregateEvent.CoordinatePrecision) &&
+                domainEvent.AggregateEvent.Longitude <= (landingLongitude + domainEvent.AggregateEvent.CoordinatePrecision);
+
+            if (continueMoving && !isOnLandingLongitude)
             {
                 if (domainEvent.AggregateEvent.IsBlocked)
                 {

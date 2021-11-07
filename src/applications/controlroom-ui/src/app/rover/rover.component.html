@@ -1,12 +1,25 @@
 <div class="dashboard-container" color="secondary">
     <div flex fxLayout="row">
-        <div fxFlex="33">
+        <div fxFlex="25">
             <div class="command-row" flex fxLayout="row">
-                <div fxFlex="50">
+                <div fxFlex="33">
+                    <h3>Direction: {{position?.facingDirectionName}}</h3>
+                </div>
+                <div fxFlex="33">
                     <h3>Longitude: {{position?.longitude}}</h3>
                 </div>
-                <div fxFlex="50">
+                <div fxFlex="33">
                     <h3>Latitude: {{position?.latitude}}</h3>
+                </div>
+            </div>
+            <div class="command-row" flex fxLayout="row">
+                <div fxFlex="33">
+                    <button mat-button color="primary">Take Off</button>
+                </div>
+                <div fxFlex="33">
+                </div>
+                <div fxFlex="33">
+                    <button mat-button color="primary" (click)="explore()">Explore</button>
                 </div>
             </div>
             <div class="command-row" flex fxLayout="row">
@@ -62,18 +75,23 @@
             </div>
             
         </div>
-        <div fxFlex="33">
+        <div fxFlex="50">
             <h3>Commands:</h3>
             <mat-chip-list aria-label="Fish selection">
                 <mat-chip *ngFor="let command of commands">{{command}}</mat-chip>
               </mat-chip-list>              
         </div>
-        <div fxFlex="33">
+        <div fxFlex="25">
             <h3>Positions:</h3>
-            <mat-list *ngFor="let pos of positions">
+            <mat-list *ngFor="let pos of positions  | slice:0:5; let i=index">
                 <mat-list-item>{{pos.longitude}} - {{pos.latitude}}</mat-list-item>
                 <mat-divider></mat-divider>
             </mat-list>
+        </div>
+    </div>
+    <div flex fxLayout="row">
+        <div fxFlex="100">
+            <app-map [linePosition]="positions"></app-map>
         </div>
     </div>
 </div>

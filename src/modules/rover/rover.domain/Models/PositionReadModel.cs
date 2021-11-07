@@ -19,6 +19,13 @@ namespace rover.domain.Models
         public double Longitude { get; set; }
         public bool IsBlocked { get; set; }
         public string StartId { get; set; }
+        public string FacingDirectionName
+        {
+            get
+            {
+                return this.FacingDirection.ToString();
+            }
+        }
 
 
         public void Apply(IReadModelContext context, IDomainEvent<PositionAggregate, PositionId, PositionChangedEvent> domainEvent)

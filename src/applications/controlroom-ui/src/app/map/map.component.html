@@ -1,2 +1,4 @@
-<div id="map"></div>
-
+<svg-container containerId="map" [height]="svgHeight" transform="translate(-36 45.5)">
+    <svg-image imageUrl="./assets/PIA23518-Mars-landing-sites.jpg" [height]="svgHeight" [width]="svgWidth"></svg-image> 
+    <svg-polyline [borderSize]="lineBorderSize" fill="none" borderColor="#c2185b" [points]="linePosition | translate : factor"></svg-polyline>   
+</svg-container>

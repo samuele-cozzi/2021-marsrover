@@ -8,6 +8,7 @@ using rover.domain.Models;
 using rover.domain.Queries;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -54,7 +55,7 @@ namespace controlroom.api.Controllers
             var result = await _queryProcessor.ProcessAsync(new GetPositionsQuery(), CancellationToken.None);
 
             _logger.LogInformation(eventId, "end - Get: rover position");
-            return result;
+            return result.OrderByDescending(x => x.Timestamp).ToList();
         }
         
         /// <summary>

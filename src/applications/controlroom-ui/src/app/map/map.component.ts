@@ -1,7 +1,7 @@
- import { Component, OnInit } from '@angular/core';
- import { Loader } from "@googlemaps/js-api-loader"
+import { Component, OnInit, Input } from '@angular/core';
+import { RoverPosition} from '../rover';
+declare const Microsoft: any
 
-declare const google: any
 
 @Component({
   selector: 'app-map',
@@ -9,28 +9,21 @@ declare const google: any
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit {
-  private loader = new Loader({
-    apiKey: "AIzaSyCjw6FViQQTE_bZto3MHgmLYlltibt9svM",
-    version: "weekly"
-  });
+  @Input() linePosition!: RoverPosition[];
 
-  private mapOptions = {
-    center: {
-      lat: 0,
-      lng: 0
-    },
-    zoom: 4
-  };
-  
-  constructor() { }
+  public factor: number = 3;
+  public svgHeight: number = 0;
+  public svgWidth: number = 0;
+  public lineBorderSize: number = 0;
 
-  ngOnInit(): void {
-    this.loader.load().then(() => {
-      var map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 8,
-      });
-    });
+  constructor() {
+    this.svgHeight = 180 * this.factor;
+    this.svgWidth = 360 * this.factor;
+    this.lineBorderSize = 2;
   }
 
+  ngOnInit() {
+
+  }
 }
+

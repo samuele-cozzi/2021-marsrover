@@ -38,6 +38,13 @@ export class RoverComponent implements OnInit {
   send(): void {
     this.reoverService.start(this.commands)
       .subscribe(() => {});
+    this.commands = [];
+  }
+
+  explore(): void {
+    this.reoverService.explore(this.commands)
+      .subscribe(() => {});
+    this.commands = [];
   }
 
   clear(): void {

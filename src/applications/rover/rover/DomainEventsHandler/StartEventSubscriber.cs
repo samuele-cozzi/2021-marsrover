@@ -78,6 +78,8 @@ namespace rover.DomainEventsHandler
                 }
             }
 
+            position.Coordinate.Precision = _options.Landing.Coordinate.Precision;
+
             _commandBus.PublishAsync(
                 new StopCommand(
                     StopId.New, 

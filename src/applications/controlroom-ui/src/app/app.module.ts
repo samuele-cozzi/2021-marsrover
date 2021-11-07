@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RoverComponent } from './rover/rover.component';
+import { Translate } from './map/map.position.pipeline';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // <-- NgModel lives here
 import { HttpClientModule } from '@angular/common/http';
@@ -24,12 +25,14 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatRadioModule } from '@angular/material/radio';
 import {MatChipsModule} from '@angular/material/chips';
 import { MapComponent } from './map/map.component'; 
+import { NgxSvgModule } from 'ngx-svg';
 
 @NgModule({
   declarations: [
     AppComponent,
     RoverComponent,
-    MapComponent
+    MapComponent,
+    Translate
   ],
   imports: [
     BrowserModule,
@@ -52,7 +55,8 @@ import { MapComponent } from './map/map.component';
     MatMenuModule,
     MatRadioModule,
     ReactiveFormsModule,
-    MatChipsModule
+    MatChipsModule,
+    NgxSvgModule
   ],
   providers: [],
   bootstrap: [AppComponent]

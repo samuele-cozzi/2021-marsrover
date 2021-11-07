@@ -40,9 +40,9 @@ Note: for linux environment follow this [link](https://docs.docker.com/engine/in
 docker-compose -f ./src/docker-compose.infrastucture.yml up
 ```
 Using:
-- RabbitMQ
+- [RabbitMQ](http://localhost:15672/)
 - MSSQL
-- seq
+- [seq](http://localhost:5340)
 
 ### Build & Run
 

@@ -32,5 +32,10 @@ export class RoverService {
     return this.http.post(url, command, this.httpOptions);
   }
 
+  explore(command: string[]): any {
+    const url = `${this.urlPrefix}/explore`
+    return this.http.post(url, this.httpOptions);
+  }
+
   
 }
