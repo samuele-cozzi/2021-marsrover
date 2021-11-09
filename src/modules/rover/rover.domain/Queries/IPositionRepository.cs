@@ -10,5 +10,6 @@ namespace rover.domain.Queries
     {
         public Task<List<Models.PositionReadModel>> GetPositionsAsync(CancellationToken cancellationToken);
         public Task<Models.PositionReadModel> GetLastPositionsAsync(CancellationToken cancellationToken);
+        public Task<Models.PositionReadModel> GetLandingPositionsAsync(CancellationToken cancellationToken);
     }
 }

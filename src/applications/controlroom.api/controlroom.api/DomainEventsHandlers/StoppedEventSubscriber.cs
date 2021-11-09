@@ -3,12 +3,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using EventFlow;
 using EventFlow.Aggregates;
+using EventFlow.Jobs;
 using EventFlow.Subscribers;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using rover.domain.Aggregates;
 using rover.domain.Commands;
 using rover.domain.DomainEvents;
 using rover.domain.Models;
+using rover.domain.Settings;
 using rover.infrastructure.rabbitmq;
 
 namespace controlroom.api.DomainEventsHandlers
@@ -17,12 +20,18 @@ namespace controlroom.api.DomainEventsHandlers
         ISubscribeAsynchronousTo<StopAggregate, StopId, StoppedEvent>
     {
         private readonly ICommandBus _commandBus;
+        private readonly IJobScheduler _jobScheduler;
+        private readonly IntegrationSettings _options;
         private static double landingLongitude;
 
         public StoppedEventSubscriber(
-            ICommandBus commandBus)
+            ICommandBus commandBus,
+            IJobScheduler jobScheduler,
+            IOptions<IntegrationSettings> options)
         {
             _commandBus = commandBus;
+            _jobScheduler = jobScheduler;
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -39,47 +48,20 @@ namespace controlroom.api.DomainEventsHandlers
         public Task HandleAsync(IDomainEvent<StopAggregate, StopId, StoppedEvent> domainEvent, CancellationToken cancellationToken)
         {
             Console.WriteLine($"Location Updated for ");
-            _commandBus.PublishAsync(
-                new PositionCommand(
-                    PositionId.New,
-                    new Position()
-                    {
-                        FacingDirection = domainEvent.AggregateEvent.FacingDirection,
-                        Coordinate = new Coordinate(){
-                            Latitude = domainEvent.AggregateEvent.Latitude,
-                            Longitude = domainEvent.AggregateEvent.Longitude
-                        }
-                    },
+
+            var result = _jobScheduler.ScheduleAsync(
+                new HandlingRoverMessagesJob(
+                    domainEvent.AggregateEvent.FacingDirection,
+                    domainEvent.AggregateEvent.Latitude,
+                    domainEvent.AggregateEvent.Longitude,
                     domainEvent.AggregateEvent.IsBlocked,
                     domainEvent.AggregateEvent.StartId,
-                    domainEvent.AggregateEvent.Stop)
-                , CancellationToken.None);
-
-            bool continueMoving = !domainEvent.AggregateEvent.Stop;
-            bool isOnLandingLongitude = domainEvent.AggregateEvent.Longitude >= (landingLongitude - domainEvent.AggregateEvent.CoordinatePrecision) &&
-                domainEvent.AggregateEvent.Longitude <= (landingLongitude + domainEvent.AggregateEvent.CoordinatePrecision);
-
-            if (continueMoving && !isOnLandingLongitude)
-            {
-                if (domainEvent.AggregateEvent.IsBlocked)
-                {
-                    var rnd = new Random();
-                    if(rnd.NextDouble() > 0.5){
-                        _commandBus.PublishAsync(
-                        new StartCommand(StartId.New, new Moves[4] { Moves.r, Moves.f, Moves.l, Moves.f }, domainEvent.AggregateEvent.Stop), CancellationToken.None);
-                    }
-                    else
-                    {
-                        _commandBus.PublishAsync(
-                        new StartCommand(StartId.New, new Moves[4] { Moves.l, Moves.f, Moves.r, Moves.f }, domainEvent.AggregateEvent.Stop), CancellationToken.None);
-                    }
-                }
-                else
-                {
-                    _commandBus.PublishAsync(
-                    new StartCommand(StartId.New, new Moves[4] { Moves.f, Moves.f, Moves.f, Moves.f }, domainEvent.AggregateEvent.Stop), CancellationToken.None);
-                }
-            }
+                    domainEvent.AggregateEvent.Stop,
+                    domainEvent.AggregateEvent.CoordinatePrecision
+                ),
+                TimeSpan.FromSeconds(_options.TimeDistanceOfMessageInSeconds),
+                CancellationToken.None)
+                .ConfigureAwait(false);
 
             return Task.CompletedTask;
         }

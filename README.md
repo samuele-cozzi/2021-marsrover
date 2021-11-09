@@ -3,7 +3,7 @@
 Explore Mars by sending remotely controlled vehicles to the surface of the planet. Control it with an API that translates the commands sent from earth to instructions that are understood by the rover.
 
 
-## Tech Overview
+## Overview
 
 Given the initial starting point (x,y) of a rover and the direction (N,S,E,W) it is facing.
 
@@ -15,24 +15,62 @@ Given the initial starting point (x,y) of a rover and the direction (N,S,E,W) it
 the rover moves up to the last possible point, aborts the sequence and reports the obstacle.
 - Implement wrapping from one edge of the grid to another. (planets are spheres after all)
 
-## Objectives
-- CQRS & EF
-- Clean Architecture
-- DDD
-- Real world scenario (Rover + Control room)
+## Ideas
+Real world scenario (Rover + Control room)
 
-## Architecture
+### Concetpual Architecture
 ![ConceptualArchitecture](https://github.com/samuele-cozzi/2021-MarsRover/blob/main/src/Utilities/MarsRoverArchitecture.svg)
 
-## Prerequisites
-- dotnet core 5
+### Explored Concepts
+- CQRS & EF
+- Clean Architecture & DDD
+- Queue Integration
+
+
+## Tech Stack
+- Infrastructure
+  - MSSQL ([Microsoft SQL Server](https://www.microsoft.com/it-it/sql-server/sql-server-downloads))
+  - RabbitMQ ([RabbitMq](https://www.rabbitmq.com/))
+  - seq ([aeq](https://datalust.co/seq))
+  - Event Store ([GES](https://eventstore.com/))
+  - Docker Compose ([Docker](https://www.docker.com/))
+  
+- Develop
+  
+  - .NET Core 5.0 
+  - EventFlow
+  - Angular 12
+
+### CQRS & EF
+Image of sequence diagram
+
+### Clean  Architecture & DDD in .NET   
+Image of clean architecture
+Many tanks to...
+
+### Eventflow Concepts
+- Aggregates
+- Command bus and commands
+- Event store
+- In-memory, Entiy Framework read model.
+- Integration
+- Asynchronous subscriber
+
+### Tools
+- [mind map](https://gitmind.com/app/doc/1e898538b34c43ba53532e5440b584ad)
+- [trello](https://trello.com/b/RbRn6Qcc/marsrover-2021)
+- [app.diagrams.net](https://app.diagrams.net/#DMarsRoverArchitecture.svg)
+- [web sequence diagrams](https://www.websequencediagrams.com/)
+
+## Tech Details
+
+### Prerequisites
 - docker
 - node 
+- dotnet core 5
 - angular (npm install -g @angular/cli)
 
 Note: for linux environment follow this [link](https://docs.docker.com/engine/install/linux-postinstall/) after docker installation
-
-## Develop
 
 ### Run Infrastructure
 
@@ -40,9 +78,18 @@ Note: for linux environment follow this [link](https://docs.docker.com/engine/in
 docker-compose -f ./src/docker-compose.infrastucture.yml up
 ```
 Using:
-- [RabbitMQ](http://localhost:15672/)
-- MSSQL
-- [seq](http://localhost:5340)
+- Docker [Visual Studio Code](https://code.visualstudio.com/download)
+- RabbitMQ [management](http://localhost:15672/)
+- MSSQL [Azure Data Studio](https://docs.microsoft.com/en-us/sql/connect/ad/sql-server-connect-ad-sql-server-azure)
+- seq [management](http://localhost:5340)
+
+### Applications
+
+#### Control Room UI
+
+#### Control Room API
+
+#### Rover
 
 ### Build & Run
 
@@ -72,21 +119,25 @@ ng serve --open
 ### Pakages References
 - Serilog
 - EventFlow
+- Hangfire
 - Angular
 - Angular Material
 - Angular Flex
 
-## Thanks
-- [Angular Tutorial](https://angular.io/tutorial)
 
-## Wiki
-- Architecture
-- CQRS & EF
-- DDD & Clean Architecture
-- Devops & github actions
+
+
+
+### Deploy
+
+
+## Many Thanks To
+- [Angular Tutorial](https://angular.io/tutorial)
+- [Event Flow Docs](https://docs.geteventflow.net/GettingStarted.html)
+- [Event Flow Github](https://github.com/eventflow/EventFlow)
+
 
 ## TODO
-- Exception Handling
 - Tests
 - DevOps
 - Authentication

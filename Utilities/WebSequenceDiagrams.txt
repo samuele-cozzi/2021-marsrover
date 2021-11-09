@@ -1,6 +1,7 @@
-title Rover
+title Rover Backend
 
 participant CR api
+participant jobs
 participant CR Command Handlers
 participant CR EventSubscriber
 participant CR Aggregates
@@ -9,11 +10,20 @@ participant CR Database
 participant CR Events
 participant R Events
 
+participant R Database
 participant R Aggregates
 participant R Event Subscriber
 participant R Command Handlers
+participant Rover
 
-CR api -> CR Command Handlers: Start (moves, stop?)
+
+Rover -> R Command Handlers: Init Mars
+R Command Handlers -> R Aggregates: Init Mars
+R Aggregates -> R Database: Init Mars (Obstacles)
+
+
+CR api -> jobs: Move (moves, stop?)
+jobs -> CR Command Handlers: Start (moves, stop?)
 CR Command Handlers -> CR Aggregates: Start.Move (moves, stop?)
 CR Aggregates -> CR Database : Start (moves,stop?)
 CR Aggregates -> R Events : Start (moves,stop?)
@@ -21,6 +31,8 @@ R Event Subscriber -> R Events: Handle async (moves, stop?)
 loop moves
     R Event Subscriber -> R Command Handlers: Move
     R Command Handlers -> R Aggregates: Move
+    R Aggregates -> R Database: Next Coordinates
+    R Database -> R Aggregates: new Coordinates
     R Event Subscriber -> R Command Handlers: Turn
     R Command Handlers -> R Aggregates: Turn
 end
@@ -28,8 +40,10 @@ R Event Subscriber -> R Command Handlers: Stop
 R Command Handlers -> R Aggregates: Stop
 R Aggregates -> CR Events: Stop
 CR EventSubscriber -> CR Events:Handle async
-CR EventSubscriber -> CR Command Handlers: Position
+CR EventSubscriber -> jobs: Position
+jobs -> CR Command Handlers: Position
 CR Command Handlers -> CR Aggregates: Position
 CR Aggregates -> CR Database: Position
 
-CR api -> CR Database: get position
+CR api -> CR Database: get positions
+CR api -> CR Database: get last position

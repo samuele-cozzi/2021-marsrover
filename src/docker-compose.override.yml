@@ -9,7 +9,8 @@ services:
   controlroom-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - IntegrationSettings__ReadModelConnectionString=Server=sqldata;Database=RoverRM;User Id=sa;Password=Pass@word
+      - ConnectionStrings__ReadModelsConnection=Server=sqldata;Database=RoverRM;User Id=sa;Password=Pass@word
+      - ConnectionStrings__JobsConnection=Server=sqldata;Database=Jobs;User Id=sa;Password=Pass@word
       - IntegrationSettings__RabbitMQConnectionString=amqp://rabbitmq
       - Serilog__WriteTo__1__Args__serverUrl=http://seq
     ports:
@@ -19,7 +20,8 @@ services:
   rover:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - IntegrationSettings__ReadModelConnectionString=Server=sqldata;Database=RoverRM;User Id=sa;Password=Pass@word
+      - ConnectionStrings__ReadModelsConnection=Server=sqldata;Database=RoverRM;User Id=sa;Password=Pass@word
+      - ConnectionStrings__JobsConnection=Server=sqldata;Database=Jobs;User Id=sa;Password=Pass@word
       - IntegrationSettings__RabbitMQConnectionString=amqp://rabbitmq
   
   

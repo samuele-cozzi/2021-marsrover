@@ -19,16 +19,13 @@ namespace controlroom.api.Controllers
     public class RoverPositionController : ControllerBase
     {
         private readonly ILogger<RoverController> _logger;
-        private readonly ICommandBus _commandBus;
         private readonly IQueryProcessor _queryProcessor;
 
         public RoverPositionController(
             ILogger<RoverController> logger,
-            ICommandBus commandBus,
             IQueryProcessor queryProcessor)
         {
             _logger = logger;
-            _commandBus = commandBus;
             _queryProcessor = queryProcessor;
         }
 
@@ -78,6 +75,31 @@ namespace controlroom.api.Controllers
             _logger.LogInformation(eventId, "start - Get last: rover position");
 
             var result = await _queryProcessor.ProcessAsync(new GetLastPositionQuery(), CancellationToken.None);
+
+            _logger.LogInformation(eventId, "end - Get last: rover position");
+            return result;
+        }
+
+        /// <summary>
+        /// Get landing rover posotion
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /api/rover/position/landing
+        ///
+        /// </remarks>
+        /// <returns>last registered rover positions</returns>
+        /// <response code="200">Ok</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        // GET api/<Rover>/5
+        [HttpGet("landing")]
+        public async Task<ActionResult<PositionReadModel>> Landing()
+        {
+            var eventId = new EventId();
+            _logger.LogInformation(eventId, "start - Get last: rover position");
+
+            var result = await _queryProcessor.ProcessAsync(new GetLandingPositionQuery(), CancellationToken.None);
 
             _logger.LogInformation(eventId, "end - Get last: rover position");
             return result;

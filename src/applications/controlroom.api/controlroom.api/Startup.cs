@@ -3,19 +3,14 @@ using EventFlow;
 using EventFlow.Configuration;
 using EventFlow.DependencyInjection.Extensions;
 using EventFlow.Extensions;
-using EventFlow.MsSql;
-using EventFlow.MsSql.Extensions;
 using EventFlow.RabbitMQ;
 using EventFlow.RabbitMQ.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using rover.domain.Aggregates;
 using rover.domain.Commands;
@@ -27,12 +22,12 @@ using rover.infrastructure.ef;
 using rover.infrastructure.rabbitmq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
 using Serilog;
-using Serilog.Configuration;
+using Hangfire;
+using Hangfire.SqlServer;
+using EventFlow.Hangfire.Extensions;
 
 namespace controlroom.api
 {
@@ -84,8 +79,25 @@ namespace controlroom.api
             services.Configure<RoverSettings>(Configuration.GetSection(nameof(RoverSettings)));
             services.Configure<IntegrationSettings>(Configuration.GetSection(nameof(IntegrationSettings)));
 
+            // Add Hangfire services.
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(Configuration.GetConnectionString("JobsConnection"), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+
+            // Add the processing server as IHostedService
+            services.AddHangfireServer();
+
             services.AddDbContext<DBContextControlRoom>(options =>
-                options.UseSqlServer(Configuration.GetSection(nameof(IntegrationSettings)).GetValue<string>("ReadModelConnectionString")));
+                options.UseSqlServer(Configuration.GetConnectionString("ReadModelsConnection")));
             services.AddScoped<IPositionRepository, PositionRepository>();
 
             return EventFlowOptions.New
@@ -105,16 +117,21 @@ namespace controlroom.api
                 .AddEvents(typeof(TurnedEvent))
                 .AddEvents(typeof(MovedEvent))
 
-                .RegisterServices(sr => sr.Register(c => Configuration.GetSection(nameof(IntegrationSettings)).GetValue<string>("ReadModelConnectionString")))
+                .RegisterServices(sr => sr.Register(c => Configuration.GetConnectionString("ReadModelsConnection")))
                 .AddEntityFrameworkReadModel()
                 
                 .AddQueryHandler<GetPositionsQueryHandler, GetPositionsQuery, List<PositionReadModel>>()
                 .AddQueryHandler<GetLastPositionQueryHandler, GetLastPositionQuery, PositionReadModel>()
+                .AddQueryHandler<GetLandingPositionQueryHandler, GetLandingPositionQuery, PositionReadModel>()
 
                 //.UseMssqlReadModel<PositionReadModel>()
                 //.UseMssqlReadModel<StartReadModel>()
                 //.ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString(
-                //    Configuration.GetSection(nameof(IntegrationSettings)).GetValue<string>("ReadModelConnectionString")))
+                //    Configuration.GetConnectionString("ReadModelsConnection"))
+
+                .UseHangfireJobScheduler()
+                .AddJobs(typeof(SendMessageToRoverJob))
+                .AddJobs(typeof(HandlingRoverMessagesJob))
 
                 .PublishToRabbitMq(RabbitMqConfiguration.With(
                                 new Uri(Configuration.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQConnectionString")),
@@ -127,7 +144,8 @@ namespace controlroom.api
                     s.Register<IHostedService, StoppedEventSubscriber>(Lifetime.Singleton);
 
                 })
-                .UseConsoleLog().CreateServiceProvider();
+                .UseConsoleLog()
+                .CreateServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -152,10 +170,12 @@ namespace controlroom.api
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseHangfireDashboard();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
             });
         }
     }

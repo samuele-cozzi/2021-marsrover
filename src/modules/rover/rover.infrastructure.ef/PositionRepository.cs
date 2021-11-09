@@ -44,6 +44,11 @@ namespace rover.infrastructure.ef
             return _context.Positions.OrderByDescending(p => p.Timestamp).FirstOrDefaultAsync();
         }
 
+        public Task<PositionReadModel> GetLandingPositionsAsync(CancellationToken cancellationToken)
+        {
+            return _context.Positions.OrderBy(p => p.Timestamp).FirstOrDefaultAsync();
+        }
+
         public Task<List<PositionReadModel>> GetPositionsAsync(CancellationToken cancellationToken)
         {
             return _context.Positions.ToListAsync();
