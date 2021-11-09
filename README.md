@@ -1,12 +1,12 @@
+[![Docker Image CI](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-rover.yml/badge.svg)](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-rover.yml)
+[![Docker Image CI](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-controlroomapi.yml/badge.svg)](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-controlroomapi.yml)
+[![Docker Image CI](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-controlroomui.yml/badge.svg)](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-controlroomui.yml)
+
 # Mars Rover
 
 Explore Mars by sending remotely controlled vehicles to the surface of the planet. Control it with an API that translates the commands sent from earth to instructions that are understood by the rover.
 
-[![Docker Image CI](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-rover.yml/badge.svg)](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-rover.yml)
 
-[![Docker Image CI](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-controlroomapi.yml/badge.svg)](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-controlroomapi.yml)
-
-[![Docker Image CI](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-controlroomui.yml/badge.svg)](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-controlroomui.yml)
 
 ## Overview
 
