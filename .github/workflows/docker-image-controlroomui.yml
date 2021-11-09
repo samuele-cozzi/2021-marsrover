@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file src/applications/controlroom-ui/Dockerfile --tag ControlRommUI-MarsRover:$(date +%s)
+      run: docker build . --file src/applications/controlroom-ui/Dockerfile --tag controlromm-ui-marsrover:$(date +%s)
