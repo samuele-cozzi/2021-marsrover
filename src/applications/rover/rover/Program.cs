@@ -22,6 +22,7 @@ using rover.domain.DomainEvents;
 using rover.domain.Models;
 using rover.domain.Settings;
 using rover.DomainEventsHandler;
+using rover.domain.Queries;
 
 namespace rover
 {
@@ -33,13 +34,10 @@ namespace rover
                 .ConfigureAppConfiguration((host, config) => {
                     config.SetBasePath(Directory.GetCurrentDirectory());
                     config.AddJsonFile("appsettings.json", true, true);
-                    config.AddJsonFile($"appsettings.{host.HostingEnvironment.EnvironmentName}.json", true, true);
                     config.AddEnvironmentVariables();
                 })
                 .ConfigureServices(
                     (hostcontext, services) => {
-                        //var envconfig = EnvironmentConfiguration.Bind(hostcontext.Configuration);
-                        //services.AddSingleton(envconfig);
 
                         services.AddOptions();
 
@@ -56,7 +54,11 @@ namespace rover
                                 new Uri(configurationRoot.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQConnectionString")), 
                                 true, 5,
                                 configurationRoot.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQPublishExchange")))
-                            //.RegisterModule<DomainModule>()
+
+                            .AddEvents(typeof(ObstacleEvent))
+                            .AddCommands(typeof(ObstacleCommand))
+                            .AddCommandHandlers(typeof(ObstacleCommandHandler))
+                            .UseInMemoryReadStoreFor<ObstacleReadModel>()
 
                             .AddEvents(typeof(StoppedEvent))
                             .AddCommands(typeof(StopCommand))
@@ -77,6 +79,8 @@ namespace rover
                             .AddEvents(typeof(PositionChangedEvent))
                             //.AddEvents(typeof(MoveEvent))
 
+                            .AddQueryHandler<GetNextPositionQueryHandler, GetNextPositionQuery, PositionReadModel>()
+
                             //
                             // subscribe services changed
                             //
@@ -85,6 +89,8 @@ namespace rover
                                 s.Register<IHostedService, RabbitConsumePersistenceService>(Lifetime.Singleton);
                                 s.Register<IHostedService, StartEventSubscriber>(Lifetime.Singleton);
                             });
+
+                        services.AddHostedService<Worker>();
                     })
                 .ConfigureLogging((hostingContext, logging) => { });
 

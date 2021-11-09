@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  controlroom-ui:
+    ports:
+      - "5010:80"
+      - "5011:443"
+
+  controlroom-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__ReadModelsConnection=Server=sqldata;Database=RoverRM;User Id=sa;Password=Pass@word
+      - ConnectionStrings__JobsConnection=Server=sqldata;Database=Jobs;User Id=sa;Password=Pass@word
+      - IntegrationSettings__RabbitMQConnectionString=amqp://rabbitmq
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq
+    ports:
+      - "5000:80"
+      - "5001:443"
+      
+  rover:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__ReadModelsConnection=Server=sqldata;Database=RoverRM;User Id=sa;Password=Pass@word
+      - ConnectionStrings__JobsConnection=Server=sqldata;Database=Jobs;User Id=sa;Password=Pass@word
+      - IntegrationSettings__RabbitMQConnectionString=amqp://rabbitmq
+  
+  

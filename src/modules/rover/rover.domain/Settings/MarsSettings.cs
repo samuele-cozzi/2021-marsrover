@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using rover.domain.Models;
 
 namespace rover.domain.Settings
 {

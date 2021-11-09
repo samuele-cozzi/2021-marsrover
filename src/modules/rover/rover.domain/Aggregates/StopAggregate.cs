@@ -17,7 +17,7 @@ namespace rover.domain.Aggregates
 
 
             Emit(new StoppedEvent(
-                startId.ToString(), landingPosition.FacingDirection, landingPosition.Latitude, landingPosition.Longitude, isBlocked, stop
+                startId.ToString(), landingPosition.FacingDirection, landingPosition.Coordinate.Latitude, landingPosition.Coordinate.Longitude, landingPosition.Coordinate.AngularPrecision, isBlocked, stop
             ));
 
             return ExecutionResult.Success();
@@ -27,8 +27,10 @@ namespace rover.domain.Aggregates
         {
             position = new Position()
             {
-                Latitude = aggregateEvent.Latitude,
-                Longitude = aggregateEvent.Longitude,
+                Coordinate = new Coordinate() {
+                    Latitude = aggregateEvent.Latitude,
+                    Longitude = aggregateEvent.Longitude
+                },
                 FacingDirection = aggregateEvent.FacingDirection
             };
         }

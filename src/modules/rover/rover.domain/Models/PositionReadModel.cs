@@ -14,11 +14,18 @@ namespace rover.domain.Models
         public DateTimeOffset Timestamp { get; private set; }
         public int SequenceNumber { get; private set; }
 
-        public FacingDirections FacingDirection { get; private set; }
-        public double Latitude { get; private set; }
-        public double Longitude { get; private set; }
+        public FacingDirections FacingDirection { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public bool IsBlocked { get; set; }
         public string StartId { get; set; }
+        public string FacingDirectionName
+        {
+            get
+            {
+                return this.FacingDirection.ToString();
+            }
+        }
 
 
         public void Apply(IReadModelContext context, IDomainEvent<PositionAggregate, PositionId, PositionChangedEvent> domainEvent)

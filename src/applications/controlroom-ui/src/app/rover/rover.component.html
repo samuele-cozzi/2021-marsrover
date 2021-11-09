@@ -1,0 +1,97 @@
+<div class="dashboard-container" color="secondary">
+    <div flex fxLayout="row">
+        <div fxFlex="25">
+            <div class="command-row" flex fxLayout="row">
+                <div fxFlex="33">
+                    <h3>Direction: {{position?.facingDirectionName}}</h3>
+                </div>
+                <div fxFlex="33">
+                    <h3>Longitude: {{position?.longitude}}</h3>
+                </div>
+                <div fxFlex="33">
+                    <h3>Latitude: {{position?.latitude}}</h3>
+                </div>
+            </div>
+            <div class="command-row" flex fxLayout="row">
+                <div fxFlex="33">
+                    <button mat-button color="primary">Take Off</button>
+                </div>
+                <div fxFlex="33">
+                </div>
+                <div fxFlex="33">
+                    <button mat-button color="primary" (click)="explore()">Explore</button>
+                </div>
+            </div>
+            <div class="command-row" flex fxLayout="row">
+                <div fxFlex="33">
+                    <button mat-fab color="primary" (click)="add('l')">
+                        <mat-icon>rotate_left</mat-icon>
+                    </button>
+                </div>
+                <div fxFlex="33">
+                    <button mat-fab color="primary" (click)="add('f')">
+                        <mat-icon>keyboard_arrow_up</mat-icon>
+                    </button>
+                </div>
+                <div fxFlex="33">
+                    <button mat-fab color="primary" (click)="add('r')">
+                        <mat-icon>rotate_right</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="command-row" flex fxLayout="row">
+                <div fxFlex="33">
+                    <button mat-fab color="primary" (click)="turnLeft()">
+                        <mat-icon>keyboard_arrow_left</mat-icon>
+                    </button>
+                </div>
+                <div fxFlex="33">
+                    <button mat-fab color="primary" (click)="send()">
+                        <mat-icon>check</mat-icon>
+                    </button>
+                </div>
+                <div fxFlex="33">
+                    <button mat-fab color="primary" (click)="turnRight()">
+                        <mat-icon>keyboard_arrow_right</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="command-row" flex fxLayout="row">
+                <div fxFlex="33">
+                    <button mat-fab color="accent" (click)="refresh()">
+                        <mat-icon>refresh</mat-icon>
+                    </button>
+                </div>
+                <div fxFlex="33">
+                    <button mat-fab color="primary" (click)="add('b')">
+                        <mat-icon>keyboard_arrow_down</mat-icon>
+                    </button>
+                </div>
+                <div fxFlex="33">
+                    <button mat-fab color="accent" (click)="clear()">
+                        <mat-icon>clear</mat-icon>
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+        <div fxFlex="50">
+            <h3>Commands:</h3>
+            <mat-chip-list aria-label="Fish selection">
+                <mat-chip *ngFor="let command of commands">{{command}}</mat-chip>
+              </mat-chip-list>              
+        </div>
+        <div fxFlex="25">
+            <h3>Positions:</h3>
+            <mat-list *ngFor="let pos of positions  | slice:0:5; let i=index">
+                <mat-list-item>{{pos.longitude}} - {{pos.latitude}}</mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+        </div>
+    </div>
+    <div flex fxLayout="row">
+        <div fxFlex="100">
+            <app-map [linePosition]="positions"></app-map>
+        </div>
+    </div>
+</div>

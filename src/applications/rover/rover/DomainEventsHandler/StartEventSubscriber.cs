@@ -58,8 +58,8 @@ namespace rover.DomainEventsHandler
                     if (result.IsSuccess)
                     {
                         var model = _queryProcessor.ProcessAsync(new ReadModelByIdQuery<MoveReadModel>(id), CancellationToken.None).Result;
-                        position.Latitude = model.Latitude;
-                        position.Longitude = model.Longitude;
+                        position.Coordinate.Latitude = model.Latitude;
+                        position.Coordinate.Longitude = model.Longitude;
                     }
                     else
                     {
@@ -77,6 +77,8 @@ namespace rover.DomainEventsHandler
                     position.FacingDirection = model.FacingDirection;
                 }
             }
+
+            position.Coordinate.AngularPrecision = _options.Landing.Coordinate.AngularPrecision;
 
             _commandBus.PublishAsync(
                 new StopCommand(
