@@ -15,4 +15,5 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file src/applications/controlroom-ui/Dockerfile --tag controlromm-ui-marsrover:$(date +%s)
+      working-directory: src
+      run: docker build . --file applications/controlroom-ui/Dockerfile --tag controlromm-ui-marsrover:$(date +%s)
