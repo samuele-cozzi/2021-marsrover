@@ -35,10 +35,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build the Docker image
         working-directory: src
-        run: docker build . --file applications/rover/rover/Dockerfile --tag {{IMAGE_NAME}}
+        run: docker build . --file applications/rover/rover/Dockerfile --tag ${{ env.IMAGE_NAME }}
       
       - uses: actions/checkout@v2
       - name: Push the Docker image
         working-directory: src
-        run: docker push  {{IMAGE_NAME}}
+        run: docker push  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
 
