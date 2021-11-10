@@ -1,3 +1,4 @@
+[![CodeQL](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/codeql-analysis.yml)
 [![Docker Rover](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-rover.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-rover.yml)
 [![Docker Control Room API](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-controlroomapi.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-controlroomapi.yml)
 [![Docker Controlroom UI](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-controlroomui.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-controlroomui.yml)
