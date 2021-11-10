@@ -1,6 +1,6 @@
-[![Docker Image CI](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-rover.yml/badge.svg)](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-rover.yml)
-[![Docker Image CI](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-controlroomapi.yml/badge.svg)](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-controlroomapi.yml)
-[![Docker Image CI](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-controlroomui.yml/badge.svg)](https://github.com/samuele-cozzi/2021-MarsRover/actions/workflows/docker-image-controlroomui.yml)
+[![Docker Rover](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-rover.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-rover.yml)
+[![Docker Control Room API](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-controlroomapi.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-controlroomapi.yml)
+[![Docker Controlroom UI](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-controlroomui.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-controlroomui.yml)
 
 # Mars Rover
 
