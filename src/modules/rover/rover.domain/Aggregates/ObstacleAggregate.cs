@@ -19,12 +19,6 @@ namespace rover.domain.Aggregates
 
         public void Apply(ObstacleEvent aggregateEvent)
         {
-            // position = new Position()
-            // {
-            //     Latitude = aggregateEvent.Latitude,
-            //     Longitude = aggregateEvent.Longitude,
-            //     FacingDirection = aggregateEvent.FacingDirection
-            // };
         }
     }
 }

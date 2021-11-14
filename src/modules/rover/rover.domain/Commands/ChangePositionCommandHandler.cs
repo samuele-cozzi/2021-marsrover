@@ -7,14 +7,14 @@ using rover.domain.Models;
 
 namespace rover.domain.Commands
 {
-    public class StopCommandHandler : CommandHandler<StopAggregate, StopId, IExecutionResult, StopCommand>
+    public class ChangePositionCommandHandler : CommandHandler<RoverPositionAggregate, RoverPositionAggregateId, IExecutionResult, ChangePositionCommand>
     {
         public override Task<IExecutionResult> ExecuteCommandAsync(
-            StopAggregate aggregate,
-            StopCommand command,
+            RoverPositionAggregate aggregate,
+            ChangePositionCommand command,
             CancellationToken cancellationToken)
         {
-            var executionResult = aggregate.Stop(command.StartId, command.RoverPosition, command.IsBlocked, command.Stop);
+            var executionResult = aggregate.ChangePosition(command.RoverPosition, command.IsBlocked,command.Stop);
             return Task.FromResult(executionResult);
         }
     }

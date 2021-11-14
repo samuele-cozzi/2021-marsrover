@@ -16,6 +16,7 @@ using EventFlow.Provided.Jobs;
 using EventFlow.Configuration;
 using rover.domain.Settings;
 using Microsoft.Extensions.Options;
+using rover.domain.Aggregates;
 
 namespace controlroom.api.Controllers
 {
@@ -25,15 +26,18 @@ namespace controlroom.api.Controllers
     {
         private readonly ILogger<RoverController> _logger;
         private readonly IJobScheduler _jobScheduler;
+        private readonly IQueryProcessor _queryProcessor;
         private readonly IntegrationSettings _options;
 
         public RoverController(
             ILogger<RoverController> logger,
             IJobScheduler jobScheduler,
+            IQueryProcessor queryProcessor,
             IOptions<IntegrationSettings> options)
         {
             _logger = logger;
             _jobScheduler = jobScheduler;
+            _queryProcessor = queryProcessor;
             _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
@@ -59,8 +63,11 @@ namespace controlroom.api.Controllers
             var eventId = new EventId();
             _logger.LogInformation(eventId, "Takeoff Explore Command");
 
+            var lastPosition = await _queryProcessor.ProcessAsync(new GetLastPositionQuery(), CancellationToken.None);
+            RoverPositionAggregateId id = (lastPosition?.AggregateId == null) ? RoverPositionAggregateId.New : RoverPositionAggregateId.With(lastPosition.AggregateId);
+
             var result = await _jobScheduler.ScheduleAsync(
-                new SendMessageToRoverJob(new Moves[0] { }, true),
+                new SendMessageToRoverJob(id, new Moves[0] { }, true),
                 TimeSpan.FromSeconds(_options.TimeDistanceOfVoyageInSeconds),
                 CancellationToken.None)
                 .ConfigureAwait(false);
@@ -113,8 +120,11 @@ namespace controlroom.api.Controllers
                 return BadRequest(e);
             }
 
+            var lastPosition = await _queryProcessor.ProcessAsync(new GetLastPositionQuery(), CancellationToken.None);
+            RoverPositionAggregateId id = RoverPositionAggregateId.With(lastPosition?.AggregateId) ?? RoverPositionAggregateId.New;
+
             var result = await _jobScheduler.ScheduleAsync(
-                new SendMessageToRoverJob(enumList, true),
+                new SendMessageToRoverJob(id, enumList, true),
                 TimeSpan.FromSeconds(_options.TimeDistanceOfMessageInSeconds),
                 CancellationToken.None)
                 .ConfigureAwait(false);
@@ -154,8 +164,11 @@ namespace controlroom.api.Controllers
             var eventId = new EventId();
             _logger.LogInformation(eventId, "Start Explore Command");
 
+            var lastPosition = await _queryProcessor.ProcessAsync(new GetLastPositionQuery(), CancellationToken.None);
+            RoverPositionAggregateId id = RoverPositionAggregateId.With(lastPosition?.AggregateId) ?? RoverPositionAggregateId.New;
+
             var result = await _jobScheduler.ScheduleAsync(
-                new SendMessageToRoverJob(new Moves[4] { Moves.f, Moves.f, Moves.f, Moves.f }, false),
+                new SendMessageToRoverJob(id, new Moves[4] { Moves.f, Moves.f, Moves.f, Moves.f }, false),
                 TimeSpan.FromSeconds(_options.TimeDistanceOfMessageInSeconds),
                 CancellationToken.None)
                 .ConfigureAwait(false);

@@ -5,15 +5,15 @@ using rover.domain.Models;
 
 namespace rover.domain.Commands
 {
-    public  class MoveCommand : Command<MoveAggregate, MoveId, IExecutionResult>
+    public  class MoveCommand : Command<RoverPositionAggregate, RoverPositionAggregateId, IExecutionResult>
     {
-        public MoveCommand(MoveId aggregateId, Position position, Moves move) : base(aggregateId)
+        public MoveCommand(RoverPositionAggregateId aggregateId, Moves[] moves, bool isBlocked) : base(aggregateId)
         {
-            Move = move;
-            Position = position;
+            Moves = moves;
+            IsBlocked = isBlocked;
         }
 
-        public Moves Move { get; }
-        public Position Position { get; }
+        public Moves[] Moves { get; }
+        public bool IsBlocked { get; }
     }
 }

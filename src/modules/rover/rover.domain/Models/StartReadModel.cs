@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using EventFlow.Aggregates;
 using EventFlow.ReadStores;
 using rover.domain.Aggregates;
@@ -7,7 +8,8 @@ using rover.domain.DomainEvents;
 
 namespace rover.domain.Models
 {
-    public class StartReadModel : IReadModel, IAmReadModelFor<StartAggregate, StartId, StartEvent>
+    [Table("Commands")]
+    public class StartReadModel : IReadModel, IAmReadModelFor<RoverPositionAggregate, RoverPositionAggregateId, StartedEvent>
     {
         [Key]
         public string AggregateId { get; private set; }
@@ -18,7 +20,7 @@ namespace rover.domain.Models
 
         public void Apply(
             IReadModelContext context,
-            IDomainEvent<StartAggregate, StartId, StartEvent> domainEvent)
+            IDomainEvent<RoverPositionAggregate, RoverPositionAggregateId, StartedEvent> domainEvent)
         {
             AggregateId = domainEvent.AggregateIdentity.Value;
             Timestamp = domainEvent.Timestamp;

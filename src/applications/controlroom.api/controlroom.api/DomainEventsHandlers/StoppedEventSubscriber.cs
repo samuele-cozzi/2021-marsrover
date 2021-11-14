@@ -17,12 +17,11 @@ using rover.infrastructure.rabbitmq;
 namespace controlroom.api.DomainEventsHandlers
 {
     public class StoppedEventSubscriber : IHostedService, IRabbitMqConsumerPersistanceService,
-        ISubscribeAsynchronousTo<StopAggregate, StopId, StoppedEvent>
+        ISubscribeAsynchronousTo<RoverPositionAggregate, RoverPositionAggregateId, StoppedEvent>
     {
         private readonly ICommandBus _commandBus;
         private readonly IJobScheduler _jobScheduler;
         private readonly IntegrationSettings _options;
-        private static double landingLongitude;
 
         public StoppedEventSubscriber(
             ICommandBus commandBus,
@@ -36,7 +35,6 @@ namespace controlroom.api.DomainEventsHandlers
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            landingLongitude = 0;
             return Task.CompletedTask;
         }
 
@@ -45,17 +43,17 @@ namespace controlroom.api.DomainEventsHandlers
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(IDomainEvent<StopAggregate, StopId, StoppedEvent> domainEvent, CancellationToken cancellationToken)
+        public Task HandleAsync(IDomainEvent<RoverPositionAggregate, RoverPositionAggregateId, StoppedEvent> domainEvent, CancellationToken cancellationToken)
         {
             Console.WriteLine($"Location Updated for ");
 
             var result = _jobScheduler.ScheduleAsync(
                 new HandlingRoverMessagesJob(
+                    domainEvent.AggregateIdentity,
                     domainEvent.AggregateEvent.FacingDirection,
                     domainEvent.AggregateEvent.Latitude,
                     domainEvent.AggregateEvent.Longitude,
                     domainEvent.AggregateEvent.IsBlocked,
-                    domainEvent.AggregateEvent.StartId,
                     domainEvent.AggregateEvent.Stop,
                     domainEvent.AggregateEvent.CoordinatePrecision
                 ),

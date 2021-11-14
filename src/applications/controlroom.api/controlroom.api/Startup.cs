@@ -28,6 +28,7 @@ using Serilog;
 using Hangfire;
 using Hangfire.SqlServer;
 using EventFlow.Hangfire.Extensions;
+using EventFlow.EntityFramework;
 
 namespace controlroom.api
 {
@@ -96,28 +97,31 @@ namespace controlroom.api
             // Add the processing server as IHostedService
             services.AddHangfireServer();
 
-            services.AddDbContext<DBContextControlRoom>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("ReadModelsConnection")));
-            services.AddScoped<IPositionRepository, PositionRepository>();
+            //services.AddDbContext<DBContextControlRoom>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("ReadModelsConnection")));
+            //services.AddScoped<IPositionRepository, PositionRepository>();
 
             return EventFlowOptions.New
                 .UseServiceCollection(services)
 
-                .AddEvents(typeof(StartEvent))
+                .AddEvents(typeof(StartedEvent))
                 .AddCommands(typeof(StartCommand))
                 .AddCommandHandlers(typeof(StartCommandHandler))
                 
 
                 .AddEvents(typeof(PositionChangedEvent))
-                .AddCommands(typeof(PositionCommand))
-                .AddCommandHandlers(typeof(PositionCommandHandler))
+                .AddCommands(typeof(ChangePositionCommand))
+                .AddCommandHandlers(typeof(ChangePositionCommandHandler))
                 
 
                 .AddEvents(typeof(StoppedEvent))
-                .AddEvents(typeof(TurnedEvent))
-                .AddEvents(typeof(MovedEvent))
 
-                .RegisterServices(sr => sr.Register(c => Configuration.GetConnectionString("ReadModelsConnection")))
+                .RegisterServices(sr =>
+                {
+                    sr.Register<IPositionRepository, PositionRepository>(Lifetime.Scoped);
+                    sr.Register<IDbContextProvider<DBContextControlRoom>, DBContextProvider>();
+                    //sr.<DBContextControlRoom>();
+                })
                 .AddEntityFrameworkReadModel()
                 
                 .AddQueryHandler<GetPositionsQueryHandler, GetPositionsQuery, List<PositionReadModel>>()
@@ -138,7 +142,7 @@ namespace controlroom.api
                                 true, 5,
                                 Configuration.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQPublishExchange")))
 
-                .AddAsynchronousSubscriber<StopAggregate, StopId, StoppedEvent, StoppedEventSubscriber>()
+                .AddAsynchronousSubscriber<RoverPositionAggregate, RoverPositionAggregateId, StoppedEvent, StoppedEventSubscriber>()
                 .RegisterServices(s => {
                     s.Register<IHostedService, RabbitConsumePersistenceService>(Lifetime.Singleton);
                     s.Register<IHostedService, StoppedEventSubscriber>(Lifetime.Singleton);

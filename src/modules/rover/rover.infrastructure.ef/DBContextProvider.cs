@@ -1,19 +1,20 @@
 ﻿using EventFlow.EntityFramework;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace rover.infrastructure.ef
 {
-    public class DBContextProvider : IDbContextProvider<DBContextControlRoom>, IDisposable
+    public class DBContextProvider : IDbContextProvider<DBContextControlRoom>
     {
         private readonly DbContextOptions<DBContextControlRoom> _options;
 
-        public DBContextProvider(string msSqlConnectionString)
+        public DBContextProvider(IConfiguration configuration)
         {
             _options = new DbContextOptionsBuilder<DBContextControlRoom>()
-                .UseSqlServer(msSqlConnectionString)
+                .UseSqlServer(configuration.GetConnectionString("ReadModelsConnection"))
                 .Options;
         }
 
@@ -22,10 +23,6 @@ namespace rover.infrastructure.ef
             var context = new DBContextControlRoom(_options);
             context.Database.EnsureCreated();
             return context;
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

@@ -1,12 +1,4 @@
 ﻿using EventFlow;
-using EventFlow.Configuration;
-using EventFlow.Extensions;
-using EventFlow.MsSql;
-using EventFlow.MsSql.Extensions;
-using EventFlow.Queries;
-using EventFlow.RabbitMQ;
-using EventFlow.RabbitMQ.Extensions;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,9 +6,6 @@ using rover.domain.Settings;
 using rover.domain.Commands;
 using rover.domain.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

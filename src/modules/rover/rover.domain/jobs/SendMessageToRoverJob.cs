@@ -17,11 +17,13 @@ using rover.domain.Settings;
 
 public class SendMessageToRoverJob : IJob
 {
+    public RoverPositionAggregateId _id;
     public Moves[] _enumList;
     public bool _stop;
     
-    public SendMessageToRoverJob (Moves[] enumList, bool stop)
+    public SendMessageToRoverJob (RoverPositionAggregateId id, Moves[] enumList, bool stop)
     {
+        _id = id;
         _enumList = enumList;
         _stop = stop;
     }
@@ -29,7 +31,7 @@ public class SendMessageToRoverJob : IJob
     public async Task ExecuteAsync(IResolver resolver, CancellationToken cancellationToken)
     {
         ICommandBus _commandBus = resolver.Resolve<ICommandBus>();
-        var result = await _commandBus.PublishAsync(new StartCommand(StartId.New, _enumList, _stop), cancellationToken);
+        var result = await _commandBus.PublishAsync(new StartCommand(_id, _enumList, _stop), cancellationToken);
         if(!result.IsSuccess){
             throw new Exception("Error while sending command to rover");
         }

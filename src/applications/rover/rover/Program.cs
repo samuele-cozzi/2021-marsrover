@@ -1,20 +1,16 @@
 ﻿using EventFlow;
-using EventFlow.Aggregates;
 using EventFlow.AspNetCore.Extensions;
 using EventFlow.Configuration;
 using EventFlow.DependencyInjection.Extensions;
 using EventFlow.Extensions;
 using EventFlow.RabbitMQ;
 using EventFlow.RabbitMQ.Extensions;
-using EventFlow.Subscribers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using rover.infrastructure.rabbitmq;
-using Serilog;
 using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using rover.domain.Aggregates;
 using rover.domain.Commands;
@@ -60,31 +56,23 @@ namespace rover
                             .AddCommandHandlers(typeof(ObstacleCommandHandler))
                             .UseInMemoryReadStoreFor<ObstacleReadModel>()
 
-                            .AddEvents(typeof(StoppedEvent))
-                            .AddCommands(typeof(StopCommand))
-                            .AddCommandHandlers(typeof(StopCommandHandler))
-                            .UseInMemoryReadStoreFor<StopReadModel>()
+                            //.AddEvents(typeof(StartedEvent))
+                            //.AddCommands(typeof(StartCommand))
+                            //.AddCommandHandlers(typeof(StartCommandHandler))
 
-                            .AddEvents(typeof(MovedEvent))
+                            .AddEvents(typeof(StartedEvent))
+                            .AddEvents(typeof(StoppedEvent))
+                            .AddEvents(typeof(PositionChangedEvent))
+
                             .AddCommands(typeof(MoveCommand))
                             .AddCommandHandlers(typeof(MoveCommandHandler))
-                            .UseInMemoryReadStoreFor<MoveReadModel>()
-
-                            .AddEvents(typeof(TurnedEvent))
-                            .AddCommands(typeof(TurnCommand))
-                            .AddCommandHandlers(typeof(TurnCommandHandler))
-                            .UseInMemoryReadStoreFor<TurnReadModel>()
-
-                            .AddEvents(typeof(StartEvent))
-                            .AddEvents(typeof(PositionChangedEvent))
-                            //.AddEvents(typeof(MoveEvent))
 
                             .AddQueryHandler<GetNextPositionQueryHandler, GetNextPositionQuery, PositionReadModel>()
 
                             //
                             // subscribe services changed
                             //
-                            .AddAsynchronousSubscriber<StartAggregate, StartId, StartEvent, StartEventSubscriber>()
+                            .AddAsynchronousSubscriber<RoverPositionAggregate, RoverPositionAggregateId, StartedEvent, StartEventSubscriber>()
                             .RegisterServices(s => {
                                 s.Register<IHostedService, RabbitConsumePersistenceService>(Lifetime.Singleton);
                                 s.Register<IHostedService, StartEventSubscriber>(Lifetime.Singleton);

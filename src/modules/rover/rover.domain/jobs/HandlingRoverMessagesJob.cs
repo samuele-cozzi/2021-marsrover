@@ -2,43 +2,39 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using EventFlow;
-using EventFlow.Aggregates;
 using EventFlow.Configuration;
 using EventFlow.Jobs;
-using EventFlow.Queries;
 using rover.domain.Aggregates;
 using rover.domain.Commands;
-using rover.domain.DomainEvents;
 using rover.domain.Models;
-using rover.domain.Queries;
 
 public class HandlingRoverMessagesJob : IJob
 {
-    public FacingDirections FacingDirection;
-    public double Latitude;
-    public double Longitude;
-    public bool IsBlocked;
-    public string startId;
-    public bool Stop;
-    public double CoordinatePrecision;
+    public RoverPositionAggregateId _id;
+    public FacingDirections _facingDirection;
+    public double _latitude;
+    public double _longitude;
+    public bool _isBlocked;
+    public bool _stop;
+    public double _coordinatePrecision;
 
     public HandlingRoverMessagesJob (
-        FacingDirections _FacingDirection,
-        double _Latitude,
-        double _Longitude,
-        bool _IsBlocked,
-        string _StartId,
-        bool _Stop,
-        double _CoordinatePrecision
+        RoverPositionAggregateId id,
+        FacingDirections facingDirection,
+        double latitude,
+        double longitude,
+        bool isBlocked,
+        bool stop,
+        double coordinatePrecision
     )
     {
-        FacingDirection = _FacingDirection;
-        Latitude = _Latitude;
-        Longitude = _Longitude;
-        IsBlocked = _IsBlocked;
-        startId = _StartId;
-        Stop = _Stop;
-        CoordinatePrecision = _CoordinatePrecision;
+        _id = id;
+        _facingDirection = facingDirection;
+        _latitude = latitude;
+        _longitude = longitude;
+        _isBlocked = isBlocked;
+        _stop = stop;
+        _coordinatePrecision = coordinatePrecision;
     }
 
     public async Task ExecuteAsync(
@@ -46,50 +42,20 @@ public class HandlingRoverMessagesJob : IJob
         CancellationToken cancellationToken)
     {
         ICommandBus _commandBus = resolver.Resolve<ICommandBus>();
-        IQueryProcessor _queryProcessor = resolver.Resolve<IQueryProcessor>();
 
         await _commandBus.PublishAsync(
-            new PositionCommand(
-                PositionId.New,
+            new ChangePositionCommand(
+                _id,
                 new Position()
                 {
-                    FacingDirection = FacingDirection,
+                    FacingDirection = _facingDirection,
                     Coordinate = new Coordinate(){
-                        Latitude = Latitude,
-                        Longitude = Longitude
+                        Latitude = _latitude,
+                        Longitude = _longitude
                     }
                 },
-                IsBlocked,
-                startId,
-                Stop)
+                _isBlocked,
+                _stop)
             , CancellationToken.None);
-
-        var landing = await _queryProcessor.ProcessAsync(new GetLandingPositionQuery(), CancellationToken.None);
-
-        bool continueMoving = !Stop;
-        bool isOnLandingLongitude = Longitude >= (landing .Longitude - CoordinatePrecision) &&
-            Longitude <= (landing.Longitude + CoordinatePrecision);
-
-        if (continueMoving && !isOnLandingLongitude)
-        {
-            if (IsBlocked)
-            {
-                var rnd = new Random();
-                if(rnd.NextDouble() > 0.5){
-                    await _commandBus.PublishAsync(
-                    new StartCommand(StartId.New, new Moves[4] { Moves.r, Moves.f, Moves.l, Moves.f }, Stop), CancellationToken.None);
-                }
-                else
-                {
-                    await _commandBus.PublishAsync(
-                    new StartCommand(StartId.New, new Moves[4] { Moves.l, Moves.f, Moves.r, Moves.f }, Stop), CancellationToken.None);
-                }
-            }
-            else
-            {
-                await _commandBus.PublishAsync(
-                new StartCommand(StartId.New, new Moves[4] { Moves.f, Moves.f, Moves.f, Moves.f }, Stop), CancellationToken.None);
-            }
-        }
     }
 }

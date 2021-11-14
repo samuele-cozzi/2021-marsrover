@@ -1,12 +1,13 @@
 ﻿using EventFlow.Aggregates;
+using EventFlow.EventStores;
 using rover.domain.Aggregates;
 using rover.domain.Models;
 
 namespace rover.domain.DomainEvents
 {
-    public class StoppedEvent : AggregateEvent<StopAggregate, StopId>
+    [EventVersion("stopped", 1)]
+    public class StoppedEvent : AggregateEvent<RoverPositionAggregate, RoverPositionAggregateId>
     {
-        public string StartId { get; set; }
         public FacingDirections FacingDirection { get; }
         public double Latitude { get; }
         public double Longitude { get; }
@@ -14,9 +15,8 @@ namespace rover.domain.DomainEvents
         public bool IsBlocked { get; }
         public bool Stop { get; set; }
 
-        public StoppedEvent(string startId, FacingDirections facingDirection, double latitude, double longitude, double coordinatePrecision, bool isBlocked, bool stop)
+        public StoppedEvent(FacingDirections facingDirection, double latitude, double longitude, double coordinatePrecision, bool isBlocked, bool stop)
         {
-            this.StartId = startId;
             this.FacingDirection = facingDirection;
             this.Latitude = latitude;
             this.Longitude = longitude;

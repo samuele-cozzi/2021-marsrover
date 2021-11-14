@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EventFlow.EntityFramework;
+using Microsoft.EntityFrameworkCore;
 using rover.domain.Models;
 using rover.domain.Queries;
 using System;
@@ -10,48 +11,40 @@ using System.Threading.Tasks;
 
 namespace rover.infrastructure.ef
 {
-    public class PositionRepository : IPositionRepository, IDisposable
+    public class PositionRepository : IPositionRepository
     {
-        private DBContextControlRoom _context;
+        private readonly IDbContextProvider<DBContextControlRoom> _contextProvider;
 
-        public PositionRepository(DBContextControlRoom context)
+        public PositionRepository(IDbContextProvider<DBContextControlRoom> contextProvider)
         {
-            _context = context;
+            _contextProvider = contextProvider;
         }
 
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
+        public async Task<PositionReadModel> GetLastPositionsAsync(CancellationToken cancellationToken)
         {
-            if (!this.disposed)
+            using (var context = _contextProvider.CreateContext())
             {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
+                var result = await context.Positions.FirstOrDefaultAsync();
+                return result;
             }
-            this.disposed = true;
         }
 
-        public void Dispose()
+        public async Task<PositionReadModel> GetLandingPositionsAsync(CancellationToken cancellationToken)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            using (var context = _contextProvider.CreateContext())
+            {
+                var result = await context.Positions.FirstOrDefaultAsync();
+                return result;
+            }
         }
 
-        public Task<PositionReadModel> GetLastPositionsAsync(CancellationToken cancellationToken)
+        public async Task<List<PositionReadModel>> GetPositionsAsync(CancellationToken cancellationToken)
         {
-            return _context.Positions.OrderByDescending(p => p.Timestamp).FirstOrDefaultAsync();
-        }
-
-        public Task<PositionReadModel> GetLandingPositionsAsync(CancellationToken cancellationToken)
-        {
-            return _context.Positions.OrderBy(p => p.Timestamp).FirstOrDefaultAsync();
-        }
-
-        public Task<List<PositionReadModel>> GetPositionsAsync(CancellationToken cancellationToken)
-        {
-            return _context.Positions.ToListAsync();
+            using (var context = _contextProvider.CreateContext())
+            {
+                var result = await context.Positions.ToListAsync();
+                return result;
+            }
         }
     }
 }

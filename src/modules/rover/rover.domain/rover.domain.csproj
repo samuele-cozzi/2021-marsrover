@@ -5,6 +5,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Aggregates\MoveAggregate.cs" />
+    <Compile Remove="Aggregates\PositionAggregate.cs" />
+    <Compile Remove="Aggregates\StartAggregate.cs" />
+    <Compile Remove="Aggregates\StopAggregate.cs" />
+    <Compile Remove="Aggregates\TurnAggregate.cs" />
+    <Compile Remove="Commands\StopCommand.cs" />
+    <Compile Remove="Commands\StopCommandHandler.cs" />
+    <Compile Remove="Commands\TurnCommand.cs" />
+    <Compile Remove="Commands\TurnCommandHandler.cs" />
+    <Compile Remove="DomainEvents\MovedEvent.cs" />
+    <Compile Remove="DomainEvents\TurnedEvent.cs" />
+    <Compile Remove="Models\MoveId.cs" />
+    <Compile Remove="Models\MoveReadModel.cs" />
+    <Compile Remove="Models\PositionId.cs" />
+    <Compile Remove="Models\RoverId.cs" />
+    <Compile Remove="Models\StartId.cs" />
+    <Compile Remove="Models\StopId.cs" />
+    <Compile Remove="Models\StopReadModel.cs" />
+    <Compile Remove="Models\TurnId.cs" />
+    <Compile Remove="Models\TurnReadModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EventFlow" Version="0.83.4713" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />

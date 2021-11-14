@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "controlroom.api", "applicat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover.infrastructure.ef", "modules\rover\rover.infrastructure.ef\rover.infrastructure.ef.csproj", "{45EB13E5-BC42-4F6F-B9B1-F88ABA140AE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rover.unittests", "modules\rover\rover.unittests\rover.unittests.csproj", "{4CC241E9-E72C-4D08-85D4-2EE5AD35A933}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{45EB13E5-BC42-4F6F-B9B1-F88ABA140AE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45EB13E5-BC42-4F6F-B9B1-F88ABA140AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45EB13E5-BC42-4F6F-B9B1-F88ABA140AE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CC241E9-E72C-4D08-85D4-2EE5AD35A933}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CC241E9-E72C-4D08-85D4-2EE5AD35A933}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CC241E9-E72C-4D08-85D4-2EE5AD35A933}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CC241E9-E72C-4D08-85D4-2EE5AD35A933}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +55,7 @@ Global
 		{4C80CEE5-958E-489A-A16B-4D738284C4D5} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
 		{B36FD00E-81C2-433B-A310-D964BC8B74F5} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
 		{45EB13E5-BC42-4F6F-B9B1-F88ABA140AE8} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
+		{4CC241E9-E72C-4D08-85D4-2EE5AD35A933} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AE9438D2-F70E-421E-90B1-E44FB7075E61}

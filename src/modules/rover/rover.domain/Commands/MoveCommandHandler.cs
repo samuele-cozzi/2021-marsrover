@@ -7,14 +7,14 @@ using rover.domain.Models;
 
 namespace rover.domain.Commands
 {
-    public class MoveCommandHandler : CommandHandler<MoveAggregate, MoveId, IExecutionResult, MoveCommand>
+    public class MoveCommandHandler : CommandHandler<RoverPositionAggregate, RoverPositionAggregateId, IExecutionResult, MoveCommand>
     {
         public override Task<IExecutionResult> ExecuteCommandAsync(
-            MoveAggregate aggregate,
+            RoverPositionAggregate aggregate,
             MoveCommand command,
             CancellationToken cancellationToken)
         {
-            var executionResult = aggregate.Move(command.Position, command.Move);
+            var executionResult = aggregate.Move(command.Moves, command.IsBlocked);
             return Task.FromResult(executionResult);
         }
     }
