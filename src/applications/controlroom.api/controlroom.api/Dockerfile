@@ -10,7 +10,7 @@ WORKDIR /src
 COPY ["applications/controlroom.api/controlroom.api/controlroom.api.csproj", "applications/controlroom.api/controlroom.api/"]
 COPY ["applications/rover/rover/rover.csproj", "applications/rover/rover/"]
 COPY ["modules/rover/rover.domain/rover.domain.csproj", "modules/rover/rover.domain/"]
-COPY ["modules/rover/rover.unittest/rover.unittest.csproj", "modules/rover/rover.unittest/"]
+COPY ["modules/rover/rover.unittests/rover.unittests.csproj", "modules/rover/rover.unittests/"]
 COPY ["modules/rover/rover.infrastructure.ef/rover.infrastructure.ef.csproj", "modules/rover/rover.infrastructure.ef/"]
 COPY ["modules/rover/rover.infrastructure.rabbitmq/rover.infrastructure.rabbitmq.csproj", "modules/rover/rover.infrastructure.rabbitmq/"]
 COPY ["rover.sln", "rover.sln"]
