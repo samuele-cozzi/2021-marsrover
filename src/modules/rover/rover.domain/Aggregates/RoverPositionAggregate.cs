@@ -24,18 +24,23 @@ namespace rover.domain.Aggregates
 
         private readonly IQueryProcessor _queryProcessor;
         private readonly ICommandBus _commandBus;
-        private readonly RoverSettings _options;
-        
+        private readonly RoverSettings _roverSettings;
+        private readonly MarsSettings _marsSettings;
+        private readonly double angularStep;
+
 
         public RoverPositionAggregate(RoverPositionAggregateId id,
             IQueryProcessor queryProcessor,
             ICommandBus commandBus,
-            IOptions<RoverSettings> options
+            IOptions<RoverSettings> roverSettings,
+            IOptions<MarsSettings> marsSettings
             ) : base(id)
         {
             _queryProcessor = queryProcessor;
             _commandBus = commandBus;
-            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+            _roverSettings = roverSettings?.Value ?? throw new ArgumentNullException(nameof(roverSettings));
+            _marsSettings = marsSettings?.Value ?? throw new ArgumentNullException(nameof(marsSettings));
+            angularStep = (_marsSettings.AngularPartition != 0) ? 360 / _marsSettings.AngularPartition : 0;
         }
 
 
@@ -49,57 +54,70 @@ namespace rover.domain.Aggregates
         public IExecutionResult Move(Moves[] moves, bool stop)
         {
             //Business logic to move rover
-            _position = _position ?? _options.Landing;
+            _position = _position ?? _roverSettings.Landing;
 
             bool isBlocked = false;
             double latitude = _position.Coordinate.Latitude;
             double longitude = _position.Coordinate.Longitude;
-            FacingDirections direction = _position.FacingDirection;
+            var position = new Position()
+            {
+                FacingDirection = _position.FacingDirection,
+                Coordinate = new Coordinate()
+                {
+                    Latitude = latitude,
+                    Longitude = longitude
+                }
+            };
 
             foreach (var move in moves)
             {
-                var position = new Position()
+                switch (move)
                 {
-                    FacingDirection = direction,
-                    Coordinate = new Coordinate()
-                    {
-                        Latitude = latitude,
-                        Longitude = longitude
-                    }
-                };
-
-                if (move == Moves.f || move == Moves.b)
-                {
-                    var newPosition = _queryProcessor.ProcessAsync(
-                        new GetNextPositionQuery(position, move), CancellationToken.None).Result;
-
-                    if (!newPosition.IsBlocked)
-                    {
-                        latitude = newPosition.Latitude;
-                        longitude = newPosition.Longitude;
-                    }
-                    else
-                    {
-                        isBlocked = true;
+                    case Moves.f:
+                        position.MoveFarward(angularStep);
                         break;
-                    }
+                    case Moves.b:
+                        position.MoveBackward(angularStep);
+                        break;
+                    case Moves.r:
+                        position.FacingDirection = position.FacingDirection.Next();
+                        break;
+                    case Moves.l:
+                        position.FacingDirection = position.FacingDirection.Previous();
+                        break;
                 }
 
-                if (move == Moves.r)
+                isBlocked = CheckObstacles(position);
+                if (!isBlocked)
                 {
-                    direction = position.FacingDirection.Next();
+                    latitude = position.Coordinate.Latitude;
+                    longitude = position.Coordinate.Longitude;
                 }
-
-                if (move == Moves.l)
+                else
                 {
-                    direction = position.FacingDirection.Previous();
+                    break;
                 }
+                
             }
 
             // Emit Stopped Event
-            Emit(new StoppedEvent(direction, latitude, longitude, _options.Landing.Coordinate.AngularPrecision, isBlocked, stop));
+            Emit(new StoppedEvent(position.FacingDirection, latitude, longitude, _roverSettings.Landing.Coordinate.AngularPrecision, isBlocked, stop));
 
             return ExecutionResult.Success();
+        }
+
+        private bool CheckObstacles(Position position)
+        {
+            if(_marsSettings.Obstacles.Count(
+                x=> x.Latitude == position.Coordinate.Latitude &&
+                x.Longitude == position.Coordinate.Longitude) > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public IExecutionResult ChangePosition(Position position, bool isBlocked, bool stop)

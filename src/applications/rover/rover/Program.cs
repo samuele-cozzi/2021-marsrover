@@ -46,15 +46,11 @@ namespace rover
                             .Configure(cfg => cfg.IsAsynchronousSubscribersEnabled = true)
                             .UseServiceCollection(services)
                             .AddAspNetCoreMetadataProviders()
+                            //.AddAspNetCore(o => o.AddDefaultMetadataProviders())
                             .PublishToRabbitMq(RabbitMqConfiguration.With(
                                 new Uri(configurationRoot.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQConnectionString")), 
                                 true, 5,
                                 configurationRoot.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQPublishExchange")))
-
-                            .AddEvents(typeof(ObstacleEvent))
-                            .AddCommands(typeof(ObstacleCommand))
-                            .AddCommandHandlers(typeof(ObstacleCommandHandler))
-                            .UseInMemoryReadStoreFor<ObstacleReadModel>()
 
                             //.AddEvents(typeof(StartedEvent))
                             //.AddCommands(typeof(StartCommand))
@@ -66,8 +62,6 @@ namespace rover
 
                             .AddCommands(typeof(MoveCommand))
                             .AddCommandHandlers(typeof(MoveCommandHandler))
-
-                            .AddQueryHandler<GetNextPositionQueryHandler, GetNextPositionQuery, PositionReadModel>()
 
                             //
                             // subscribe services changed

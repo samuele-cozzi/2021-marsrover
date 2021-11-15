@@ -41,11 +41,6 @@ namespace rover.unittests
                 .UseServiceCollection(services)
                 .AddAspNetCore()
 
-                .AddEvents(typeof(ObstacleEvent))
-                .AddCommands(typeof(ObstacleCommand))
-                .AddCommandHandlers(typeof(ObstacleCommandHandler))
-                .UseInMemoryReadStoreFor<ObstacleReadModel>()
-
                 .UseEntityFrameworkReadModel<PositionReadModel, DBContextControlRoom>()
                 .ConfigureEntityFramework(EntityFrameworkConfiguration.New)
                 .AddDbContextProvider<DBContextControlRoom, FakedEntityFramewokReadModelDbContextProvider>()

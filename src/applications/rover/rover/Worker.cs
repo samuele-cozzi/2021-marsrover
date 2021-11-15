@@ -8,6 +8,7 @@ using rover.domain.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace rover
 {
@@ -40,6 +41,7 @@ namespace rover
             
             if (_marsSettings.ObstaclesPercentage > 0)
             {
+                _marsSettings.Obstacles = new List<Coordinate>();
                 double step = 360 / _marsSettings.AngularPartition;
                 for (double lat = -90; lat <= 90; lat += step)
                 {
@@ -47,29 +49,27 @@ namespace rover
                     {
                         if (lat == -90 || lat == 90)
                         {
-                            var command = new ObstacleCommand(ObstacleId.New, new Coordinate() { Latitude = lat, Longitude = lon });
-                            _commandBus.PublishAsync(command, CancellationToken.None).Wait();
+                            _marsSettings.Obstacles.Add(new Coordinate() { Latitude = lat, Longitude = lon });
                         }
                         else
                         {
                             Random rnd = new Random();
                             if (rnd.NextDouble() < _marsSettings.ObstaclesPercentage)
                             {
-                                var command = new ObstacleCommand(ObstacleId.New, new Coordinate() { Latitude = lat, Longitude = lon });
-                                _commandBus.PublishAsync(command, CancellationToken.None).Wait();
+                                _marsSettings.Obstacles.Add(new Coordinate() { Latitude = lat, Longitude = lon });
                             }
                         }         
                     }
                 }
             }
-            else
-            {
-                foreach (var obstacle in _marsSettings.Obstacles)
-                {
-                    var command = new ObstacleCommand(ObstacleId.New, new Coordinate() { Latitude = obstacle.Latitude, Longitude = obstacle.Longitude });
-                    _commandBus.PublishAsync(command, CancellationToken.None).Wait();
-                }
-            }
+            //else
+            //{
+            //    foreach (var obstacle in _marsSettings.Obstacles)
+            //    {
+            //        var command = new ObstacleCommand(ObstacleId.New, new Coordinate() { Latitude = obstacle.Latitude, Longitude = obstacle.Longitude });
+            //        _commandBus.PublishAsync(command, CancellationToken.None).Wait();
+            //    }
+            //}
 
         }
 

@@ -6,18 +6,24 @@
 
   <ItemGroup>
     <Compile Remove="Aggregates\MoveAggregate.cs" />
+    <Compile Remove="Aggregates\ObstacleAggregate.cs" />
     <Compile Remove="Aggregates\PositionAggregate.cs" />
     <Compile Remove="Aggregates\StartAggregate.cs" />
     <Compile Remove="Aggregates\StopAggregate.cs" />
     <Compile Remove="Aggregates\TurnAggregate.cs" />
+    <Compile Remove="Commands\ObstacleCommand.cs" />
+    <Compile Remove="Commands\ObstacleCommandHandler.cs" />
     <Compile Remove="Commands\StopCommand.cs" />
     <Compile Remove="Commands\StopCommandHandler.cs" />
     <Compile Remove="Commands\TurnCommand.cs" />
     <Compile Remove="Commands\TurnCommandHandler.cs" />
     <Compile Remove="DomainEvents\MovedEvent.cs" />
+    <Compile Remove="DomainEvents\ObstacleEvent.cs" />
     <Compile Remove="DomainEvents\TurnedEvent.cs" />
     <Compile Remove="Models\MoveId.cs" />
     <Compile Remove="Models\MoveReadModel.cs" />
+    <Compile Remove="Models\ObstacleId.cs" />
+    <Compile Remove="Models\ObstacleReadModel.cs" />
     <Compile Remove="Models\PositionId.cs" />
     <Compile Remove="Models\RoverId.cs" />
     <Compile Remove="Models\StartId.cs" />
@@ -25,6 +31,8 @@
     <Compile Remove="Models\StopReadModel.cs" />
     <Compile Remove="Models\TurnId.cs" />
     <Compile Remove="Models\TurnReadModel.cs" />
+    <Compile Remove="Queries\GetNextPositionQuery.cs" />
+    <Compile Remove="Queries\GetNextPositionQueryHandler.cs" />
   </ItemGroup>
 
   <ItemGroup>
