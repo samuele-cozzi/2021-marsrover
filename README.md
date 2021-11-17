@@ -1,4 +1,7 @@
 [![CodeQL](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/codeql-analysis.yml)
+[![Unit Test](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/dotnet-unittest.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/dotnet-unittest.yml)
+[![codecov](https://codecov.io/gh/samuele-cozzi/2021-marsrover/branch/main/graph/badge.svg?token=ARTZVUUV8G)](https://codecov.io/gh/samuele-cozzi/2021-marsrover)
+
 [![Docker Rover](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-rover.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-rover.yml)
 [![Docker Control Room API](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-controlroomapi.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-controlroomapi.yml)
 [![Docker Controlroom UI](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-controlroomui.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/docker-push-controlroomui.yml)
