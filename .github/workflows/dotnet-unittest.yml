@@ -1,4 +1,4 @@
-name: .NET
+name: Unit Test
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
         dotnet-version: 5.0.x
         
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ./src/rover.sln
       
     - name: Test
       run: dotnet test ./src/modules/rover/rover.unittests/rover.unittests.csproj -c Release --logger "trx;LogFileName=test_results_unit_test.trx" -p:CollectCoverage=true -p:CoverletOutput="testResults/coverage.info" -p:CoverletOutputFormat=lcov

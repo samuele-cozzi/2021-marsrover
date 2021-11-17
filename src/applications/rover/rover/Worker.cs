@@ -35,7 +35,7 @@ namespace rover
             _commandBus = commandBus;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation($"Start Worker");
             
@@ -62,15 +62,7 @@ namespace rover
                     }
                 }
             }
-            //else
-            //{
-            //    foreach (var obstacle in _marsSettings.Obstacles)
-            //    {
-            //        var command = new ObstacleCommand(ObstacleId.New, new Coordinate() { Latitude = obstacle.Latitude, Longitude = obstacle.Longitude });
-            //        _commandBus.PublishAsync(command, CancellationToken.None).Wait();
-            //    }
-            //}
-
+            return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
