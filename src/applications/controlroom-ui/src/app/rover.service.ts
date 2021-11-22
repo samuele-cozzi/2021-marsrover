@@ -22,6 +22,11 @@ export class RoverService {
     return this.http.get<RoverPosition>(url);
   }
 
+  takeoff(command: string[]): any {
+    const url = `${this.urlPrefix}/takeoff`
+    return this.http.post(url, command, this.httpOptions);
+  }
+
   start(command: string[]): any {
     const url = `${this.urlPrefix}/move`
     return this.http.post(url, command, this.httpOptions);

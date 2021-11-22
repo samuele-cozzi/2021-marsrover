@@ -2,6 +2,7 @@
 using EventFlow.Aggregates;
 using EventFlow.Aggregates.ExecutionResults;
 using EventFlow.Queries;
+using EventFlow.Jobs;
 using Microsoft.Extensions.Options;
 using rover.domain.Commands;
 using rover.domain.DomainEvents;
@@ -25,22 +26,28 @@ namespace rover.domain.Aggregates
 
         private readonly IQueryProcessor _queryProcessor;
         private readonly ICommandBus _commandBus;
+        private readonly IJobScheduler _jobScheduler;
         private readonly RoverSettings _roverSettings;
         private readonly MarsSettings _marsSettings;
+        private readonly IntegrationSettings _options;
         private readonly double angularStep;
 
 
         public RoverAggregate(RoverAggregateId id,
             IQueryProcessor queryProcessor,
             ICommandBus commandBus,
+            IJobScheduler jobScheduler,
             IOptions<RoverSettings> roverSettings,
-            IOptions<MarsSettings> marsSettings
+            IOptions<MarsSettings> marsSettings,
+            IOptions<IntegrationSettings> options
             ) : base(id)
         {
             _queryProcessor = queryProcessor;
             _commandBus = commandBus;
+            _jobScheduler = jobScheduler;
             _roverSettings = roverSettings?.Value ?? throw new ArgumentNullException(nameof(roverSettings));
             _marsSettings = marsSettings?.Value ?? throw new ArgumentNullException(nameof(marsSettings));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
             angularStep = (_marsSettings.AngularPartition != 0) ? 360 / _marsSettings.AngularPartition : 0;
         }
 
@@ -137,25 +144,29 @@ namespace rover.domain.Aggregates
 
             if (continueMoving && !isOnLandingLongitude)
             {
+                Moves[] moves = new Moves[4];
                 if (isBlocked)
                 {
                     var rnd = new Random();
                     if (rnd.NextDouble() > 0.5)
                     {
-                        _commandBus.PublishAsync(
-                        new StartCommand(this.Id, new Moves[4] { Moves.r, Moves.f, Moves.l, Moves.f }, stop), CancellationToken.None);
+                        moves = new Moves[4] { Moves.r, Moves.f, Moves.l, Moves.f };
                     }
                     else
                     {
-                        _commandBus.PublishAsync(
-                        new StartCommand(this.Id, new Moves[4] { Moves.l, Moves.f, Moves.r, Moves.f }, stop), CancellationToken.None);
+                        moves = new Moves[4] { Moves.l, Moves.f, Moves.r, Moves.f };
                     }
                 }
                 else
                 {
-                    _commandBus.PublishAsync(
-                    new StartCommand(this.Id, new Moves[4] { Moves.f, Moves.f, Moves.f, Moves.f }, stop), CancellationToken.None);
+                    moves = new Moves[4] { Moves.f, Moves.f, Moves.f, Moves.f };
                 }
+
+                _jobScheduler.ScheduleAsync(
+                    new SendMessageToRoverJob(this.Id, moves, stop),
+                    TimeSpan.FromSeconds(_options.TimeDistanceOfMessageInSeconds),
+                    CancellationToken.None)
+                    .ConfigureAwait(false);
             }
 
             return ExecutionResult.Success();

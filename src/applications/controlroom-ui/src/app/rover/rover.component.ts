@@ -35,6 +35,11 @@ export class RoverComponent implements OnInit {
     this.commands.push('f');
   }
 
+  takeoff(): void {
+    this.reoverService.takeoff([])
+      .subscribe(() => {});
+  }
+
   send(): void {
     this.reoverService.start(this.commands)
       .subscribe(() => {});
