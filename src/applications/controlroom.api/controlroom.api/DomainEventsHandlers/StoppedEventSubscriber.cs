@@ -17,7 +17,7 @@ using rover.infrastructure.rabbitmq;
 namespace controlroom.api.DomainEventsHandlers
 {
     public class StoppedEventSubscriber : IHostedService, IRabbitMqConsumerPersistanceService,
-        ISubscribeAsynchronousTo<RoverPositionAggregate, RoverPositionAggregateId, StoppedEvent>
+        ISubscribeAsynchronousTo<RoverAggregate, RoverAggregateId, MovedEvent>
     {
         private readonly ICommandBus _commandBus;
         private readonly IJobScheduler _jobScheduler;
@@ -43,7 +43,7 @@ namespace controlroom.api.DomainEventsHandlers
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(IDomainEvent<RoverPositionAggregate, RoverPositionAggregateId, StoppedEvent> domainEvent, CancellationToken cancellationToken)
+        public Task HandleAsync(IDomainEvent<RoverAggregate, RoverAggregateId, MovedEvent> domainEvent, CancellationToken cancellationToken)
         {
             Console.WriteLine($"Location Updated for ");
 

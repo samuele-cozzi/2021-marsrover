@@ -17,7 +17,7 @@ using rover.infrastructure.rabbitmq;
 namespace rover.DomainEventsHandler
 {
     public class StartEventSubscriber : IHostedService, IRabbitMqConsumerPersistanceService, 
-        ISubscribeAsynchronousTo<RoverPositionAggregate, RoverPositionAggregateId, StartedEvent>
+        ISubscribeAsynchronousTo<RoverAggregate, RoverAggregateId, StartedEvent>
     {
         private readonly ICommandBus _commandBus;
         
@@ -39,7 +39,7 @@ namespace rover.DomainEventsHandler
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(IDomainEvent<RoverPositionAggregate, RoverPositionAggregateId, StartedEvent> domainEvent, CancellationToken cancellationToken)
+        public Task HandleAsync(IDomainEvent<RoverAggregate, RoverAggregateId, StartedEvent> domainEvent, CancellationToken cancellationToken)
         {
             _commandBus.PublishAsync(
                 new MoveCommand(

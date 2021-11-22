@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using rover.domain.Models;
 using rover.domain.Queries;
+using rover.domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,11 +30,11 @@ namespace rover.infrastructure.ef
             }
         }
 
-        public async Task<PositionReadModel> GetLandingPositionsAsync(CancellationToken cancellationToken)
+        public async Task<LandingReadModel> GetLandingPositionsAsync(CancellationToken cancellationToken)
         {
             using (var context = _contextProvider.CreateContext())
             {
-                var result = await context.Positions.FirstOrDefaultAsync();
+                var result = await context.Landing.FirstOrDefaultAsync();
                 return result;
             }
         }

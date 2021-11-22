@@ -1,15 +1,20 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using EventFlow.Aggregates;
+﻿using EventFlow.Aggregates;
+using EventFlow.EventStores;
 using EventFlow.ReadStores;
 using rover.domain.Aggregates;
 using rover.domain.DomainEvents;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace rover.domain.Models
 {
-    [Table("Positions")]
-    public class PositionReadModel : IReadModel, IAmReadModelFor<RoverAggregate, RoverAggregateId, StoppedEvent>
+    [Table("Landing")]
+    public class LandingReadModel : IReadModel, IAmReadModelFor<RoverAggregate, RoverAggregateId, LandedEvent>
     {
         [Key]
         public string AggregateId { get; set; }
@@ -19,7 +24,6 @@ namespace rover.domain.Models
         public FacingDirections FacingDirection { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public bool IsBlocked { get; set; }
         public string FacingDirectionName
         {
             get
@@ -29,7 +33,7 @@ namespace rover.domain.Models
         }
 
 
-        public void Apply(IReadModelContext context, IDomainEvent<RoverAggregate, RoverAggregateId, StoppedEvent> domainEvent)
+        public void Apply(IReadModelContext context, IDomainEvent<RoverAggregate, RoverAggregateId, LandedEvent> domainEvent)
         {
             AggregateId = domainEvent.AggregateIdentity.Value;
             Timestamp = domainEvent.Timestamp;
@@ -38,8 +42,6 @@ namespace rover.domain.Models
             Latitude = domainEvent.AggregateEvent.Latitude;
             Longitude = domainEvent.AggregateEvent.Longitude;
             FacingDirection = domainEvent.AggregateEvent.FacingDirection;
-            IsBlocked = domainEvent.AggregateEvent.IsBlocked;
         }
-
     }
 }

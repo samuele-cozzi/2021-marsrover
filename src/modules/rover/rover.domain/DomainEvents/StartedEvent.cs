@@ -6,7 +6,7 @@ using rover.domain.Models;
 namespace rover.domain.DomainEvents
 {
     [EventVersion("started", 1)]
-    public class StartedEvent : AggregateEvent<RoverPositionAggregate, RoverPositionAggregateId>
+    public class StartedEvent : AggregateEvent<RoverAggregate, RoverAggregateId>
     {
         public Moves[] Move { get; }
         public bool Stop { get; set; }

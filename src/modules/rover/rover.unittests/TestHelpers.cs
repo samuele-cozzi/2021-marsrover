@@ -16,6 +16,7 @@ using rover.domain.Commands;
 using rover.domain.DomainEvents;
 using rover.domain.Models;
 using rover.domain.Queries;
+using rover.domain.Services;
 using rover.domain.Settings;
 using rover.infrastructure.ef;
 using rover.unittests.Utilities;
@@ -45,13 +46,58 @@ namespace rover.unittests
                 .ConfigureEntityFramework(EntityFrameworkConfiguration.New)
                 .AddDbContextProvider<DBContextControlRoom, FakedEntityFramewokReadModelDbContextProvider>()
 
+                .AddEvents(typeof(StartedEvent))
+                .AddEvents(typeof(MovedEvent))
+                .AddEvents(typeof(StoppedEvent))
+                
+                .AddQueryHandler<GetLastPositionQueryHandler, GetLastPositionQuery, PositionReadModel>()
+                .AddQueryHandler<GetLandingPositionQueryHandler, GetLandingPositionQuery, LandingReadModel>()
+                
+                .RegisterServices(s => {
+                    s.Register<IPositionRepository, PositionRepository>();
+                    s.Register<IDbContextProvider<DBContextControlRoom>, FakedEntityFramewokReadModelDbContextProvider>(Lifetime.AlwaysUnique);
+                    s.CreateResolver(true);
+                })
+                .CreateServiceProvider();
+
+            var resolver = provider.GetService<IResolver>();
+
+            return resolver;
+        }
+
+        internal IResolver Resolver_Commands_LandingLat0Long0FacE_Step1_ObstacleLat0Long2()
+        {
+            var services = new ServiceCollection();
+            // Settings
+            this.CreateRoverSettings_LandingLat0Long0FacE(services);
+            this.CreateMarsSettings_Step1_ObstacleLat0Long2(services);
+
+            // EventFlow
+            var provider = EventFlowOptions.New
+                .UseServiceCollection(services)
+                .AddAspNetCore()
+
+                .UseEntityFrameworkReadModel<PositionReadModel, DBContextControlRoom>()
+                .ConfigureEntityFramework(EntityFrameworkConfiguration.New)
+                .AddDbContextProvider<DBContextControlRoom, FakedEntityFramewokReadModelDbContextProvider>()
+
                 .AddCommands(typeof(MoveCommand))
                 .AddCommandHandlers(typeof(MoveCommandHandler))
+                .AddCommands(typeof(ChangePositionCommand))
+                .AddCommandHandlers(typeof(ChangePositionCommandHandler))
+                .AddCommands(typeof(StartCommand))
+                .AddCommandHandlers(typeof(StartCommandHandler))
+
                 .AddEvents(typeof(StartedEvent))
+                .AddEvents(typeof(MovedEvent))
                 .AddEvents(typeof(StoppedEvent))
-                .AddEvents(typeof(PositionChangedEvent))
+
                 .AddQueryHandler<GetLastPositionQueryHandler, GetLastPositionQuery, PositionReadModel>()
-                .AddQueryHandler<GetLandingPositionQueryHandler, GetLandingPositionQuery, PositionReadModel>()
+                .AddQueryHandler<GetLandingPositionQueryHandler, GetLandingPositionQuery, LandingReadModel>()
+
+                .AddJobs(typeof(SendMessageToRoverJob))
+                .AddJobs(typeof(HandlingRoverMessagesJob))
+
                 .RegisterServices(s => {
                     s.Register<IPositionRepository, PositionRepository>();
                     s.Register<IDbContextProvider<DBContextControlRoom>, FakedEntityFramewokReadModelDbContextProvider>(Lifetime.AlwaysUnique);

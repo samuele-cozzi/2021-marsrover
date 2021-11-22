@@ -17,6 +17,7 @@ namespace rover.infrastructure.ef
 
         public DbSet<StartReadModel> Commands { get; set; }
         public DbSet<PositionReadModel> Positions { get; set; }
+        public DbSet<LandingReadModel> Landing { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

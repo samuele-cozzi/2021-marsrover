@@ -15,6 +15,7 @@ namespace rover.infrastructure.ef
             return efo
                 .UseEntityFrameworkReadModel<StartReadModel, DBContextControlRoom>()
                 .UseEntityFrameworkReadModel<PositionReadModel, DBContextControlRoom>()
+                .UseEntityFrameworkReadModel<LandingReadModel, DBContextControlRoom>()
                 .ConfigureEntityFramework(EntityFrameworkConfiguration.New)
                 .AddDbContextProvider<DBContextControlRoom, DBContextProvider>();
         }

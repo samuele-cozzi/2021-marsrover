@@ -5,9 +5,9 @@ using rover.domain.Models;
 
 namespace rover.domain.Commands
 {
-    public  class MoveCommand : Command<RoverPositionAggregate, RoverPositionAggregateId, IExecutionResult>
+    public  class MoveCommand : Command<RoverAggregate, RoverAggregateId, IExecutionResult>
     {
-        public MoveCommand(RoverPositionAggregateId aggregateId, Moves[] moves, bool isBlocked) : base(aggregateId)
+        public MoveCommand(RoverAggregateId aggregateId, Moves[] moves, bool isBlocked) : base(aggregateId)
         {
             Moves = moves;
             IsBlocked = isBlocked;

@@ -53,10 +53,10 @@ export class RoverComponent implements OnInit {
 
   refresh(): void {
     this.reoverService.getRoverPosition()
-      .subscribe(position => this.position = position);
-
-    this.reoverService.getRoverPositions()
-      .subscribe(positions => this.positions = positions);
+      .subscribe(position => {
+        this.position = position;
+        this.positions.push(position);
+      });
   }
 
 }

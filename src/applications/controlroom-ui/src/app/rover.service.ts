@@ -17,11 +17,6 @@ export class RoverService {
 
   constructor(private http: HttpClient) { }
 
-  getRoverPositions(): Observable<RoverPosition[]> {
-    const url = `${this.urlPrefix}/position`;
-    return this.http.get<RoverPosition[]>(url);
-  }
-
   getRoverPosition(): Observable<RoverPosition> {
     const url = `${this.urlPrefix}/position/last`;
     return this.http.get<RoverPosition>(url);

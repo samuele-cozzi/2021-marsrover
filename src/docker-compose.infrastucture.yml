@@ -26,12 +26,27 @@ services:
     volumes:
       - marsrover-nosqldata:/data/db
 
-  redisdata:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - marsrover-redisdata:/data
+  # redisdata:
+  #   image: redis:alpine
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - marsrover-redisdata:/data
+  
+  # eventstore:
+  #   image: eventstore/eventstore:release-5.0.1
+  #   container_name: eventstore
+  #   ports:
+  #     - 2113:2113
+  #     - 1113:1113
+  #   restart: always
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -sf http://localhost:2113/stats || exit 1"]
+  #     interval: 5s
+  #     timeout: 2s
+  #   environment:
+  #     - EVENTSTORE_RUN_PROJECTIONS=all
+  #     - EVENTSTORE_START_STANDARD_PROJECTIONS=TRUE
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -44,7 +59,7 @@ volumes:
     external: false
   marsrover-nosqldata:
     external: false
-  marsrover-redisdata:
-    external: false
+  # marsrover-redisdata:
+  #   external: false
 
   

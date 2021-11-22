@@ -1,5 +1,6 @@
 using EventFlow.Queries;
 using rover.domain.Models;
+using rover.domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace rover.domain.Queries
 {
-    public class GetLandingPositionQueryHandler : IQueryHandler<GetLandingPositionQuery, PositionReadModel>
+    public class GetLandingPositionQueryHandler : IQueryHandler<GetLandingPositionQuery, LandingReadModel>
     {
         private IPositionRepository _positionRepository;
 
@@ -18,7 +19,7 @@ namespace rover.domain.Queries
             _positionRepository = positionRepository;
         }
 
-        public Task<PositionReadModel> ExecuteQueryAsync(GetLandingPositionQuery query, CancellationToken cancellationToken)
+        public Task<LandingReadModel> ExecuteQueryAsync(GetLandingPositionQuery query, CancellationToken cancellationToken)
         {
             return _positionRepository.GetLandingPositionsAsync(cancellationToken);
         }

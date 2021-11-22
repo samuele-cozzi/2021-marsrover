@@ -17,7 +17,6 @@
     <Compile Remove="Commands\StopCommandHandler.cs" />
     <Compile Remove="Commands\TurnCommand.cs" />
     <Compile Remove="Commands\TurnCommandHandler.cs" />
-    <Compile Remove="DomainEvents\MovedEvent.cs" />
     <Compile Remove="DomainEvents\ObstacleEvent.cs" />
     <Compile Remove="DomainEvents\TurnedEvent.cs" />
     <Compile Remove="Models\MoveId.cs" />

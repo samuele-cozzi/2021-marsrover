@@ -9,7 +9,7 @@ using rover.domain.DomainEvents;
 namespace rover.domain.Models
 {
     [Table("Commands")]
-    public class StartReadModel : IReadModel, IAmReadModelFor<RoverPositionAggregate, RoverPositionAggregateId, StartedEvent>
+    public class StartReadModel : IReadModel, IAmReadModelFor<RoverAggregate, RoverAggregateId, StartedEvent>
     {
         [Key]
         public string AggregateId { get; private set; }
@@ -20,7 +20,7 @@ namespace rover.domain.Models
 
         public void Apply(
             IReadModelContext context,
-            IDomainEvent<RoverPositionAggregate, RoverPositionAggregateId, StartedEvent> domainEvent)
+            IDomainEvent<RoverAggregate, RoverAggregateId, StartedEvent> domainEvent)
         {
             AggregateId = domainEvent.AggregateIdentity.Value;
             Timestamp = domainEvent.Timestamp;
