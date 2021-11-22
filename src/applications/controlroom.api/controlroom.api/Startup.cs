@@ -29,6 +29,12 @@ using Hangfire;
 using Hangfire.SqlServer;
 using EventFlow.Hangfire.Extensions;
 using EventFlow.EntityFramework;
+using rover.domain.Services;
+using System.Data.Common;
+using EventStore.ClientAPI;
+using EventStore.ClientAPI.SystemData;
+using EventFlow.MetadataProviders;
+using EventFlow.EventStores.EventStore.Extensions;
 
 namespace controlroom.api
 {
@@ -109,12 +115,12 @@ namespace controlroom.api
                 .AddCommandHandlers(typeof(StartCommandHandler))
                 
 
-                .AddEvents(typeof(PositionChangedEvent))
+                .AddEvents(typeof(StoppedEvent))
                 .AddCommands(typeof(ChangePositionCommand))
                 .AddCommandHandlers(typeof(ChangePositionCommandHandler))
-                
 
-                .AddEvents(typeof(StoppedEvent))
+                .AddEvents(typeof(MovedEvent))
+                .AddEvents(typeof(LandedEvent))
 
                 .RegisterServices(sr =>
                 {
@@ -126,7 +132,7 @@ namespace controlroom.api
                 
                 .AddQueryHandler<GetPositionsQueryHandler, GetPositionsQuery, List<PositionReadModel>>()
                 .AddQueryHandler<GetLastPositionQueryHandler, GetLastPositionQuery, PositionReadModel>()
-                .AddQueryHandler<GetLandingPositionQueryHandler, GetLandingPositionQuery, PositionReadModel>()
+                .AddQueryHandler<GetLandingPositionQueryHandler, GetLandingPositionQuery, LandingReadModel>()
 
                 //.UseMssqlReadModel<PositionReadModel>()
                 //.UseMssqlReadModel<StartReadModel>()
@@ -142,7 +148,7 @@ namespace controlroom.api
                                 true, 5,
                                 Configuration.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQPublishExchange")))
 
-                .AddAsynchronousSubscriber<RoverPositionAggregate, RoverPositionAggregateId, StoppedEvent, StoppedEventSubscriber>()
+                .AddAsynchronousSubscriber<RoverAggregate, RoverAggregateId, MovedEvent, StoppedEventSubscriber>()
                 .RegisterServices(s => {
                     s.Register<IHostedService, RabbitConsumePersistenceService>(Lifetime.Singleton);
                     s.Register<IHostedService, StoppedEventSubscriber>(Lifetime.Singleton);
@@ -152,6 +158,7 @@ namespace controlroom.api
                 .CreateServiceProvider();
         }
 
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -182,5 +189,7 @@ namespace controlroom.api
                 endpoints.MapHangfireDashboard();
             });
         }
+
+
     }
 }

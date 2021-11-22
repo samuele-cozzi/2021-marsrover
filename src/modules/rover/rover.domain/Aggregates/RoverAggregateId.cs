@@ -11,8 +11,8 @@ namespace rover.domain.Aggregates
 {
 
     [JsonConverter(typeof(SingleValueObjectConverter))]
-    public class RoverPositionAggregateId : Identity<RoverPositionAggregateId>
+    public class RoverAggregateId : Identity<RoverAggregateId>
     {
-        public RoverPositionAggregateId(string value) : base(value) { }
+        public RoverAggregateId(string value) : base(value) { }
     }
 }

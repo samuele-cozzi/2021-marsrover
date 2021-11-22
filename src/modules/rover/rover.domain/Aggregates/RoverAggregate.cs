@@ -18,9 +18,10 @@ using System.Threading.Tasks;
 
 namespace rover.domain.Aggregates
 {
-    public  class RoverPositionAggregate : AggregateRoot<RoverPositionAggregate, RoverPositionAggregateId>
+    public  class RoverAggregate : AggregateRoot<RoverAggregate, RoverAggregateId>
     {
         public Position _position { get; private set; }
+        public Position _landing { get; private set; }
 
         private readonly IQueryProcessor _queryProcessor;
         private readonly ICommandBus _commandBus;
@@ -29,7 +30,7 @@ namespace rover.domain.Aggregates
         private readonly double angularStep;
 
 
-        public RoverPositionAggregate(RoverPositionAggregateId id,
+        public RoverAggregate(RoverAggregateId id,
             IQueryProcessor queryProcessor,
             ICommandBus commandBus,
             IOptions<RoverSettings> roverSettings,
@@ -80,10 +81,10 @@ namespace rover.domain.Aggregates
                         position.MoveBackward(angularStep);
                         break;
                     case Moves.r:
-                        position.FacingDirection = position.FacingDirection.Next();
+                        position.TurnRight();
                         break;
                     case Moves.l:
-                        position.FacingDirection = position.FacingDirection.Previous();
+                        position.TurnLeft();
                         break;
                 }
 
@@ -101,7 +102,7 @@ namespace rover.domain.Aggregates
             }
 
             // Emit Stopped Event
-            Emit(new StoppedEvent(position.FacingDirection, latitude, longitude, _roverSettings.Landing.Coordinate.AngularPrecision, isBlocked, stop));
+            Emit(new MovedEvent(position.FacingDirection, latitude, longitude, _roverSettings.Landing.Coordinate.AngularPrecision, isBlocked, stop));
 
             return ExecutionResult.Success();
         }
@@ -122,7 +123,11 @@ namespace rover.domain.Aggregates
 
         public IExecutionResult ChangePosition(Position position, bool isBlocked, bool stop)
         {
-            Emit(new PositionChangedEvent(position.FacingDirection, position.Coordinate.Latitude, position.Coordinate.Longitude, isBlocked, stop));
+            if (_landing == null) { 
+                Emit(new LandedEvent(position.FacingDirection, position.Coordinate.Latitude, position.Coordinate.Longitude));
+            }
+
+            Emit(new StoppedEvent(position.FacingDirection, position.Coordinate.Latitude, position.Coordinate.Longitude, isBlocked, stop));
 
             var landing = _queryProcessor.ProcessAsync(new GetLandingPositionQuery(), CancellationToken.None).Result;
 
@@ -160,7 +165,7 @@ namespace rover.domain.Aggregates
         {
         }
 
-        public void Apply(StoppedEvent aggregateEvent)
+        public void Apply(MovedEvent aggregateEvent)
         {
             if (_position != null) { 
                 _position.Coordinate.Latitude = aggregateEvent.Latitude;
@@ -169,14 +174,20 @@ namespace rover.domain.Aggregates
             }
         }
 
-        public void Apply(PositionChangedEvent aggregateEvent)
+        public void Apply(LandedEvent aggregateEvent)
         {
-            if (_position != null)
-            {
-                _position.Coordinate.Latitude = aggregateEvent.Latitude;
-                _position.Coordinate.Longitude = aggregateEvent.Longitude;
-                _position.FacingDirection = aggregateEvent.FacingDirection;
-            }
+            _landing = _landing ?? new Position() { Coordinate = new Coordinate() };
+            _landing.Coordinate.Latitude = aggregateEvent.Latitude;
+            _landing.Coordinate.Longitude = aggregateEvent.Longitude;
+            _landing.FacingDirection = aggregateEvent.FacingDirection;
+        }
+
+        public void Apply(StoppedEvent aggregateEvent)
+        {
+            _position = _position ?? new Position() { Coordinate = new Coordinate() };
+            _position.Coordinate.Latitude = aggregateEvent.Latitude;
+            _position.Coordinate.Longitude = aggregateEvent.Longitude;
+            _position.FacingDirection = aggregateEvent.FacingDirection;
         }
     }
 }

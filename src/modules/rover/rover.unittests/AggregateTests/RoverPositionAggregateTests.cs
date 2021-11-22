@@ -36,10 +36,10 @@ namespace rover.unittests.AggregateTests
             var helper = new TestHelpers();
             var resolver = helper.Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2();
             IAggregateStore aggregateStore = resolver.Resolve<IAggregateStore>();
-            var id = RoverPositionAggregateId.New;
+            var id = RoverAggregateId.New;
 
             // Act
-            var _aggregate = await aggregateStore.LoadAsync<RoverPositionAggregate, RoverPositionAggregateId>(id, CancellationToken.None);
+            var _aggregate = await aggregateStore.LoadAsync<RoverAggregate, RoverAggregateId>(id, CancellationToken.None);
             var result = _aggregate.Move(moves, true);
 
             // Assert
@@ -49,35 +49,51 @@ namespace rover.unittests.AggregateTests
             Assert.Equal(Longitude, _aggregate._position?.Coordinate?.Longitude);
         }
 
-        // [Theory]
-        // [InlineData(FacingDirections.E, 0, 0, false)]
-        // [InlineData(FacingDirections.E, 0, 0, true)]
-        // [InlineData(FacingDirections.N, 1, 1, false)]
-        // [InlineData(FacingDirections.S, -1, -1, true)]
-        // public async void RoverPositionAggregate_ChangePosition_CheckNewPosition(FacingDirections direction, double Latitude, double Longitude, bool isBlocked)
-        // {
-        //     // Arrange
-        //     var helper = new TestHelpers();
-        //     var resolver = helper.Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2();
-        //     IAggregateStore aggregateStore = resolver.Resolve<IAggregateStore>();
-        //     IQueryProcessor _queryProcessor = resolver.Resolve<IQueryProcessor>();
-        //     var id = RoverPositionAggregateId.New;
-        //     Position position = new Position() { FacingDirection = direction, Coordinate = new Coordinate() { Latitude = Latitude, Longitude = Longitude } };
+        [Theory]
+        [InlineData(new Moves[2] { Moves.f, Moves.f }, FacingDirections.E, 0, 1)]
+        public async void RoverPositionAggregate_Move_CheckBlock(Moves[] moves, FacingDirections direction, double Latitude, double Longitude)
+        {
+            // Arrange
+            var helper = new TestHelpers();
+            var resolver = helper.Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2();
+            IAggregateStore aggregateStore = resolver.Resolve<IAggregateStore>();
+            var id = RoverAggregateId.New;
 
-        //     // Act
-        //     var _aggregate = await aggregateStore.LoadAsync<RoverPositionAggregate, RoverPositionAggregateId>(id, CancellationToken.None);
-        //     var result =  _aggregate.ChangePosition(position, isBlocked, true);
+            // Act
+            var _aggregate = await aggregateStore.LoadAsync<RoverAggregate, RoverAggregateId>(id, CancellationToken.None);
+            var result = _aggregate.Move(moves, true);
 
-        //     PositionReadModel newPosition = await _queryProcessor.ProcessAsync(new ReadModelByIdQuery<PositionReadModel>(id), CancellationToken.None).ConfigureAwait(false);
-        //     var result1 = await _queryProcessor.ProcessAsync(new GetLastPositionQuery(), CancellationToken.None);
+            // Assert
+            Assert.True(result.IsSuccess);
+            Assert.Equal(direction, _aggregate._position?.FacingDirection);
+            Assert.Equal(Latitude, _aggregate._position?.Coordinate?.Latitude);
+            Assert.Equal(Longitude, _aggregate._position?.Coordinate?.Longitude);
+        }
 
-        //     // Assert
-        //     Assert.True(result.IsSuccess);
-        //     Assert.Equal(id.Value, newPosition.AggregateId);
-        //     Assert.Equal(direction, newPosition.FacingDirection);
-        //     Assert.Equal(Latitude, newPosition.Latitude);
-        //     Assert.Equal(Longitude, newPosition.Longitude);
-        //     Assert.Equal(isBlocked, newPosition.IsBlocked);
-        // }
+        [Theory]
+        [InlineData(FacingDirections.E, 0, 0, false)]
+        [InlineData(FacingDirections.E, 0, 0, true)]
+        [InlineData(FacingDirections.N, 1, 1, false)]
+        [InlineData(FacingDirections.S, -1, -1, true)]
+        public async void RoverPositionAggregate_ChangePosition_CheckNewPosition(FacingDirections direction, double Latitude, double Longitude, bool isBlocked)
+        {
+            // Arrange
+            var helper = new TestHelpers();
+            var resolver = helper.Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2();
+            IAggregateStore aggregateStore = resolver.Resolve<IAggregateStore>();
+            IQueryProcessor _queryProcessor = resolver.Resolve<IQueryProcessor>();
+            var id = RoverAggregateId.New;
+            Position position = new Position() { FacingDirection = direction, Coordinate = new Coordinate() { Latitude = Latitude, Longitude = Longitude } };
+
+            // Act
+            var _aggregate = await aggregateStore.LoadAsync<RoverAggregate, RoverAggregateId>(id, CancellationToken.None);
+            var result = _aggregate.ChangePosition(position, isBlocked, true);
+
+            // Assert
+            Assert.True(result.IsSuccess);
+            Assert.Equal(direction, _aggregate._position?.FacingDirection);
+            Assert.Equal(Latitude, _aggregate._position?.Coordinate?.Latitude);
+            Assert.Equal(Longitude, _aggregate._position?.Coordinate?.Longitude);
+        }
     }
 }

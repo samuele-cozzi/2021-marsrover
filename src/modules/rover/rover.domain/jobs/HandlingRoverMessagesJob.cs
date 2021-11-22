@@ -10,7 +10,7 @@ using rover.domain.Models;
 
 public class HandlingRoverMessagesJob : IJob
 {
-    public RoverPositionAggregateId _id;
+    public RoverAggregateId _id;
     public FacingDirections _facingDirection;
     public double _latitude;
     public double _longitude;
@@ -19,7 +19,7 @@ public class HandlingRoverMessagesJob : IJob
     public double _coordinatePrecision;
 
     public HandlingRoverMessagesJob (
-        RoverPositionAggregateId id,
+        RoverAggregateId id,
         FacingDirections facingDirection,
         double latitude,
         double longitude,

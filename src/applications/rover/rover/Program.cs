@@ -56,9 +56,10 @@ namespace rover
                             //.AddCommands(typeof(StartCommand))
                             //.AddCommandHandlers(typeof(StartCommandHandler))
 
+                            .AddEvents(typeof(LandedEvent))
                             .AddEvents(typeof(StartedEvent))
+                            .AddEvents(typeof(MovedEvent))
                             .AddEvents(typeof(StoppedEvent))
-                            .AddEvents(typeof(PositionChangedEvent))
 
                             .AddCommands(typeof(MoveCommand))
                             .AddCommandHandlers(typeof(MoveCommandHandler))
@@ -66,7 +67,7 @@ namespace rover
                             //
                             // subscribe services changed
                             //
-                            .AddAsynchronousSubscriber<RoverPositionAggregate, RoverPositionAggregateId, StartedEvent, StartEventSubscriber>()
+                            .AddAsynchronousSubscriber<RoverAggregate, RoverAggregateId, StartedEvent, StartEventSubscriber>()
                             .RegisterServices(s => {
                                 s.Register<IHostedService, RabbitConsumePersistenceService>(Lifetime.Singleton);
                                 s.Register<IHostedService, StartEventSubscriber>(Lifetime.Singleton);

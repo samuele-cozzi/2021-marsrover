@@ -17,11 +17,11 @@ using rover.domain.Settings;
 
 public class SendMessageToRoverJob : IJob
 {
-    public RoverPositionAggregateId _id;
+    public RoverAggregateId _id;
     public Moves[] _enumList;
     public bool _stop;
     
-    public SendMessageToRoverJob (RoverPositionAggregateId id, Moves[] enumList, bool stop)
+    public SendMessageToRoverJob (RoverAggregateId id, Moves[] enumList, bool stop)
     {
         _id = id;
         _enumList = enumList;

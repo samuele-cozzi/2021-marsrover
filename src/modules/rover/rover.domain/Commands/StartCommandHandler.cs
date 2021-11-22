@@ -7,10 +7,10 @@ using rover.domain.Models;
 
 namespace rover.domain.Commands
 {
-    public class StartCommandHandler : CommandHandler<RoverPositionAggregate, RoverPositionAggregateId, IExecutionResult, StartCommand>
+    public class StartCommandHandler : CommandHandler<RoverAggregate, RoverAggregateId, IExecutionResult, StartCommand>
     {
         public override Task<IExecutionResult> ExecuteCommandAsync(
-            RoverPositionAggregate aggregate,
+            RoverAggregate aggregate,
             StartCommand command,
             CancellationToken cancellationToken)
         {

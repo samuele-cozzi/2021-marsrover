@@ -94,7 +94,7 @@ namespace controlroom.api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         // GET api/<Rover>/5
         [HttpGet("landing")]
-        public async Task<ActionResult<PositionReadModel>> Landing()
+        public async Task<ActionResult<LandingReadModel>> Landing()
         {
             var eventId = new EventId();
             _logger.LogInformation(eventId, "start - Get last: rover position");

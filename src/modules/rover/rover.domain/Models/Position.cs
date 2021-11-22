@@ -1,5 +1,6 @@
 ﻿//using rover.domain.AggregateModels.Abstracts;
 
+using rover.domain.Utilities;
 using System;
 
 namespace rover.domain.Models
@@ -35,6 +36,16 @@ namespace rover.domain.Models
                 Coordinate.Longitude += angularStep;
 
             this.Boundaries(angularStep);
+        }
+
+        public void TurnRight()
+        {
+            this.FacingDirection = this.FacingDirection.Next();
+        }
+
+        public void TurnLeft()
+        {
+            this.FacingDirection = this.FacingDirection.Previous();
         }
 
         private void Boundaries(double angularStep)

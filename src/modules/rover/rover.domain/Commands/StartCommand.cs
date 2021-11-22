@@ -5,9 +5,9 @@ using rover.domain.Models;
 
 namespace rover.domain.Commands
 {
-    public class StartCommand : Command<RoverPositionAggregate, RoverPositionAggregateId, IExecutionResult>
+    public class StartCommand : Command<RoverAggregate, RoverAggregateId, IExecutionResult>
     {
-        public StartCommand(RoverPositionAggregateId aggregateId, Moves[] move, bool stop) : base(aggregateId)
+        public StartCommand(RoverAggregateId aggregateId, Moves[] move, bool stop) : base(aggregateId)
         {
             Move = move;
             Stop = stop;

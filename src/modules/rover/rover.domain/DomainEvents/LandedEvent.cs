@@ -2,26 +2,26 @@
 using EventFlow.EventStores;
 using rover.domain.Aggregates;
 using rover.domain.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace rover.domain.DomainEvents
 {
-    [EventVersion("positionchanged", 1)]
-    public class PositionChangedEvent : AggregateEvent<RoverPositionAggregate, RoverPositionAggregateId>
+    [EventVersion("landing", 1)]
+    public class LandedEvent : AggregateEvent<RoverAggregate, RoverAggregateId>
     {
         public FacingDirections FacingDirection { get; }
         public double Latitude { get; }
         public double Longitude { get; }
-        public bool IsBlocked { get; }
-        public bool Stop { get; set; }
 
-        public PositionChangedEvent(FacingDirections facingDirection, double latitude, double longitude, bool isBlocked, bool stop)
+        public LandedEvent(FacingDirections facingDirection, double latitude, double longitude)
         {
             this.FacingDirection = facingDirection;
             this.Latitude = latitude;
             this.Longitude = longitude;
-            this.IsBlocked = isBlocked;
-            this.Stop = stop;
         }
-
     }
 }

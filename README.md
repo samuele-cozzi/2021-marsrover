@@ -94,6 +94,10 @@ Using:
 
 ### Applications
 
+- Control Room UI [app](http://localhost:5010/)
+- Control Room API [swagger](http://localhost:5000/swagger)
+- Control Room API [hangfire](http://localhost:5000/hangfire)
+
 #### Control Room UI
 
 #### Control Room API

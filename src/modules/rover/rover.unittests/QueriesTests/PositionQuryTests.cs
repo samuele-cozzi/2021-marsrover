@@ -47,7 +47,7 @@ namespace rover.unittests.QueriesTests
                     Latitude = latitude,
                     Longitude = longitude,
                     FacingDirection = direction,
-                    AggregateId = RoverPositionAggregateId.New.Value,
+                    AggregateId = RoverAggregateId.New.Value,
                     Timestamp = DateTime.UtcNow,
                     IsBlocked = false,
                     SequenceNumber = 1,

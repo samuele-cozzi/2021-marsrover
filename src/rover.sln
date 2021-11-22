@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "controlroom.api", "applicat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover.infrastructure.ef", "modules\rover\rover.infrastructure.ef\rover.infrastructure.ef.csproj", "{45EB13E5-BC42-4F6F-B9B1-F88ABA140AE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rover.unittests", "modules\rover\rover.unittests\rover.unittests.csproj", "{4CC241E9-E72C-4D08-85D4-2EE5AD35A933}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover.unittests", "modules\rover\rover.unittests\rover.unittests.csproj", "{4CC241E9-E72C-4D08-85D4-2EE5AD35A933}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
