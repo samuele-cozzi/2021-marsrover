@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using rover.domain.Aggregates;
 using rover.domain.Commands;
 using rover.domain.DomainEvents;
 using rover.domain.Models;
@@ -36,6 +37,7 @@ namespace rover.unittests
             // Settings
             this.CreateRoverSettings_LandingLat0Long0FacE(services);
             this.CreateMarsSettings_Step1_ObstacleLat0Long2(services);
+            this.CreateIntegrationSettings_0(services);
 
             // EventFlow
             var provider = EventFlowOptions.New
@@ -49,9 +51,17 @@ namespace rover.unittests
                 .AddEvents(typeof(StartedEvent))
                 .AddEvents(typeof(MovedEvent))
                 .AddEvents(typeof(StoppedEvent))
+                .AddEvents(typeof(LandedEvent))
+
+                .AddJobs(typeof(SendMessageToRoverJob))
+                .AddJobs(typeof(HandlingRoverMessagesJob))
                 
                 .AddQueryHandler<GetLastPositionQueryHandler, GetLastPositionQuery, PositionReadModel>()
                 .AddQueryHandler<GetLandingPositionQueryHandler, GetLandingPositionQuery, LandingReadModel>()
+
+                .UseInMemoryReadStoreFor<StartReadModel>()
+                .UseInMemoryReadStoreFor<PositionReadModel>()
+                .UseInMemoryReadStoreFor<LandingReadModel>()
                 
                 .RegisterServices(s => {
                     s.Register<IPositionRepository, PositionRepository>();
@@ -65,15 +75,16 @@ namespace rover.unittests
             return resolver;
         }
 
-        internal IResolver Resolver_Commands_LandingLat0Long0FacE_Step1_ObstacleLat0Long2()
+        internal IRootResolver Resolver_Commands_LandingLat0Long0FacE_Step1_ObstacleLat0Long2()
         {
             var services = new ServiceCollection();
             // Settings
             this.CreateRoverSettings_LandingLat0Long0FacE(services);
             this.CreateMarsSettings_Step1_ObstacleLat0Long2(services);
+            this.CreateIntegrationSettings_0(services);
 
             // EventFlow
-            var provider = EventFlowOptions.New
+            var resolver = EventFlowOptions.New
                 .UseServiceCollection(services)
                 .AddAspNetCore()
 
@@ -91,9 +102,14 @@ namespace rover.unittests
                 .AddEvents(typeof(StartedEvent))
                 .AddEvents(typeof(MovedEvent))
                 .AddEvents(typeof(StoppedEvent))
+                .AddEvents(typeof(LandedEvent))
 
                 .AddQueryHandler<GetLastPositionQueryHandler, GetLastPositionQuery, PositionReadModel>()
                 .AddQueryHandler<GetLandingPositionQueryHandler, GetLandingPositionQuery, LandingReadModel>()
+
+                .UseInMemoryReadStoreFor<StartReadModel>()
+                .UseInMemoryReadStoreFor<PositionReadModel>()
+                .UseInMemoryReadStoreFor<LandingReadModel>()
 
                 .AddJobs(typeof(SendMessageToRoverJob))
                 .AddJobs(typeof(HandlingRoverMessagesJob))
@@ -103,9 +119,7 @@ namespace rover.unittests
                     s.Register<IDbContextProvider<DBContextControlRoom>, FakedEntityFramewokReadModelDbContextProvider>(Lifetime.AlwaysUnique);
                     s.CreateResolver(true);
                 })
-                .CreateServiceProvider();
-
-            var resolver = provider.GetService<IResolver>();
+                .CreateResolver();
 
             return resolver;
         }
@@ -151,6 +165,19 @@ namespace rover.unittests
                     }
                 }));
             services.AddTransient<MarsSettings>();
+
+            return services;
+        }
+
+        private ServiceCollection CreateIntegrationSettings_0(ServiceCollection services)
+        {
+            services.AddTransient<IOptions<IntegrationSettings>>(
+                provider => Options.Create<IntegrationSettings>(new IntegrationSettings
+                {
+                    TimeDistanceOfMessageInSeconds = 0,
+                    TimeDistanceOfVoyageInSeconds = 0
+                }));
+            services.AddTransient<IntegrationSettings>();
 
             return services;
         }

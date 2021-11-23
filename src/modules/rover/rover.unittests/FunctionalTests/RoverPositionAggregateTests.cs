@@ -12,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace rover.unittests.AggregateTests
+namespace rover.unittests.FinctionalTests
 {
     public class RoverPositionAggregateTests
     {
