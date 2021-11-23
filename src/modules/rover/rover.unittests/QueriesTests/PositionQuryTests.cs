@@ -31,7 +31,7 @@ namespace rover.unittests.QueriesTests
         }
 
         [Theory]
-        [InlineData(10,15, FacingDirections.S)]
+        //[InlineData(10,15, FacingDirections.S)]
         [InlineData(-10, 115, FacingDirections.W)]
         public async void LastPositionQuery_Get_RetunrnPosition(double latitude, double longitude, FacingDirections direction)
         {
