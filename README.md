@@ -13,7 +13,6 @@
 Explore Mars by sending remotely controlled vehicles to the surface of the planet. Control it with an API that translates the commands sent from earth to instructions that are understood by the rover.
 
 
-
 ## Overview
 
 Given the initial starting point (x,y) of a rover and the direction (N,S,E,W) it is facing.
