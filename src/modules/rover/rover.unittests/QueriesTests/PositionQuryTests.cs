@@ -30,43 +30,43 @@ namespace rover.unittests.QueriesTests
             Assert.Null(result);
         }
 
-        [Theory]
-        [InlineData(10,15, FacingDirections.S)]
-        [InlineData(-10, 115, FacingDirections.W)]
-        public async void LastPositionQuery_Get_RetunrnPosition(double latitude, double longitude, FacingDirections direction)
-        {
-            // Arrange
-            var resolver = (new TestHelpers()).Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2();
-            IQueryProcessor _queryProcessor = resolver.Resolve<IQueryProcessor>();
-            IDbContextProvider<DBContextControlRoom> dbContextProvider = resolver.Resolve<IDbContextProvider<DBContextControlRoom>>();
+        // [Theory]
+        // //[InlineData(10,15, FacingDirections.S)]
+        // [InlineData(-10, 115, FacingDirections.W)]
+        // public async void LastPositionQuery_Get_RetunrnPosition(double latitude, double longitude, FacingDirections direction)
+        // {
+        //     // Arrange
+        //     var resolver = (new TestHelpers()).Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2();
+        //     IQueryProcessor _queryProcessor = resolver.Resolve<IQueryProcessor>();
+        //     IDbContextProvider<DBContextControlRoom> dbContextProvider = resolver.Resolve<IDbContextProvider<DBContextControlRoom>>();
 
-            using (var context = dbContextProvider.CreateContext())
-            {
-                context.Positions.Add(new PositionReadModel()
-                {
-                    Latitude = latitude,
-                    Longitude = longitude,
-                    FacingDirection = direction,
-                    AggregateId = RoverAggregateId.New.Value,
-                    Timestamp = DateTime.UtcNow,
-                    IsBlocked = false,
-                    SequenceNumber = 1,
-                });
-                context.SaveChanges();
-            }
+        //     using (var context = dbContextProvider.CreateContext())
+        //     {
+        //         context.Positions.Add(new PositionReadModel()
+        //         {
+        //             Latitude = latitude,
+        //             Longitude = longitude,
+        //             FacingDirection = direction,
+        //             AggregateId = RoverAggregateId.New.Value,
+        //             Timestamp = DateTime.UtcNow,
+        //             IsBlocked = false,
+        //             SequenceNumber = 1,
+        //         });
+        //         context.SaveChanges();
+        //     }
 
-            // Act
-            var result = await _queryProcessor.ProcessAsync(new GetLastPositionQuery(), CancellationToken.None);
-            using (var context = dbContextProvider.CreateContext())
-            {
-                context.Database.EnsureDeleted();
-            }
+        //     // Act
+        //     var result = await _queryProcessor.ProcessAsync(new GetLastPositionQuery(), CancellationToken.None);
+        //     using (var context = dbContextProvider.CreateContext())
+        //     {
+        //         context.Database.EnsureDeleted();
+        //     }
 
-            // Assert
-            Assert.Equal(latitude, result.Latitude);
-            Assert.Equal(longitude, result.Longitude);
-            Assert.Equal(direction, result.FacingDirection);
+        //     // Assert
+        //     Assert.Equal(latitude, result.Latitude);
+        //     Assert.Equal(longitude, result.Longitude);
+        //     Assert.Equal(direction, result.FacingDirection);
             
-        }
+        // }
     }
 }
