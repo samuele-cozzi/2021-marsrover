@@ -67,6 +67,7 @@ namespace rover.domain.Aggregates
             bool isBlocked = false;
             double latitude = _position.Coordinate.Latitude;
             double longitude = _position.Coordinate.Longitude;
+            FacingDirections direction = _position.FacingDirection;
             var position = new Position()
             {
                 FacingDirection = _position.FacingDirection,
@@ -100,6 +101,7 @@ namespace rover.domain.Aggregates
                 {
                     latitude = position.Coordinate.Latitude;
                     longitude = position.Coordinate.Longitude;
+                    direction = position.FacingDirection;
                 }
                 else
                 {
@@ -178,11 +180,10 @@ namespace rover.domain.Aggregates
 
         public void Apply(MovedEvent aggregateEvent)
         {
-            if (_position != null) { 
-                _position.Coordinate.Latitude = aggregateEvent.Latitude;
-                _position.Coordinate.Longitude = aggregateEvent.Longitude;
-                _position.FacingDirection = aggregateEvent.FacingDirection;
-            }
+            _position = _position ?? new Position() { Coordinate = new Coordinate() };
+            _position.Coordinate.Latitude = aggregateEvent.Latitude;
+            _position.Coordinate.Longitude = aggregateEvent.Longitude;
+            _position.FacingDirection = aggregateEvent.FacingDirection;
         }
 
         public void Apply(LandedEvent aggregateEvent)
