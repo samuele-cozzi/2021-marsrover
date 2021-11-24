@@ -4,12 +4,15 @@ truncate table [dbo].Positions
 truncate table dbo.Landing
 */
 
+--drop database RoverRM
+--create database Jobs
+--drop database Jobs
 
+select * from [RoverRM].[dbo].Commands order by timestamp
+select * from [RoverRM].[dbo].Positions order by timestamp
+select * from [RoverRM].dbo.Landing
 
-select * from [dbo].Commands order by timestamp
-select * from [dbo].Positions order by timestamp
-select * from dbo.Landing
+select * FROM [RoverRM].[dbo].[EventFlow]
 
-
-select * from EventEntity
-select * from SnapshotEntity
+-- select * from EventEntity
+-- select * from SnapshotEntity

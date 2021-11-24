@@ -35,6 +35,10 @@ using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using EventFlow.MetadataProviders;
 using EventFlow.EventStores.EventStore.Extensions;
+using EventFlow.MsSql.Extensions;
+using EventFlow.MsSql;
+using Hangfire.Dashboard;
+using EventFlow.MsSql.EventStores;
 
 namespace controlroom.api
 {
@@ -107,7 +111,7 @@ namespace controlroom.api
             //    options.UseSqlServer(Configuration.GetConnectionString("ReadModelsConnection")));
             //services.AddScoped<IPositionRepository, PositionRepository>();
 
-            return EventFlowOptions.New
+            var serviceProvider = EventFlowOptions.New
                 .UseServiceCollection(services)
 
                 .AddEvents(typeof(StartedEvent))
@@ -129,6 +133,10 @@ namespace controlroom.api
                     //sr.<DBContextControlRoom>();
                 })
                 .AddEntityFrameworkReadModel()
+
+                .ConfigureMsSql(MsSqlConfiguration.New.SetConnectionString(Configuration.GetConnectionString("ReadModelsConnection")))
+                .UseMssqlEventStore()
+                //.UseMsSqlSnapshotStore()
                 
                 .AddQueryHandler<GetPositionsQueryHandler, GetPositionsQuery, List<PositionReadModel>>()
                 .AddQueryHandler<GetLastPositionQueryHandler, GetLastPositionQuery, PositionReadModel>()
@@ -156,6 +164,13 @@ namespace controlroom.api
                 })
                 .UseConsoleLog()
                 .CreateServiceProvider();
+
+            var resolver = serviceProvider.GetService<IResolver>();
+
+            var msSqlDatabaseMigrator = resolver.Resolve<IMsSqlDatabaseMigrator>();
+            EventFlowEventStoresMsSql.MigrateDatabase(msSqlDatabaseMigrator);
+
+            return serviceProvider;
         }
 
         
@@ -182,6 +197,10 @@ namespace controlroom.api
 
             app.UseAuthorization();
             app.UseHangfireDashboard();
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                IsReadOnlyFunc = (DashboardContext context) => true
+            });
 
             app.UseEndpoints(endpoints =>
             {
