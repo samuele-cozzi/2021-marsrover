@@ -4,6 +4,10 @@ truncate table [dbo].Positions
 truncate table dbo.Landing
 */
 
+-- drop database RoverRM
+-- create database RoverRM
+-- drop database Jobs
+-- create database Jobs
 
 
 select * from [dbo].Commands order by timestamp
