@@ -1,34 +1,15 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using EventFlow;
-using EventFlow.Aggregates;
-using EventFlow.Jobs;
-using EventFlow.Subscribers;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using rover.domain.Aggregates;
-using rover.domain.Commands;
-using rover.domain.DomainEvents;
-using rover.domain.Models;
-using rover.domain.Settings;
-using rover.infrastructure.rabbitmq;
-
-namespace controlroom.api.DomainEventsHandlers
+﻿namespace controlroom_api.DomainEventsHandlers
 {
     public class StoppedEventSubscriber : IHostedService, IRabbitMqConsumerPersistanceService,
         ISubscribeAsynchronousTo<RoverAggregate, RoverAggregateId, MovedEvent>
     {
-        private readonly ICommandBus _commandBus;
         private readonly IJobScheduler _jobScheduler;
         private readonly IntegrationSettings _options;
 
         public StoppedEventSubscriber(
-            ICommandBus commandBus,
             IJobScheduler jobScheduler,
             IOptions<IntegrationSettings> options)
         {
-            _commandBus = commandBus;
             _jobScheduler = jobScheduler;
             _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
