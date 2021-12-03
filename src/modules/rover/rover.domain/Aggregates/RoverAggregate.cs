@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using rover.domain.Jobs;
 
 namespace rover.domain.Aggregates
 {

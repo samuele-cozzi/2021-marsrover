@@ -3,20 +3,20 @@ version: '3.4'
 services:
 
   controlroom-api:
-    image: ${REGISTRY:-rover}/controlroom.api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-rover}/controlroom-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: applications/controlroom.api/controlroom.api/Dockerfile
+      dockerfile: applications/controlroom-api/Dockerfile
     depends_on:
       - seq
       - sqldata
       - rabbitmq
 
-  rover:
-    image: ${REGISTRY:-rover}/rover:${PLATFORM:-linux}-${TAG:-latest}
+  rover-iot:
+    image: ${REGISTRY:-rover}/rover-iot:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: applications/rover/rover/Dockerfile
+      dockerfile: applications/rover-iot/Dockerfile
     depends_on:
       - seq
       - sqldata

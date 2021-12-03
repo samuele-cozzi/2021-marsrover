@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using rover.domain.Aggregates;
 using rover.domain.Commands;
 using rover.domain.DomainEvents;
+using rover.domain.Jobs;
 using rover.domain.Models;
 using rover.domain.Queries;
 using rover.domain.Services;

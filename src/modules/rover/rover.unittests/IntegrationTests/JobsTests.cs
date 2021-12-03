@@ -4,6 +4,7 @@ using EventFlow.Jobs;
 using EventFlow.Queries;
 using rover.domain.Aggregates;
 using rover.domain.Commands;
+using rover.domain.Jobs;
 using rover.domain.Models;
 using rover.domain.Queries;
 using System;

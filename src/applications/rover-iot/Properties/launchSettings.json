@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "rover-iot": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
