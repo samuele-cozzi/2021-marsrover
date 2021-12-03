@@ -11,6 +11,7 @@ global using rover.domain.DomainEvents;
 global using rover.domain.Models;
 global using rover.domain.Queries;
 global using rover.domain.Services;
+global using rover.domain.Jobs;
 global using rover.infrastructure.ef;
 global using rover.infrastructure.rabbitmq;
 global using EventFlow.Configuration;

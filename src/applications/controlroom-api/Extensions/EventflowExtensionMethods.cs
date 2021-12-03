@@ -7,7 +7,8 @@ static class EventflowExtensionMethods
         services.AddEventFlow(ef =>
         {
             ef.UseServiceCollection(services)
-                .AddAspNetCore(o => o.AddDefaultMetadataProviders())
+                .AddAspNetCoreMetadataProviders()
+                //.AddAspNetCore(o => o.AddDefaultMetadataProviders())
                 .AddEvents(typeof(StartedEvent))
                 .AddCommands(typeof(StartCommand))
                 .AddCommandHandlers(typeof(StartCommandHandler))
@@ -36,8 +37,7 @@ static class EventflowExtensionMethods
                 //    Configuration.GetConnectionString("ReadModelsConnection"))
 
                 .UseHangfireJobScheduler()
-                .AddJobs(typeof(SendMessageToRoverJob))
-                .AddJobs(typeof(HandlingRoverMessagesJob))
+                .AddJobs(new[] { typeof(SendMessageToRoverJob), typeof(HandlingRoverMessagesJob) })
 
                 .PublishToRabbitMq(RabbitMqConfiguration.With(
                                 new Uri(configuration.GetSection(nameof(IntegrationSettings)).GetValue<string>("RabbitMQConnectionString")),

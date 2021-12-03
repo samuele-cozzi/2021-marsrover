@@ -53,11 +53,8 @@
         {
             _logger.LogInformation("Takeoff Explore Command");
 
-            var lastPosition = await _queryProcessor.ProcessAsync(new GetLastPositionQuery(), CancellationToken.None);
-            RoverAggregateId id = (lastPosition?.AggregateId == null) ? RoverAggregateId.New : RoverAggregateId.With(lastPosition.AggregateId);
-
             var result = await _jobScheduler.ScheduleAsync(
-                new SendMessageToRoverJob(id, new Moves[0] { }, true),
+                new SendMessageToRoverJob(RoverAggregateId.New, new Moves[0] { }, true),
                 TimeSpan.FromSeconds(_options.TimeDistanceOfVoyageInSeconds),
                 CancellationToken.None)
                 .ConfigureAwait(false);

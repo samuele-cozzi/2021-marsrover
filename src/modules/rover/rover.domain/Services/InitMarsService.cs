@@ -1,44 +1,35 @@
-﻿using EventFlow;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using rover.domain.Settings;
-using rover.domain.Commands;
 using rover.domain.Models;
+using rover.domain.Settings;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
-namespace rover
+namespace rover.domain.Services
 {
-    public class Worker : IHostedService
+    public class InitMarsService
     {
-        private readonly IHostApplicationLifetime _hostLifetime;
-        private readonly ILogger<Worker> _logger;
-        private readonly RoverSettings _roverSettings;
+        private readonly ILogger<InitMarsService> _logger;
         private readonly MarsSettings _marsSettings;
-        private readonly ICommandBus _commandBus;
 
         private int? _exitCode;
 
-        public Worker(IHostApplicationLifetime hostLifetime, 
-            ILogger<Worker> logger, 
-            IOptions<RoverSettings> roverSettings, 
-            IOptions<MarsSettings> marsSettings,
-            ICommandBus commandBus)
+        public InitMarsService(
+            ILogger<InitMarsService> logger,
+            IOptions<MarsSettings> marsSettings)
         {
-            _hostLifetime = hostLifetime ?? throw new ArgumentNullException(nameof(hostLifetime));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _roverSettings = roverSettings?.Value ?? throw new ArgumentNullException(nameof(roverSettings));
             _marsSettings = marsSettings?.Value ?? throw new ArgumentNullException(nameof(marsSettings));
-            _commandBus = commandBus;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public Task InitMarsAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Start Worker");
-            
+            _logger.LogInformation($"Start Init Mars");
+
             if (_marsSettings.ObstaclesPercentage > 0)
             {
                 _marsSettings.Obstacles = new List<Coordinate>();
@@ -58,17 +49,13 @@ namespace rover
                             {
                                 _marsSettings.Obstacles.Add(new Coordinate() { Latitude = lat, Longitude = lon });
                             }
-                        }         
+                        }
                     }
                 }
             }
-            return Task.CompletedTask;
-        }
 
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            Environment.ExitCode = _exitCode.GetValueOrDefault(-1);
-            _logger?.LogInformation($"Shutting down the service with code {Environment.ExitCode}");
+            _logger.LogInformation($"Finish Init Mars");
+
             return Task.CompletedTask;
         }
     }

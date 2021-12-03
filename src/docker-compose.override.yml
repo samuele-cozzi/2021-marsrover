@@ -17,10 +17,9 @@ services:
       - "5000:80"
       - "5001:443"
       
-  rover:
+  rover-iot:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__ReadModelsConnection=Server=sqldata;Database=RoverRM;User Id=sa;Password=Pass@word
       - ConnectionStrings__JobsConnection=Server=sqldata;Database=Jobs;User Id=sa;Password=Pass@word
       - IntegrationSettings__RabbitMQConnectionString=amqp://rabbitmq
   

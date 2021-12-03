@@ -12,11 +12,11 @@ services:
       - sqldata
       - rabbitmq
 
-  rover:
-    image: ${REGISTRY:-rover}/rover:${PLATFORM:-linux}-${TAG:-latest}
+  rover-iot:
+    image: ${REGISTRY:-rover}/rover-iot:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: applications/rover/rover/Dockerfile
+      dockerfile: applications/rover-iot/Dockerfile
     depends_on:
       - seq
       - sqldata

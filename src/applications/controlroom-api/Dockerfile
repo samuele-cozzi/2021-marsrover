@@ -8,7 +8,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["applications/controlroom-api/controlroom-api.csproj", "applications/controlroom-api/"]
-COPY ["applications/rover/rover/rover.csproj", "applications/rover/rover/"]
+COPY ["applications/rover-iot/rover-iot.csproj", "applications/rover-iot/"]
 COPY ["modules/rover/rover.domain/rover.domain.csproj", "modules/rover/rover.domain/"]
 COPY ["modules/rover/rover.unittests/rover.unittests.csproj", "modules/rover/rover.unittests/"]
 COPY ["modules/rover/rover.infrastructure.ef/rover.infrastructure.ef.csproj", "modules/rover/rover.infrastructure.ef/"]

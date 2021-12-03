@@ -1,12 +1,13 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/runtime:6.0 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+
 WORKDIR /src
-COPY ["applications/controlroom.api/controlroom.api/controlroom.api.csproj", "applications/controlroom.api/controlroom.api/"]
-COPY ["applications/rover/rover/rover.csproj", "applications/rover/rover/"]
+COPY ["applications/controlroom-api/controlroom-api.csproj", "applications/controlroom-api/"]
+COPY ["applications/rover-iot/rover-iot.csproj", "applications/rover-iot/"]
 COPY ["modules/rover/rover.domain/rover.domain.csproj", "modules/rover/rover.domain/"]
 COPY ["modules/rover/rover.unittests/rover.unittests.csproj", "modules/rover/rover.unittests/"]
 COPY ["modules/rover/rover.infrastructure.ef/rover.infrastructure.ef.csproj", "modules/rover/rover.infrastructure.ef/"]
@@ -14,13 +15,13 @@ COPY ["modules/rover/rover.infrastructure.rabbitmq/rover.infrastructure.rabbitmq
 COPY ["rover.sln", "rover.sln"]
 RUN dotnet restore "rover.sln"
 COPY . .
-WORKDIR "/src/applications/rover/rover"
-RUN dotnet build "rover.csproj" -c Release -o /app/build
+WORKDIR "/src/applications/rover-iot"
+RUN dotnet build "rover-iot.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "rover.csproj" -c Release -o /app/publish
+RUN dotnet publish "rover-iot.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "rover.dll"]
+ENTRYPOINT ["dotnet", "rover-iot.dll"]
