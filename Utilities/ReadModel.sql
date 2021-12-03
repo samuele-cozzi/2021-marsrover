@@ -16,5 +16,5 @@ select * from [RoverRM].dbo.Landing
 
 select * FROM [RoverRM].[dbo].[EventFlow]
 
--- select * from EventEntity
+select * from EventEntity
 -- select * from SnapshotEntity
