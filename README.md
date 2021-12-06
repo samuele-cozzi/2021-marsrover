@@ -1,5 +1,4 @@
 [![CodeQL](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/codeql-analysis.yml)
-[![Unit Test](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/dotnet-unittest.yml/badge.svg)](https://github.com/samuele-cozzi/2021-marsrover/actions/workflows/dotnet-unittest.yml)
 [![codecov](https://codecov.io/gh/samuele-cozzi/2021-marsrover/branch/main/graph/badge.svg?token=ARTZVUUV8G)](https://codecov.io/gh/samuele-cozzi/2021-marsrover)
 [![Maintainability](https://api.codeclimate.com/v1/badges/fac11f4252ca3d792cda/maintainability)](https://codeclimate.com/github/samuele-cozzi/2021-marsrover/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/fac11f4252ca3d792cda/test_coverage)](https://codeclimate.com/github/samuele-cozzi/2021-marsrover/test_coverage)
