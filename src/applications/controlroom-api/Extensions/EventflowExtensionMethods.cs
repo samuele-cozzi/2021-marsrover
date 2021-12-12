@@ -22,7 +22,7 @@ static class EventflowExtensionMethods
 
                 .RegisterServices(sr =>
                 {
-                    sr.Register<IPositionRepository, PositionRepository>(Lifetime.Scoped);
+                    sr.Register<IPositionRepository, rover.infrastructure.dapper.PositionRepository>(Lifetime.Scoped);
                     sr.Register<IDbContextProvider<DBContextControlRoom>, DBContextProvider>();
                 })
                 .AddEntityFrameworkReadModel()

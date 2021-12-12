@@ -21,7 +21,6 @@ static class WebExtensionMethods
 
     public static IServiceCollection AddConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
-        //services.Configure<RoverSettings>(configuration.GetSection(nameof(RoverSettings)));
         services.Configure<IntegrationSettings>(configuration.GetSection(nameof(IntegrationSettings)));
 
         return services;

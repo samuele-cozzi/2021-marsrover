@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "controlroom-api", "applicat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rover-iot", "applications\rover-iot\rover-iot.csproj", "{89E1670F-5D8A-4956-99CB-D47592BDE4E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rover.infrastructure.dapper", "modules\rover\rover.infrastructure.dapper\rover.infrastructure.dapper.csproj", "{37C4E7BF-060F-4D9A-B8A5-AB0CEF210B32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{89E1670F-5D8A-4956-99CB-D47592BDE4E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89E1670F-5D8A-4956-99CB-D47592BDE4E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89E1670F-5D8A-4956-99CB-D47592BDE4E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37C4E7BF-060F-4D9A-B8A5-AB0CEF210B32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37C4E7BF-060F-4D9A-B8A5-AB0CEF210B32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37C4E7BF-060F-4D9A-B8A5-AB0CEF210B32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37C4E7BF-060F-4D9A-B8A5-AB0CEF210B32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +62,7 @@ Global
 		{B36FD00E-81C2-433B-A310-D964BC8B74F5} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
 		{45EB13E5-BC42-4F6F-B9B1-F88ABA140AE8} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
 		{4CC241E9-E72C-4D08-85D4-2EE5AD35A933} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
+		{37C4E7BF-060F-4D9A-B8A5-AB0CEF210B32} = {D7212BC1-927D-4F54-8C2C-172A87E773EB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AE9438D2-F70E-421E-90B1-E44FB7075E61}
