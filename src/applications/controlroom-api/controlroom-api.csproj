@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\modules\rover\rover.domain\rover.domain.csproj" />
+    <ProjectReference Include="..\..\modules\rover\rover.infrastructure.dapper\rover.infrastructure.dapper.csproj" />
     <ProjectReference Include="..\..\modules\rover\rover.infrastructure.ef\rover.infrastructure.ef.csproj" />
     <ProjectReference Include="..\..\modules\rover\rover.infrastructure.rabbitmq\rover.infrastructure.rabbitmq.csproj" />
   </ItemGroup>

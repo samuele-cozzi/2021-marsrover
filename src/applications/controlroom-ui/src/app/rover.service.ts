@@ -22,6 +22,11 @@ export class RoverService {
     return this.http.get<RoverPosition>(url);
   }
 
+  getRoverPositions(): Observable<RoverPosition[]> {
+    const url = `${this.urlPrefix}/position`;
+    return this.http.get<RoverPosition[]>(url);
+  }
+
   takeoff(command: string[]): any {
     const url = `${this.urlPrefix}/takeoff`
     return this.http.post(url, command, this.httpOptions);
