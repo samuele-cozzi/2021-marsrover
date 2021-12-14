@@ -30,6 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\rover.domain\rover.domain.csproj" />
     <ProjectReference Include="..\rover.infrastructure.ef\rover.infrastructure.ef.csproj" />
+    <ProjectReference Include="..\rover.infrastructure.dapper\rover.infrastructure.dapper.csproj" />
   </ItemGroup>
 
 </Project>

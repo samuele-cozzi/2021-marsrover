@@ -76,6 +76,78 @@ namespace rover.unittests
             return resolver;
         }
 
+        internal IResolver Resolver_LandingLat0Long0FacE_QueryEF()
+        {
+            var services = new ServiceCollection();
+            // Settings
+            this.CreateRoverSettings_LandingLat0Long0FacE(services);
+            this.CreateMarsSettings_Step1_ObstacleLat0Long2(services);
+            this.CreateIntegrationSettings_0(services);
+
+            // EventFlow
+            var provider = EventFlowOptions.New
+                .UseServiceCollection(services)
+                .AddAspNetCore()
+
+                .UseEntityFrameworkReadModel<PositionReadModel, DBContextControlRoom>()
+                .ConfigureEntityFramework(EntityFrameworkConfiguration.New)
+                .AddDbContextProvider<DBContextControlRoom, FakedEntityFramewokReadModelDbContextProvider>()
+                
+                .AddQueryHandler<GetLastPositionQueryHandler, GetLastPositionQuery, PositionReadModel>()
+                .AddQueryHandler<GetLandingPositionQueryHandler, GetLandingPositionQuery, LandingReadModel>()
+
+                .UseInMemoryReadStoreFor<StartReadModel>()
+                .UseInMemoryReadStoreFor<PositionReadModel>()
+                .UseInMemoryReadStoreFor<LandingReadModel>()
+                
+                .RegisterServices(s => {
+                    s.Register<IPositionRepository, rover.infrastructure.ef.PositionRepository>();
+                    s.Register<IDbContextProvider<DBContextControlRoom>, FakedEntityFramewokReadModelDbContextProvider>(Lifetime.AlwaysUnique);
+                    s.CreateResolver(true);
+                })
+                .CreateServiceProvider();
+
+            var resolver = provider.GetService<IResolver>();
+
+            return resolver;
+        }
+
+        internal IResolver Resolver_LandingLat0Long0FacE_QueryDapper()
+        {
+            var services = new ServiceCollection();
+            // Settings
+            this.CreateRoverSettings_LandingLat0Long0FacE(services);
+            this.CreateMarsSettings_Step1_ObstacleLat0Long2(services);
+            this.CreateIntegrationSettings_0(services);
+
+            // EventFlow
+            var provider = EventFlowOptions.New
+                .UseServiceCollection(services)
+                .AddAspNetCore()
+
+                .UseEntityFrameworkReadModel<PositionReadModel, DBContextControlRoom>()
+                .ConfigureEntityFramework(EntityFrameworkConfiguration.New)
+                .AddDbContextProvider<DBContextControlRoom, FakedEntityFramewokReadModelDbContextProvider>()
+                
+                .AddQueryHandler<GetLastPositionQueryHandler, GetLastPositionQuery, PositionReadModel>()
+                .AddQueryHandler<GetLandingPositionQueryHandler, GetLandingPositionQuery, LandingReadModel>()
+
+                .UseInMemoryReadStoreFor<StartReadModel>()
+                .UseInMemoryReadStoreFor<PositionReadModel>()
+                .UseInMemoryReadStoreFor<LandingReadModel>()
+                
+                .RegisterServices(s => {
+                    s.Register<IPositionRepository, rover.infrastructure.dapper.PositionRepository>();
+                    s.Register<IDbContextProvider<DBContextControlRoom>, FakedEntityFramewokReadModelDbContextProvider>(Lifetime.AlwaysUnique);
+                    s.CreateResolver(true);
+                })
+                .CreateServiceProvider();
+
+            var resolver = provider.GetService<IResolver>();
+
+            return resolver;
+        }
+
         internal IRootResolver Resolver_Commands_LandingLat0Long0FacE_Step1_ObstacleLat0Long2()
         {
             var services = new ServiceCollection();

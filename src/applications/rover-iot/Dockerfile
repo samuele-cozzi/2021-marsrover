@@ -11,6 +11,7 @@ COPY ["applications/rover-iot/rover-iot.csproj", "applications/rover-iot/"]
 COPY ["modules/rover/rover.domain/rover.domain.csproj", "modules/rover/rover.domain/"]
 COPY ["modules/rover/rover.unittests/rover.unittests.csproj", "modules/rover/rover.unittests/"]
 COPY ["modules/rover/rover.infrastructure.ef/rover.infrastructure.ef.csproj", "modules/rover/rover.infrastructure.ef/"]
+COPY ["modules/rover/rover.infrastructure.dapper/rover.infrastructure.dapper.csproj", "modules/rover/rover.infrastructure.dapper/"]
 COPY ["modules/rover/rover.infrastructure.rabbitmq/rover.infrastructure.rabbitmq.csproj", "modules/rover/rover.infrastructure.rabbitmq/"]
 COPY ["rover.sln", "rover.sln"]
 RUN dotnet restore "rover.sln"
