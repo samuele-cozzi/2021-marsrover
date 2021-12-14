@@ -2,6 +2,7 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using rover.infrastructure.ef;
+using System;
 using System.Data.Common;
 
 namespace rover.unittests.Utilities
@@ -13,7 +14,7 @@ namespace rover.unittests.Utilities
         {
             var options = new DbContextOptionsBuilder<DBContextControlRoom>()
                 //.UseSqlite(CreateInMemoryDatabase())
-                .UseInMemoryDatabase("for testing")
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
             var context = new DBContextControlRoom(options);
