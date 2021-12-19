@@ -25,7 +25,9 @@ namespace rover.infrastructure.ef
         {
             using (var context = _contextProvider.CreateContext())
             {
-                var result = await context.Positions.FirstOrDefaultAsync();
+                var result = await context.Positions
+                    .OrderByDescending(x => x.SequenceNumber)
+                    .FirstOrDefaultAsync();
                 return result;
             }
         }
@@ -34,7 +36,9 @@ namespace rover.infrastructure.ef
         {
             using (var context = _contextProvider.CreateContext())
             {
-                var result = await context.Landing.FirstOrDefaultAsync();
+                var result = await context.Landing
+                    .OrderByDescending(x => x.SequenceNumber)
+                    .FirstOrDefaultAsync();
                 return result;
             }
         }

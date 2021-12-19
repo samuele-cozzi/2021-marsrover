@@ -24,7 +24,7 @@ namespace rover.unittests.IntegrationTests
         {
             // Arrange
             var helper = new TestHelpers();
-            var resolver = helper.Resolver_Commands_LandingLat0Long0FacE_Step1_ObstacleLat0Long2();
+            var resolver = helper.Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2(Guid.NewGuid().ToString());
             ICommandBus _commandBus = resolver.Resolve<ICommandBus>();
             IAggregateStore aggregateStore = resolver.Resolve<IAggregateStore>();
             var id = RoverAggregateId.New;
@@ -47,7 +47,7 @@ namespace rover.unittests.IntegrationTests
         {
             // Arrange
             var helper = new TestHelpers();
-            var resolver = helper.Resolver_Commands_LandingLat0Long0FacE_Step1_ObstacleLat0Long2();
+            var resolver = helper.Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2(Guid.NewGuid().ToString());
             ICommandBus _commandBus = resolver.Resolve<ICommandBus>();
             IQueryProcessor _queryProcessor = resolver.Resolve<IQueryProcessor>();
             var id = RoverAggregateId.New;
@@ -73,7 +73,7 @@ namespace rover.unittests.IntegrationTests
         {
             // Arrange
             var helper = new TestHelpers();
-            var resolver = helper.Resolver_Commands_LandingLat0Long0FacE_Step1_ObstacleLat0Long2();
+            var resolver = helper.Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2(Guid.NewGuid().ToString());
             ICommandBus _commandBus = resolver.Resolve<ICommandBus>();
             IQueryProcessor _queryProcessor = resolver.Resolve<IQueryProcessor>();
             var id = RoverAggregateId.New;

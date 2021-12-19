@@ -1,9 +1,11 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Connections;
 using Microsoft.Extensions.Configuration;
 using rover.domain.Models;
 using rover.domain.Services;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -14,17 +16,18 @@ namespace rover.infrastructure.dapper
 {
     public class PositionRepository : IPositionRepository
     {
-        private readonly string _connectionString;
-        public PositionRepository(IConfiguration configuration)
+        private readonly IDbConnectionFactory _factory;
+        public PositionRepository(IDbConnectionFactory factory)
         {
-            _connectionString = configuration.GetConnectionString("ReadModelsConnection");
+            _factory = factory;
         }
+
         public async Task<LandingReadModel> GetLandingPositionsAsync(CancellationToken cancellationToken)
         {
-            var sql = "select * from dbo.Landing order by timestamp";
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = _factory.CreateDbConnection())
             {
-                connection.Open();
+                var sql = @"select * from dbo.Landing 
+                    order by sequencenumber desc, timestamp desc";
                 var result = await connection.QueryFirstOrDefaultAsync<LandingReadModel>(sql);
                 return result;
             }
@@ -32,10 +35,11 @@ namespace rover.infrastructure.dapper
 
         public async Task<PositionReadModel> GetLastPositionsAsync(CancellationToken cancellationToken)
         {
-            var sql = "select * from dbo.Positions order by timestamp";
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = _factory.CreateDbConnection())
             {
-                connection.Open();
+                var sql = @"select * from dbo.Positions
+                    order by timestamp desc";
+
                 var result = await connection.QueryFirstOrDefaultAsync<PositionReadModel>(sql);
                 return result;
             }
@@ -43,7 +47,9 @@ namespace rover.infrastructure.dapper
 
         public async Task<List<PositionReadModel>> GetPositionsAsync(CancellationToken cancellationToken)
         {
-            var sql = @"select  
+            using (var connection = _factory.CreateDbConnection())
+            {
+                var sql = @"select  
                     AggregateId,
                     CAST(JSON_VALUE(metadata, '$.timestamp') AS DATETIME2)  AS Timestamp,
                     JSON_VALUE(metadata, '$.aggregate_sequence_number') AS SequenceNumber,
@@ -55,11 +61,9 @@ namespace rover.infrastructure.dapper
                 WHERE JSON_VALUE(metadata, '$.event_name') = 'positionchanged'
                 ORDER BY CAST(JSON_VALUE(metadata, '$.aggregate_sequence_number') AS INT) DESC";
 
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
+
                 var result = (await connection.QueryAsync<PositionReadModel>(sql)).ToList();
-                
+
                 return result;
             }
         }

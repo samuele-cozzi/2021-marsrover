@@ -8,7 +8,7 @@ using rover.domain.DomainEvents;
 
 namespace rover.domain.Models
 {
-    [Table("Positions")]
+    [Table("Positions", Schema = "dbo" )]
     public class PositionReadModel : IReadModel, IAmReadModelFor<RoverAggregate, RoverAggregateId, StoppedEvent>
     {
         [Key]

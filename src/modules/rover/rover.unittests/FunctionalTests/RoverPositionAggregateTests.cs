@@ -34,7 +34,7 @@ namespace rover.unittests.FinctionalTests
         {
             // Arrange
             var helper = new TestHelpers();
-            var resolver = helper.Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2();
+            var resolver = helper.Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2(Guid.NewGuid().ToString());
             IAggregateStore aggregateStore = resolver.Resolve<IAggregateStore>();
             var id = RoverAggregateId.New;
 
@@ -55,7 +55,7 @@ namespace rover.unittests.FinctionalTests
         {
             // Arrange
             var helper = new TestHelpers();
-            var resolver = helper.Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2();
+            var resolver = helper.Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2(Guid.NewGuid().ToString());
             IAggregateStore aggregateStore = resolver.Resolve<IAggregateStore>();
             var id = RoverAggregateId.New;
 
@@ -79,7 +79,7 @@ namespace rover.unittests.FinctionalTests
         {
             // Arrange
             var helper = new TestHelpers();
-            var resolver = helper.Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2();
+            var resolver = helper.Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2(Guid.NewGuid().ToString());
             IAggregateStore aggregateStore = resolver.Resolve<IAggregateStore>();
             IQueryProcessor _queryProcessor = resolver.Resolve<IQueryProcessor>();
             var id = RoverAggregateId.New;

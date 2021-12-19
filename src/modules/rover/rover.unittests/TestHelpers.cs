@@ -7,6 +7,7 @@ using EventFlow.EntityFramework.Extensions;
 using EventFlow.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,7 @@ using rover.infrastructure.ef;
 using rover.unittests.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,129 +34,14 @@ namespace rover.unittests
 {
     internal class TestHelpers
     {
-        internal IResolver Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2()
+        internal IRootResolver Resolver_LandingLat0Long0FacE_Step1_ObstacleLat0Long2(string connectionString)
         {
             var services = new ServiceCollection();
             // Settings
             this.CreateRoverSettings_LandingLat0Long0FacE(services);
             this.CreateMarsSettings_Step1_ObstacleLat0Long2(services);
             this.CreateIntegrationSettings_0(services);
-
-            // EventFlow
-            var provider = EventFlowOptions.New
-                .UseServiceCollection(services)
-                .AddAspNetCore()
-
-                .UseEntityFrameworkReadModel<PositionReadModel, DBContextControlRoom>()
-                .ConfigureEntityFramework(EntityFrameworkConfiguration.New)
-                .AddDbContextProvider<DBContextControlRoom, FakedEntityFramewokReadModelDbContextProvider>()
-
-                .AddEvents(typeof(StartedEvent))
-                .AddEvents(typeof(MovedEvent))
-                .AddEvents(typeof(StoppedEvent))
-                .AddEvents(typeof(LandedEvent))
-
-                .AddJobs(typeof(SendMessageToRoverJob))
-                .AddJobs(typeof(HandlingRoverMessagesJob))
-                
-                .AddQueryHandler<GetLastPositionQueryHandler, GetLastPositionQuery, PositionReadModel>()
-                .AddQueryHandler<GetLandingPositionQueryHandler, GetLandingPositionQuery, LandingReadModel>()
-
-                .UseInMemoryReadStoreFor<StartReadModel>()
-                .UseInMemoryReadStoreFor<PositionReadModel>()
-                .UseInMemoryReadStoreFor<LandingReadModel>()
-                
-                .RegisterServices(s => {
-                    s.Register<IPositionRepository, PositionRepository>();
-                    s.Register<IDbContextProvider<DBContextControlRoom>, FakedEntityFramewokReadModelDbContextProvider>(Lifetime.AlwaysUnique);
-                    s.CreateResolver(true);
-                })
-                .CreateServiceProvider();
-
-            var resolver = provider.GetService<IResolver>();
-
-            return resolver;
-        }
-
-        internal IResolver Resolver_LandingLat0Long0FacE_QueryEF()
-        {
-            var services = new ServiceCollection();
-            // Settings
-            this.CreateRoverSettings_LandingLat0Long0FacE(services);
-            this.CreateMarsSettings_Step1_ObstacleLat0Long2(services);
-            this.CreateIntegrationSettings_0(services);
-
-            // EventFlow
-            var provider = EventFlowOptions.New
-                .UseServiceCollection(services)
-                .AddAspNetCore()
-
-                .UseEntityFrameworkReadModel<PositionReadModel, DBContextControlRoom>()
-                .ConfigureEntityFramework(EntityFrameworkConfiguration.New)
-                .AddDbContextProvider<DBContextControlRoom, FakedEntityFramewokReadModelDbContextProvider>()
-                
-                .AddQueryHandler<GetLastPositionQueryHandler, GetLastPositionQuery, PositionReadModel>()
-                .AddQueryHandler<GetLandingPositionQueryHandler, GetLandingPositionQuery, LandingReadModel>()
-
-                .UseInMemoryReadStoreFor<StartReadModel>()
-                .UseInMemoryReadStoreFor<PositionReadModel>()
-                .UseInMemoryReadStoreFor<LandingReadModel>()
-                
-                .RegisterServices(s => {
-                    s.Register<IPositionRepository, rover.infrastructure.ef.PositionRepository>();
-                    s.Register<IDbContextProvider<DBContextControlRoom>, FakedEntityFramewokReadModelDbContextProvider>(Lifetime.AlwaysUnique);
-                    s.CreateResolver(true);
-                })
-                .CreateServiceProvider();
-
-            var resolver = provider.GetService<IResolver>();
-
-            return resolver;
-        }
-
-        internal IResolver Resolver_LandingLat0Long0FacE_QueryDapper()
-        {
-            var services = new ServiceCollection();
-            // Settings
-            this.CreateRoverSettings_LandingLat0Long0FacE(services);
-            this.CreateMarsSettings_Step1_ObstacleLat0Long2(services);
-            this.CreateIntegrationSettings_0(services);
-
-            // EventFlow
-            var provider = EventFlowOptions.New
-                .UseServiceCollection(services)
-                .AddAspNetCore()
-
-                .UseEntityFrameworkReadModel<PositionReadModel, DBContextControlRoom>()
-                .ConfigureEntityFramework(EntityFrameworkConfiguration.New)
-                .AddDbContextProvider<DBContextControlRoom, FakedEntityFramewokReadModelDbContextProvider>()
-                
-                .AddQueryHandler<GetLastPositionQueryHandler, GetLastPositionQuery, PositionReadModel>()
-                .AddQueryHandler<GetLandingPositionQueryHandler, GetLandingPositionQuery, LandingReadModel>()
-
-                .UseInMemoryReadStoreFor<StartReadModel>()
-                .UseInMemoryReadStoreFor<PositionReadModel>()
-                .UseInMemoryReadStoreFor<LandingReadModel>()
-                
-                .RegisterServices(s => {
-                    s.Register<IPositionRepository, rover.infrastructure.dapper.PositionRepository>();
-                    s.Register<IDbContextProvider<DBContextControlRoom>, FakedEntityFramewokReadModelDbContextProvider>(Lifetime.AlwaysUnique);
-                    s.CreateResolver(true);
-                })
-                .CreateServiceProvider();
-
-            var resolver = provider.GetService<IResolver>();
-
-            return resolver;
-        }
-
-        internal IRootResolver Resolver_Commands_LandingLat0Long0FacE_Step1_ObstacleLat0Long2()
-        {
-            var services = new ServiceCollection();
-            // Settings
-            this.CreateRoverSettings_LandingLat0Long0FacE(services);
-            this.CreateMarsSettings_Step1_ObstacleLat0Long2(services);
-            this.CreateIntegrationSettings_0(services);
+            this.CreateConnectionString(services, connectionString);
 
             // EventFlow
             var resolver = EventFlowOptions.New
@@ -251,6 +138,22 @@ namespace rover.unittests
                     TimeDistanceOfVoyageInSeconds = 0
                 }));
             services.AddTransient<IntegrationSettings>();
+
+            return services;
+        }
+
+        private ServiceCollection CreateConnectionString(ServiceCollection services, string connectionString)
+        {
+            var myConfiguration = new Dictionary<string, string>
+            {
+                { "ConnectionStrings:ReadModelsConnection", connectionString }
+            };
+
+            var configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(myConfiguration)
+                .Build();
+
+            services.AddSingleton<IConfiguration>(configuration);
 
             return services;
         }

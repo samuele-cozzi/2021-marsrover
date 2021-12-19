@@ -1,4 +1,6 @@
-﻿namespace controlroom_api.Extensions;
+﻿using rover.infrastructure.dapper;
+
+namespace controlroom_api.Extensions;
 
 static class EventflowExtensionMethods
 {
@@ -24,6 +26,7 @@ static class EventflowExtensionMethods
                 {
                     sr.Register<IPositionRepository, rover.infrastructure.dapper.PositionRepository>(Lifetime.Scoped);
                     sr.Register<IDbContextProvider<DBContextControlRoom>, DBContextProvider>();
+                    sr.Register<IDbConnectionFactory, DapperConnectionFactory>(Lifetime.AlwaysUnique);
                 })
                 .AddEntityFrameworkReadModel()
 
